@@ -15,10 +15,6 @@
 <title>MEMORY TRAP</title>
 
 <style>
-/* ============================================================
-   MEMORY TRAP — CSS CORRIGIDO (NÍVEIS 1 A 10)
-   ============================================================ */
-
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
@@ -26,655 +22,182 @@
     -webkit-user-select: none;
 }
 
-html,
-body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #000;
-    color: #fff;
-    font-family: Arial, Helvetica, sans-serif;
-    touch-action: none;
-}
-
-body {
-    position: fixed;
-    inset: 0;
+html, body {
+    margin: 0; width: 100%; height: 100%; overflow: hidden;
+    background: #000; color: #fff; font-family: Arial, Helvetica, sans-serif;
+    touch-action: none; position: fixed; inset: 0;
 }
 
 button {
-    font: inherit;
-    color: inherit;
-    border: 0;
-    outline: 0;
-    background: none;
-    touch-action: none;
+    font: inherit; color: inherit; border: 0; outline: 0;
+    background: none; touch-action: none;
 }
 
 #app {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #000;
+    position: fixed; inset: 0; width: 100%; height: 100%;
+    overflow: hidden; background: #000;
 }
 
 .screen {
-    position: absolute;
-    inset: 0;
-    display: none;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+    position: absolute; inset: 0; display: none;
+    width: 100%; height: 100%; overflow: hidden;
 }
 
 .screen.active {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
 }
 
-/* ============================================================
-   TELA INICIAL (CENTRALIZADA)
-   ============================================================ */
-
+/* TELA INICIAL */
 #homeScreen {
     justify-content: center;
-    padding:
-        calc(env(safe-area-inset-top) + 15px)
-        20px
-        calc(env(safe-area-inset-bottom) + 15px);
+    padding: calc(env(safe-area-inset-top) + 15px) 20px calc(env(safe-area-inset-bottom) + 15px);
     gap: 22px;
 }
 
-.logo {
-    text-align: center;
-    line-height: .82;
-    pointer-events: none;
-}
+.logo { text-align: center; line-height: .82; pointer-events: none; }
+.logo-main { display: block; font-size: clamp(42px, 13vw, 76px); font-weight: 900; letter-spacing: .10em; }
+.logo-sub { display: block; margin-top: 10px; font-size: clamp(16px, 4.5vw, 26px); font-weight: 700; letter-spacing: .45em; padding-left: .45em; }
+.logo-line { width: min(240px, 60vw); height: 1px; margin: 15px auto 0; background: rgba(255,255,255,.45); }
 
-.logo-main {
-    display: block;
-    font-size: clamp(42px, 13vw, 76px);
-    font-weight: 900;
-    letter-spacing: .10em;
-}
-
-.logo-sub {
-    display: block;
-    margin-top: 10px;
-    font-size: clamp(16px, 4.5vw, 26px);
-    font-weight: 700;
-    letter-spacing: .45em;
-    padding-left: .45em;
-}
-
-.logo-line {
-    width: min(240px, 60vw);
-    height: 1px;
-    margin: 15px auto 0;
-    background: rgba(255,255,255,.45);
-}
-
-/* VIDAS (VERMELHO VIBRANTE) */
-.lives {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-}
-
-.heart {
-    position: relative;
-    width: 22px;
-    height: 22px;
-    transform: rotate(-45deg);
-    border-radius: 3px;
-    background: #ff3b30;
-}
-
-.heart::before,
-.heart::after {
-    content: "";
-    position: absolute;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: #ff3b30;
-}
-
+/* VIDAS */
+.lives { display: flex; justify-content: center; align-items: center; gap: 12px; }
+.heart { position: relative; width: 22px; height: 22px; transform: rotate(-45deg); border-radius: 3px; background: #ff3b30; }
+.heart::before, .heart::after { content: ""; position: absolute; width: 22px; height: 22px; border-radius: 50%; background: #ff3b30; }
 .heart::before { top: -11px; left: 0; }
 .heart::after { top: 0; left: 11px; }
-
-.heart.empty {
-    background: #333333;
-}
-
-.heart.empty::before,
-.heart.empty::after {
-    background: #333333;
-}
+.heart.empty, .heart.empty::before, .heart.empty::after { background: #333333; }
 
 .start-button {
-    position: relative;
-    width: min(320px, 82vw);
-    min-height: 76px;
-    padding: 16px 24px;
-    border: 1px solid rgba(255,255,255,.75);
-    border-radius: 6px;
-    background: #050505;
-    overflow: hidden;
+    position: relative; width: min(320px, 82vw); min-height: 76px; padding: 16px 24px;
+    border: 1px solid rgba(255,255,255,.75); border-radius: 6px; background: #050505;
 }
+.start-button:active { transform: scale(.97); }
+.start-title { display: block; font-size: 25px; font-weight: 900; letter-spacing: .15em; }
+.start-subtitle { display: block; margin-top: 5px; font-size: 11px; letter-spacing: .25em; opacity: .55; }
 
-.start-button:active {
-    transform: scale(.97);
-}
-
-.start-title {
-    display: block;
-    font-size: 25px;
-    font-weight: 900;
-    letter-spacing: .15em;
-}
-
-.start-subtitle {
-    display: block;
-    margin-top: 5px;
-    font-size: 11px;
-    letter-spacing: .25em;
-    opacity: .55;
-}
-
-/* HALL DOS SOBREVIVENTES */
+/* HALL */
 .hall {
-    position: relative;
-    width: min(370px, 90vw);
-    height: 150px;
-    overflow: hidden;
-    border-top: 1px solid rgba(255,255,255,.12);
-    border-bottom: 1px solid rgba(255,255,255,.12);
+    position: relative; width: min(370px, 90vw); height: 150px; overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,.12); border-bottom: 1px solid rgba(255,255,255,.12);
 }
+.hall-title { position: absolute; top: 10px; left: 0; right: 0; z-index: 3; text-align: center; font-size: 10px; letter-spacing: .25em; opacity: .5; }
+.hall-mask { position: absolute; inset: 0; overflow: hidden; padding-top: 34px; }
+.hall-list { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.hall-name { font-size: 15px; font-weight: 700; letter-spacing: .12em; opacity: .82; }
+.hall-empty { margin-top: 35px; font-size: 11px; letter-spacing: .15em; opacity: .28; }
+.home-menu { position: absolute; right: 20px; bottom: calc(env(safe-area-inset-bottom) + 15px); width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; font-size: 20px; opacity: .7; }
 
-.hall-title {
-    position: absolute;
-    top: 10px;
-    left: 0;
-    right: 0;
-    z-index: 3;
-    text-align: center;
-    font-size: 10px;
-    letter-spacing: .25em;
-    opacity: .5;
-}
+/* TELA DE JOGO */
+#gameScreen { justify-content: flex-start; background: #000; }
+.game-header { position: relative; width: 100%; text-align: center; padding-top: calc(env(safe-area-inset-top) + 15px); z-index: 20; }
+.level-number { font-size: 18px; font-weight: 700; letter-spacing: .15em; }
+.level-question { width: 90%; margin: 8px auto 0; text-align: center; font-size: clamp(16px, 4vw, 20px); font-weight: 700; line-height: 1.3; }
+.level-content { position: relative; width: 100%; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 20px 70px; gap: 15px; }
+.game-lives { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 15px); z-index: 30; }
 
-.hall-mask {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    padding-top: 34px;
-}
-
-.hall-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-}
-
-.hall-name {
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: .12em;
-    opacity: .82;
-}
-
-.hall-empty {
-    margin-top: 35px;
-    font-size: 11px;
-    letter-spacing: .15em;
-    opacity: .28;
-}
-
-.home-menu {
-    position: absolute;
-    right: 20px;
-    bottom: calc(env(safe-area-inset-bottom) + 15px);
-    width: 44px;
-    height: 44px;
-    border: 1px solid rgba(255,255,255,.22);
-    border-radius: 50%;
-    font-size: 20px;
-    opacity: .7;
-}
-
-/* ============================================================
-   TELA DE JOGO
-   ============================================================ */
-
-#gameScreen {
-    justify-content: flex-start;
-    background: #000;
-}
-
-.game-header {
-    position: relative;
-    width: 100%;
-    text-align: center;
-    padding-top: calc(env(safe-area-inset-top) + 15px);
-    z-index: 20;
-}
-
-.level-number {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: .15em;
-}
-
-.level-question {
-    width: 90%;
-    margin: 8px auto 0;
-    text-align: center;
-    font-size: clamp(16px, 4vw, 20px);
-    font-weight: 700;
-    line-height: 1.3;
-}
-
-.level-content {
-    position: relative;
-    width: 100%;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px 70px;
-    gap: 15px;
-}
-
-.game-lives {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: calc(env(safe-area-inset-bottom) + 15px);
-    z-index: 30;
-}
-
-/* ============================================================
-   OPÇÕES (RETÂNGULOS AZUIS COM BORDAS ARREDONDADAS)
-   ============================================================ */
-
-.options-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-    width: min(380px, 94vw);
-    margin: 0 auto;
-}
-
+/* OPÇÕES PADRÃO (Botões Azuis) */
+.options-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; width: min(380px, 94vw); margin: 0 auto; }
 .blue-choice {
-    min-height: 65px;
-    background: #246bff;
-    border: 1px solid rgba(255,255,255,.25);
-    border-radius: 14px;
-    font-size: 18px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    text-align: center;
+    min-height: 65px; background: #246bff; border: 1px solid rgba(255,255,255,.25);
+    border-radius: 14px; font-size: 18px; font-weight: 700; display: flex;
+    align-items: center; justify-content: center; padding: 10px; text-align: center;
 }
+.blue-choice:active { transform: scale(.96); background: #1a53cc; }
 
-.blue-choice:active {
-    transform: scale(.96);
-    background: #1a53cc;
-}
-
-/* ============================================================
-   NÍVEL 1 (QUEBRADO + PEÇAS PARA ENCAIXAR)
-   ============================================================ */
-
-.broken-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 25px;
-    width: 100%;
-}
-
-.broken-target-area {
-    position: relative;
-    width: 160px;
-    height: 160px;
-    border: 2px dashed rgba(255,255,255,.3);
-    border-radius: 10px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-}
-
-.broken-slot {
-    border: 1px solid rgba(255,255,255,.2);
-}
-
-.broken-pieces-pool {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-    width: 100%;
-}
-
+/* NÍVEL 1 */
+.broken-container { display: flex; flex-direction: column; align-items: center; gap: 40px; width: 100%; }
+.broken-top { width: 220px; height: 110px; background: #246bff; border-radius: 10px; clip-path: polygon(0% 0%, 100% 0%, 100% 40%, 80% 100%, 60% 50%, 40% 100%, 20% 60%, 0% 100%); }
+.broken-pieces-pool { display: flex; gap: 15px; justify-content: center; width: 100%; }
 .puzzle-piece {
-    width: 65px;
-    height: 65px;
-    background: #246bff;
-    border: 1px solid rgba(255,255,255,.3);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    font-weight: 900;
-    touch-action: none;
-    cursor: grab;
+    width: 60px; height: 60px; background: #246bff; border-radius: 8px;
+    touch-action: none; cursor: grab; transition: transform 0.2s ease;
 }
+.puzzle-piece.dragging { transition: none; z-index: 50; }
 
-/* ============================================================
-   NÍVEL 2 (4 BLOCOS AZUIS LARGOS)
-   ============================================================ */
+/* NÍVEL 2 */
+.grid2-large { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, 75px); gap: 14px; width: min(380px, 94vw); }
 
-.grid2-large {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(2, 75px);
-    gap: 14px;
-    width: min(380px, 94vw);
-}
-
-/* ============================================================
-   NÍVEL 5 (FORMAS GEOMÉTRICAS VARIADAS)
-   ============================================================ */
-
-.shape-field {
-    position: relative;
-    width: min(360px, 92vw);
-    height: 170px;
-    border: 1px solid rgba(255,255,255,.15);
-    border-radius: 10px;
-}
-
-.geo-shape {
-    position: absolute;
-    background: #fff;
-}
-
+/* NÍVEL 5 (Formas soltas) */
+.shape-field { position: relative; width: min(360px, 92vw); height: 170px; }
+.geo-shape { position: absolute; background: #fff; }
 .geo-circle { border-radius: 50%; }
 .geo-square { border-radius: 4px; }
 .geo-rect { border-radius: 3px; }
-.geo-pentagon {
-    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-}
-.geo-hexagon {
-    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-}
+.geo-pentagon { clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
+.geo-hexagon { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
 
-/* ============================================================
-   NÍVEL 7 (RATOS CIRCULARES + RATO DA PERGUNTA)
-   ============================================================ */
+/* NÍVEL 7 (Ratos) */
+.rats-wrap { position: relative; width: 220px; height: 220px; margin-bottom: 20px; }
+.orbit-center { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; transform: translate(-5%, -5%); animation: spin 4s linear infinite; }
+.circling-rat { position: absolute; font-size: 26px; transform-origin: center; }
+@keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+.question-with-rat { position: relative; display: inline-block; padding: 0 15px; }
+.small-hiding-rat { position: absolute; font-size: 14px; top: -16px; left: 50%; transform: translateX(-50%); animation: ratPeekAround 3s ease-in-out infinite; }
+@keyframes ratPeekAround { 0%, 100% { transform: translateX(-60px) translateY(0); } 50% { transform: translateX(45px) translateY(-4px); } }
 
-.rats-wrap {
-    position: relative;
-    width: 100%;
-    height: 180px;
-}
+/* NÍVEL 8 (Cores Verticais) */
+.color-bar-container { display: flex; gap: 8px; justify-content: center; align-items: center; height: 120px; }
+.color-segment { width: 35px; height: 100%; border-radius: 6px; }
+.color-segment:active { transform: scale(.95); }
+.c-red { background: #ff3030; } .c-blue { background: #3080ff; }
+.c-green { background: #35c96b; } .c-yellow { background: #ffd83d; }
+.c-purple { background: #9c55ff; } .c-orange { background: #ff8a30; } .c-white { background: #fff; }
 
-.circling-rat {
-    position: absolute;
-    font-size: 26px;
-    animation: ratCircle 4s linear infinite;
-}
+/* NÍVEL 9 */
+.arrow-sequence-display { display: flex; gap: 16px; font-size: 40px; font-weight: 900; margin: 15px 0; }
 
-@keyframes ratCircle {
-    0% { transform: translate(-50px, 0) rotate(0deg); }
-    25% { transform: translate(0, -40px) rotate(90deg); }
-    50% { transform: translate(50px, 0) rotate(180deg); }
-    75% { transform: translate(0, 40px) rotate(270deg); }
-    100% { transform: translate(-50px, 0) rotate(360deg); }
-}
+/* NÍVEL 10 */
+.red-trap-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; width: min(380px, 94vw); }
+.red-trap-btn { min-height: 65px; border: 1px solid rgba(255,255,255,.25); border-radius: 14px; }
+#secretRedTarget { cursor: pointer; }
 
-.question-with-rat {
-    position: relative;
-    display: inline-block;
-    padding: 0 15px;
-}
+/* OVERLAYS E SETTINGS */
+#overlay { position: absolute; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; background: #000; }
+#overlay.active { display: flex; }
+.overlay-content { width: min(340px, 86vw); text-align: center; }
+.overlay-title { font-size: 28px; font-weight: 900; letter-spacing: .1em; }
+.overlay-text { margin-top: 12px; font-size: 14px; line-height: 1.4; opacity: .7; }
+.overlay-button { margin-top: 24px; padding: 14px 26px; border: 1px solid rgba(255,255,255,.5); border-radius: 8px; }
 
-.small-hiding-rat {
-    position: absolute;
-    font-size: 14px;
-    top: -16px;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: ratPeekAround 3s ease-in-out infinite;
-}
-
-@keyframes ratPeekAround {
-    0%, 100% { transform: translateX(-60px) translateY(0); }
-    50% { transform: translateX(45px) translateY(-4px); }
-}
-
-/* ============================================================
-   NÍVEL 8 (CORES EM BARRA TIPO VOLUME)
-   ============================================================ */
-
-.color-bar-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    width: 100%;
-}
-
-.color-sequence-bar {
-    display: flex;
-    width: min(340px, 90vw);
-    height: 48px;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,.3);
-}
-
-.color-segment {
-    flex: 1;
-    height: 100%;
-}
-
-.c-red { background: #ff3030; }
-.c-blue { background: #3080ff; }
-.c-green { background: #35c96b; }
-.c-yellow { background: #ffd83d; }
-.c-purple { background: #9c55ff; }
-.c-orange { background: #ff8a30; }
-.c-white { background: #fff; }
-
-/* ============================================================
-   NÍVEL 9 (SETAS NO CENTRO)
-   ============================================================ */
-
-.arrow-sequence-display {
-    display: flex;
-    gap: 16px;
-    font-size: 40px;
-    font-weight: 900;
-    margin: 15px 0;
-}
-
-/* ============================================================
-   NÍVEL 10 (CAMUFLADO / TONS PRÓXIMOS AO VERMELHO)
-   ============================================================ */
-
-.red-trap-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-    width: min(380px, 94vw);
-}
-
-.red-trap-btn {
-    min-height: 65px;
-    border: 1px solid rgba(255,255,255,.25);
-    border-radius: 14px;
-    font-size: 16px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* ============================================================
-   OVERLAY & SETTINGS
-   ============================================================ */
-
-#overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 100;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    background: #000;
-}
-
-#overlay.active {
-    display: flex;
-}
-
-.overlay-content {
-    width: min(340px, 86vw);
-    text-align: center;
-}
-
-.overlay-title {
-    font-size: 28px;
-    font-weight: 900;
-    letter-spacing: .1em;
-}
-
-.overlay-text {
-    margin-top: 12px;
-    font-size: 14px;
-    line-height: 1.4;
-    opacity: .7;
-}
-
-.overlay-button {
-    margin-top: 24px;
-    padding: 14px 26px;
-    border: 1px solid rgba(255,255,255,.5);
-    border-radius: 8px;
-}
-
-#settingsScreen {
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: calc(env(safe-area-inset-top) + 40px) 25px 25px;
-}
-
-.settings-title {
-    font-size: 24px;
-    font-weight: 900;
-    letter-spacing: .15em;
-}
-
-.setting-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: min(360px, 90vw);
-    margin-top: 22px;
-    padding: 16px 0;
-    border-bottom: 1px solid rgba(255,255,255,.12);
-}
-
-.setting-button {
-    min-width: 70px;
-    padding: 8px 14px;
-    border: 1px solid rgba(255,255,255,.3);
-    border-radius: 8px;
-}
-
-.back-button {
-    position: absolute;
-    left: 20px;
-    top: calc(env(safe-area-inset-top) + 15px);
-    padding: 10px;
-    opacity: .6;
-}
+#settingsScreen { flex-direction: column; align-items: center; justify-content: flex-start; padding: calc(env(safe-area-inset-top) + 40px) 25px 25px; }
+.settings-title { font-size: 24px; font-weight: 900; letter-spacing: .15em; }
+.setting-row { display: flex; align-items: center; justify-content: space-between; width: min(360px, 90vw); margin-top: 22px; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,.12); }
+.setting-button { min-width: 70px; padding: 8px 14px; border: 1px solid rgba(255,255,255,.3); border-radius: 8px; }
+.back-button { position: absolute; left: 20px; top: calc(env(safe-area-inset-top) + 15px); padding: 10px; opacity: .6; }
 </style>
 </head>
 
 <body>
-
 <div id="app">
-
-    <!-- TELA INICIAL -->
     <section id="homeScreen" class="screen active">
         <div class="logo">
-            <span class="logo-main">MEMORY</span>
-            <span class="logo-sub">TRAP</span>
-            <div class="logo-line"></div>
+            <span class="logo-main">MEMORY</span><span class="logo-sub">TRAP</span><div class="logo-line"></div>
         </div>
-
         <div id="homeLives" class="lives"></div>
-
         <button id="startButton" class="start-button">
-            <span class="start-title">INICIAR</span>
-            <span class="start-subtitle">MEMORY TRAP</span>
+            <span class="start-title">INICIAR</span><span class="start-subtitle">MEMORY TRAP</span>
         </button>
-
-        <div class="hall">
-            <div class="hall-title">HALL DOS SOBREVIVENTES</div>
-            <div class="hall-mask">
-                <div id="hallList" class="hall-list"></div>
-            </div>
-        </div>
-
+        <div class="hall"><div class="hall-title">HALL DOS SOBREVIVENTES</div><div class="hall-mask"><div id="hallList" class="hall-list"></div></div></div>
         <button id="menuButton" class="home-menu" aria-label="Menu">☰</button>
     </section>
 
-    <!-- TELA DE JOGO -->
     <section id="gameScreen" class="screen">
         <div class="game-header">
             <div id="levelNumber" class="level-number"></div>
             <div id="levelQuestion" class="level-question"></div>
         </div>
-
         <div id="levelContent" class="level-content"></div>
-
         <div id="gameLives" class="lives game-lives"></div>
     </section>
 
-    <!-- CONFIGURAÇÕES -->
     <section id="settingsScreen" class="screen">
         <button id="backButton" class="back-button">←</button>
         <div class="settings-title">CONFIGURAÇÕES</div>
-
-        <div class="setting-row">
-            <span>SOM</span>
-            <button id="soundButton" class="setting-button">ON</button>
-        </div>
-
-        <div class="setting-row">
-            <span>VIBRAÇÃO</span>
-            <button id="vibrationButton" class="setting-button">ON</button>
-        </div>
+        <div class="setting-row"><span>SOM</span><button id="soundButton" class="setting-button">ON</button></div>
+        <div class="setting-row"><span>VIBRAÇÃO</span><button id="vibrationButton" class="setting-button">ON</button></div>
     </section>
 
-    <!-- OVERLAY -->
     <div id="overlay">
         <div class="overlay-content">
             <div id="overlayTitle" class="overlay-title"></div>
@@ -682,441 +205,209 @@ button {
             <button id="overlayButton" class="overlay-button"></button>
         </div>
     </div>
-
 </div>
 
 <script>
-/* ============================================================
-   MEMORY TRAP — JAVASCRIPT CORRIGIDO (NÍVEIS 1 A 10)
-   ============================================================ */
-
-const CONFIG = {
-    TOTAL_LEVELS: 10,
-    STARTING_LIVES: 5,
-    SOUND_ENABLED: true,
-    VIBRATION_ENABLED: true,
-    SURVIVORS_KEY: "memory_trap_survivors_v1"
-};
-
-const GAME = {
-    currentLevel: 0,
-    lives: CONFIG.STARTING_LIVES,
-    totalAttempts: 0,
-    mistakes: 0,
-    levelTimers: [],
-    state: {},
-    finished: false
-};
+const CONFIG = { TOTAL_LEVELS: 10, STARTING_LIVES: 5, SOUND_ENABLED: true, VIBRATION_ENABLED: true, SURVIVORS_KEY: "memory_trap_survivors_v1" };
+const GAME = { currentLevel: 0, lives: CONFIG.STARTING_LIVES, totalAttempts: 0, mistakes: 0, levelTimers: [], state: {}, finished: false };
 
 const DOM = {
-    homeScreen: document.getElementById("homeScreen"),
-    gameScreen: document.getElementById("gameScreen"),
-    settingsScreen: document.getElementById("settingsScreen"),
-    homeLives: document.getElementById("homeLives"),
-    gameLives: document.getElementById("gameLives"),
-    levelNumber: document.getElementById("levelNumber"),
-    levelQuestion: document.getElementById("levelQuestion"),
-    levelContent: document.getElementById("levelContent"),
-    startButton: document.getElementById("startButton"),
-    menuButton: document.getElementById("menuButton"),
-    backButton: document.getElementById("backButton"),
-    soundButton: document.getElementById("soundButton"),
-    vibrationButton: document.getElementById("vibrationButton"),
-    hallList: document.getElementById("hallList"),
-    overlay: document.getElementById("overlay"),
-    overlayTitle: document.getElementById("overlayTitle"),
-    overlayText: document.getElementById("overlayText"),
-    overlayButton: document.getElementById("overlayButton")
+    homeScreen: document.getElementById("homeScreen"), gameScreen: document.getElementById("gameScreen"), settingsScreen: document.getElementById("settingsScreen"),
+    homeLives: document.getElementById("homeLives"), gameLives: document.getElementById("gameLives"), levelNumber: document.getElementById("levelNumber"),
+    levelQuestion: document.getElementById("levelQuestion"), levelContent: document.getElementById("levelContent"), startButton: document.getElementById("startButton"),
+    menuButton: document.getElementById("menuButton"), backButton: document.getElementById("backButton"), soundButton: document.getElementById("soundButton"),
+    vibrationButton: document.getElementById("vibrationButton"), hallList: document.getElementById("hallList"), overlay: document.getElementById("overlay"),
+    overlayTitle: document.getElementById("overlayTitle"), overlayText: document.getElementById("overlayText"), overlayButton: document.getElementById("overlayButton")
 };
 
 const LEVELS = {
-    1: { name: "Peça Quebrada", type: "broken-shape" },
-    2: { name: "Quadrado Azul", type: "grid" },
-    3: { name: "Toque no Certo", type: "direct-answer" },
-    4: { name: "Mais Próximo de Pi", type: "pi" },
-    5: { name: "Quantos Círculos?", type: "count-circles" },
-    6: { name: "Círculos em Sequência", type: "appearing-circles" },
-    7: { name: "Sem Número — Ratos", type: "no-number-rats", hiddenNumber: true },
-    8: { name: "Memória das Cores", type: "color-memory" },
-    9: { name: "Memória Direcional", type: "arrow-memory" },
-    10: { name: "Botão Camuflado", type: "camouflaged-command" }
+    1: { type: "broken-shape" }, 2: { type: "grid" }, 3: { type: "direct-answer" }, 4: { type: "pi" },
+    5: { type: "count-circles" }, 6: { type: "appearing-circles" }, 7: { type: "no-number-rats", hiddenNumber: true },
+    8: { type: "color-memory" }, 9: { type: "arrow-memory" }, 10: { type: "camouflaged-command" }
 };
 
-function clearLevelTimers() {
-    GAME.levelTimers.forEach(t => { clearTimeout(t); clearInterval(t); });
-    GAME.levelTimers = [];
-}
-
-function addLevelTimer(t) {
-    GAME.levelTimers.push(t);
-}
+function clearLevelTimers() { GAME.levelTimers.forEach(t => { clearTimeout(t); clearInterval(t); }); GAME.levelTimers = []; }
+function addLevelTimer(t) { GAME.levelTimers.push(t); }
 
 let audioContext = null;
 function getAudioContext() {
-    if (!audioContext) {
-        const Ctx = window.AudioContext || window.webkitAudioContext;
-        if (Ctx) audioContext = new Ctx();
-    }
+    if (!audioContext) { const Ctx = window.AudioContext || window.webkitAudioContext; if (Ctx) audioContext = new Ctx(); }
     return audioContext;
 }
 
 function playTone(freq, dur, type = "sine", vol = 0.035) {
     if (!CONFIG.SOUND_ENABLED) return;
-    const ctx = getAudioContext();
-    if (!ctx) return;
+    const ctx = getAudioContext(); if (!ctx) return;
     if (ctx.state === "suspended") ctx.resume().catch(() => {});
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    gain.gain.setValueAtTime(vol, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + dur);
+    const osc = ctx.createOscillator(); const gain = ctx.createGain();
+    osc.type = type; osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(vol, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + dur);
 }
 
-function soundCorrect() {
-    playTone(720, .08, "sine", .035);
-    setTimeout(() => playTone(960, .07, "sine", .025), 45);
-}
+function soundCorrect() { playTone(720, .08, "sine", .035); setTimeout(() => playTone(960, .07, "sine", .025), 45); }
+function soundLifeLost() { playTone(95, .25, "sawtooth", .05); }
+function soundVictory() { [392, 494, 587, 784].forEach((n, i) => setTimeout(() => playTone(n, .25, "sine", .045), i * 150)); }
 
-function soundLifeLost() {
-    playTone(95, .25, "sawtooth", .05);
-}
-
-function soundVictory() {
-    [392, 494, 587, 784].forEach((n, i) => setTimeout(() => playTone(n, .25, "sine", .045), i * 150));
-}
-
-function vibrate(pat) {
-    if (CONFIG.VIBRATION_ENABLED && "vibrate" in navigator) {
-        try { navigator.vibrate(pat); } catch (e) {}
-    }
-}
-
-function feedbackCorrect() {
-    soundCorrect();
-    vibrate(18);
-}
-
-function feedbackLifeLost() {
-    soundLifeLost();
-    vibrate([60, 40, 80]);
-}
+function vibrate(pat) { if (CONFIG.VIBRATION_ENABLED && "vibrate" in navigator) { try { navigator.vibrate(pat); } catch (e) {} } }
+function feedbackCorrect() { soundCorrect(); vibrate(18); }
+function feedbackLifeLost() { soundLifeLost(); vibrate([60, 40, 80]); }
 
 function renderLives(container) {
     container.innerHTML = "";
     for (let i = 0; i < CONFIG.STARTING_LIVES; i++) {
-        const heart = document.createElement("div");
-        heart.className = "heart";
+        const heart = document.createElement("div"); heart.className = "heart";
         if (i >= GAME.lives) heart.classList.add("empty");
         container.appendChild(heart);
     }
 }
+function updateLives() { renderLives(DOM.homeLives); renderLives(DOM.gameLives); }
 
-function updateLives() {
-    renderLives(DOM.homeLives);
-    renderLives(DOM.gameLives);
-}
+function showScreen(screen) { document.querySelectorAll(".screen").forEach(el => el.classList.remove("active")); screen.classList.add("active"); }
 
-function showScreen(screen) {
-    document.querySelectorAll(".screen").forEach(el => el.classList.remove("active"));
-    screen.classList.add("active");
-}
+function goHome() { clearLevelTimers(); GAME.finished = false; updateLives(); showScreen(DOM.homeScreen); startHallAnimation(); }
 
-function goHome() {
-    clearLevelTimers();
-    GAME.finished = false;
-    updateLives();
-    showScreen(DOM.homeScreen);
-    startHallAnimation();
-}
-
-function getSurvivors() {
-    try {
-        const raw = localStorage.getItem(CONFIG.SURVIVORS_KEY);
-        return raw ? JSON.parse(raw) : [];
-    } catch { return []; }
-}
-
+function getSurvivors() { try { const raw = localStorage.getItem(CONFIG.SURVIVORS_KEY); return raw ? JSON.parse(raw) : []; } catch { return []; } }
 function saveSurvivor(name, stats) {
     const survivors = getSurvivors();
     survivors.push({ name, attempts: stats.attempts, mistakes: stats.mistakes, time: stats.time, date: Date.now() });
-    localStorage.setItem(CONFIG.SURVIVORS_KEY, JSON.stringify(survivors));
-    renderHall();
+    localStorage.setItem(CONFIG.SURVIVORS_KEY, JSON.stringify(survivors)); renderHall();
 }
-
 function renderHall() {
-    const survivors = getSurvivors();
-    DOM.hallList.innerHTML = "";
-    if (survivors.length === 0) {
-        const empty = document.createElement("div");
-        empty.className = "hall-empty";
-        empty.textContent = "NENHUM SOBREVIVENTE";
-        DOM.hallList.appendChild(empty);
-        return;
-    }
-    survivors.slice(-20).reverse().forEach(p => {
-        const name = document.createElement("div");
-        name.className = "hall-name";
-        name.textContent = String(p.name).slice(0, 20).toUpperCase();
-        DOM.hallList.appendChild(name);
-    });
+    const survivors = getSurvivors(); DOM.hallList.innerHTML = "";
+    if (survivors.length === 0) { const empty = document.createElement("div"); empty.className = "hall-empty"; empty.textContent = "NENHUM SOBREVIVENTE"; DOM.hallList.appendChild(empty); return; }
+    survivors.slice(-20).reverse().forEach(p => { const name = document.createElement("div"); name.className = "hall-name"; name.textContent = String(p.name).slice(0, 20).toUpperCase(); DOM.hallList.appendChild(name); });
 }
 
-let hallAnim = null;
-let hallPos = 0;
+let hallAnim = null; let hallPos = 0;
 function startHallAnimation() {
-    if (hallAnim) cancelAnimationFrame(hallAnim);
-    hallPos = 0;
+    if (hallAnim) cancelAnimationFrame(hallAnim); hallPos = 0;
     function animate() {
         if (!DOM.homeScreen.classList.contains("active")) return;
-        const h = DOM.hallList.offsetHeight;
-        const v = DOM.hallList.parentElement.offsetHeight;
-        if (h > v) {
-            hallPos += 0.18;
-            if (hallPos > h - v + 25) hallPos = 0;
-            DOM.hallList.style.transform = `translateY(-${hallPos}px)`;
-        }
+        const h = DOM.hallList.offsetHeight; const v = DOM.hallList.parentElement.offsetHeight;
+        if (h > v) { hallPos += 0.18; if (hallPos > h - v + 25) hallPos = 0; DOM.hallList.style.transform = `translateY(-${hallPos}px)`; }
         hallAnim = requestAnimationFrame(animate);
     }
     animate();
 }
 
 function startGame() {
-    clearLevelTimers();
-    GAME.currentLevel = 1;
-    GAME.lives = CONFIG.STARTING_LIVES;
-    GAME.totalAttempts = 0;
-    GAME.mistakes = 0;
-    GAME.startedAt = Date.now();
-    GAME.finished = false;
-    updateLives();
-    showScreen(DOM.gameScreen);
-    loadLevel(1);
+    clearLevelTimers(); GAME.currentLevel = 1; GAME.lives = CONFIG.STARTING_LIVES;
+    GAME.totalAttempts = 0; GAME.mistakes = 0; GAME.finished = false;
+    updateLives(); showScreen(DOM.gameScreen); loadLevel(1);
 }
 
 function loadLevel(levelNumber) {
-    clearLevelTimers();
-    GAME.currentLevel = levelNumber;
-    GAME.state = {};
-
+    clearLevelTimers(); GAME.currentLevel = levelNumber; GAME.state = {};
     const level = LEVELS[levelNumber];
-    if (!level) {
-        finishGame();
-        return;
-    }
-
+    if (!level) { finishGame(); return; }
     DOM.levelNumber.textContent = level.hiddenNumber ? "" : levelNumber;
-    DOM.levelQuestion.innerHTML = "";
-    DOM.levelContent.innerHTML = "";
-    renderLevel(levelNumber, level);
-    updateLives();
+    DOM.levelQuestion.innerHTML = ""; DOM.levelContent.innerHTML = "";
+    renderLevel(levelNumber, level); updateLives();
 }
 
 function failLevel() {
     if (GAME.finished) return;
-    GAME.totalAttempts++;
-    GAME.mistakes++;
-    GAME.lives--;
-    feedbackLifeLost();
-    updateLives();
-
+    GAME.totalAttempts++; GAME.mistakes++; GAME.lives--;
+    feedbackLifeLost(); updateLives();
     if (GAME.lives <= 0) {
         clearLevelTimers();
-        showOverlay("SEM VIDAS", "Você perdeu as 5 vidas. O jogo será reiniciado do Nível 1.", "RECOMEÇAR", () => {
-            GAME.lives = CONFIG.STARTING_LIVES;
-            updateLives();
-            closeOverlay();
-            loadLevel(1);
-        });
+        showOverlay("SEM VIDAS", "Você perdeu as 5 vidas. O jogo será reiniciado do Nível 1.", "RECOMEÇAR", () => { GAME.lives = CONFIG.STARTING_LIVES; updateLives(); closeOverlay(); loadLevel(1); });
         return;
     }
-
-    showOverlay("ERRO", "Você continua no mesmo nível.", "TENTAR NOVAMENTE", () => {
-        closeOverlay();
-        loadLevel(GAME.currentLevel);
-    });
+    // Piscar erro sem recarregar a tela (ajuste no layout)
 }
 
 function completeLevel() {
     if (GAME.finished) return;
-    feedbackCorrect();
-    const next = GAME.currentLevel + 1;
-    if (GAME.currentLevel === CONFIG.TOTAL_LEVELS || !LEVELS[next]) {
-        finishGame();
-        return;
-    }
+    feedbackCorrect(); const next = GAME.currentLevel + 1;
+    if (GAME.currentLevel === CONFIG.TOTAL_LEVELS || !LEVELS[next]) { finishGame(); return; }
     setTimeout(() => { loadLevel(next); }, 180);
 }
 
-function showOverlay(title, text, btnText, action) {
-    DOM.overlayTitle.textContent = title;
-    DOM.overlayText.textContent = text;
-    DOM.overlayButton.textContent = btnText;
-    DOM.overlayButton.onclick = action;
-    DOM.overlay.classList.add("active");
-}
-
-function closeOverlay() {
-    DOM.overlay.classList.remove("active");
-}
+function showOverlay(title, text, btnText, action) { DOM.overlayTitle.textContent = title; DOM.overlayText.textContent = text; DOM.overlayButton.textContent = btnText; DOM.overlayButton.onclick = action; DOM.overlay.classList.add("active"); }
+function closeOverlay() { DOM.overlay.classList.remove("active"); }
 
 function renderLevel(number, level) {
     switch (level.type) {
-        case "broken-shape": renderLevel1(); break;
-        case "grid": renderLevel2(); break;
-        case "direct-answer": renderLevel3(); break;
-        case "pi": renderLevel4(); break;
-        case "count-circles": renderLevel5(); break;
-        case "appearing-circles": renderLevel6(); break;
-        case "no-number-rats": renderLevel7(); break;
-        case "color-memory": renderLevel8(); break;
-        case "arrow-memory": renderLevel9(); break;
-        case "camouflaged-command": renderLevel10(); break;
+        case "broken-shape": renderLevel1(); break; case "grid": renderLevel2(); break;
+        case "direct-answer": renderLevel3(); break; case "pi": renderLevel4(); break;
+        case "count-circles": renderLevel5(); break; case "appearing-circles": renderLevel6(); break;
+        case "no-number-rats": renderLevel7(); break; case "color-memory": renderLevel8(); break;
+        case "arrow-memory": renderLevel9(); break; case "camouflaged-command": renderLevel10(); break;
         default: completeLevel(); break;
     }
 }
 
-/* ============================================================
-   IMPLEMENTAÇÃO DOS NÍVEIS 1 A 10
-   ============================================================ */
-
-/* Nível 1: Forma quebrada + peças para arrastar */
+/* NÍVEIS 1 A 10 */
 function renderLevel1() {
     DOM.levelQuestion.textContent = "Complete a figura.";
-    const wrap = document.createElement("div");
-    wrap.className = "broken-container";
-    wrap.innerHTML = `
-        <div class="broken-target-area" id="targetArea">
-            <div class="broken-slot" data-slot="0"></div>
-            <div class="broken-slot" data-slot="1"></div>
-            <div class="broken-slot" data-slot="2"></div>
-            <div class="broken-slot" data-slot="3"></div>
-        </div>
-        <div class="broken-pieces-pool" id="piecesPool">
-            <div class="puzzle-piece" draggable="true" data-piece="3">◰</div>
-            <div class="puzzle-piece" draggable="true" data-piece="0">◱</div>
-            <div class="puzzle-piece" draggable="true" data-piece="1">◲</div>
-            <div class="puzzle-piece" draggable="true" data-piece="2">◳</div>
-        </div>
-    `;
+    const wrap = document.createElement("div"); wrap.className = "broken-container";
+    wrap.innerHTML = `<div class="broken-top" id="targetArea"></div><div class="broken-pieces-pool" id="piecesPool"><div class="puzzle-piece" data-correct="false"></div><div class="puzzle-piece" data-correct="true"></div><div class="puzzle-piece" data-correct="false"></div><div class="puzzle-piece" data-correct="false"></div></div>`;
     DOM.levelContent.appendChild(wrap);
 
-    let placedCount = 0;
     const pieces = wrap.querySelectorAll(".puzzle-piece");
-    const slots = wrap.querySelectorAll(".broken-slot");
+    const targetArea = wrap.querySelector("#targetArea");
 
     pieces.forEach(piece => {
         piece.addEventListener("pointerdown", e => {
             piece.setPointerCapture(e.pointerId);
-            const startX = e.clientX;
-            const startY = e.clientY;
+            piece.classList.add("dragging");
+            const startX = e.clientX; const startY = e.clientY;
             
-            function onMove(em) {
-                piece.style.transform = `translate(${em.clientX - startX}px, ${em.clientY - startY}px)`;
-                piece.style.zIndex = "50";
-            }
+            function onMove(em) { piece.style.transform = `translate(${em.clientX - startX}px, ${em.clientY - startY}px)`; }
             
             function onUp(em) {
-                piece.releasePointerCapture(em.pointerId);
-                piece.removeEventListener("pointermove", onMove);
-                piece.removeEventListener("pointerup", onUp);
+                piece.releasePointerCapture(em.pointerId); piece.classList.remove("dragging");
+                piece.removeEventListener("pointermove", onMove); piece.removeEventListener("pointerup", onUp);
                 
-                // Verificar colisão simples com o container alvo
-                const rect = DOM.levelContent.getBoundingClientRect();
-                const pRect = piece.getBoundingClientRect();
-                const tRect = wrap.querySelector("#targetArea").getBoundingClientRect();
+                const pRect = piece.getBoundingClientRect(); const tRect = targetArea.getBoundingClientRect();
+                const isOver = (pRect.left >= tRect.left - 30 && pRect.right <= tRect.right + 30 && pRect.top >= tRect.top - 30 && pRect.bottom <= tRect.bottom + 30);
                 
-                if (pRect.left >= tRect.left - 20 && pRect.right <= tRect.right + 20 &&
-                    pRect.top >= tRect.top - 20 && pRect.bottom <= tRect.bottom + 20) {
-                    piece.style.transform = "none";
-                    piece.style.position = "static";
-                    piece.style.visibility = "hidden";
-                    placedCount++;
-                    if (placedCount === 4) {
-                        completeLevel();
-                    }
-                } else {
-                    piece.style.transform = "none";
-                    piece.style.zIndex = "1";
-                    failLevel();
-                }
+                if (isOver) {
+                    if (piece.dataset.correct === "true") { piece.style.visibility = "hidden"; completeLevel(); } 
+                    else { failLevel(); setTimeout(() => piece.style.transform = "none", 100); }
+                } else { piece.style.transform = "none"; }
             }
-            
-            piece.addEventListener("pointermove", onMove);
-            piece.addEventListener("pointerup", onUp);
+            piece.addEventListener("pointermove", onMove); piece.addEventListener("pointerup", onUp);
         });
     });
 }
 
-/* Nível 2: 4 Retângulos azuis largos centralizados */
 function renderLevel2() {
     DOM.levelQuestion.textContent = "Aperte no correto.";
-    const wrap = document.createElement("div");
-    wrap.className = "grid2-large";
+    const wrap = document.createElement("div"); wrap.className = "grid2-large";
     for (let i = 0; i < 4; i++) {
-        const btn = document.createElement("button");
-        btn.className = "blue-choice";
-        wrap.appendChild(btn);
-        btn.addEventListener("pointerup", () => {
-            if (i === 2) completeLevel();
-            else failLevel();
-        });
+        const btn = document.createElement("button"); btn.className = "blue-choice";
+        wrap.appendChild(btn); btn.addEventListener("pointerup", () => { if (i === 2) completeLevel(); else failLevel(); });
     }
     DOM.levelContent.appendChild(wrap);
 }
 
-/* Nível 3: Opções com retângulos azuis arredondados */
 function renderLevel3() {
     DOM.levelQuestion.textContent = "Qual destas palavras é exatamente a resposta?";
-    const wrap = document.createElement("div");
-    wrap.className = "options-grid";
-    const texts = ["NÃO", "TALVEZ", "CERTO", "ERRADO"];
-    texts.forEach((txt, idx) => {
-        const btn = document.createElement("button");
-        btn.className = "blue-choice";
-        btn.textContent = txt;
-        wrap.appendChild(btn);
-        btn.addEventListener("pointerup", () => {
-            if (idx === 2) completeLevel();
-            else failLevel();
-        });
+    const wrap = document.createElement("div"); wrap.className = "options-grid";
+    ["NÃO", "TALVEZ", "CERTO", "ERRADO"].forEach((txt, idx) => {
+        const btn = document.createElement("button"); btn.className = "blue-choice"; btn.textContent = txt; wrap.appendChild(btn);
+        btn.addEventListener("pointerup", () => { if (idx === 2) completeLevel(); else failLevel(); });
     });
     DOM.levelContent.appendChild(wrap);
 }
 
-/* Nível 4: Mais próximo de Pi */
 function renderLevel4() {
     DOM.levelQuestion.textContent = "Qual o número mais próximo de Pi?";
-    const wrap = document.createElement("div");
-    wrap.className = "options-grid";
-    const opts = ["2,14", "3,14", "4,14", "5,14"];
-    opts.forEach((val, idx) => {
-        const btn = document.createElement("button");
-        btn.className = "blue-choice";
-        btn.textContent = val;
-        wrap.appendChild(btn);
-        btn.addEventListener("pointerup", () => {
-            if (idx === 1) completeLevel();
-            else failLevel();
-        });
+    const wrap = document.createElement("div"); wrap.className = "options-grid";
+    ["2,14", "3,14", "4,14", "5,14"].forEach((val, idx) => {
+        const btn = document.createElement("button"); btn.className = "blue-choice"; btn.textContent = val; wrap.appendChild(btn);
+        btn.addEventListener("pointerup", () => { if (idx === 1) completeLevel(); else failLevel(); });
     });
     DOM.levelContent.appendChild(wrap);
 }
 
-/* Nível 5: Contagem de Formas Variadas */
 function renderLevel5() {
     DOM.levelQuestion.textContent = "Quantos círculos tem na tela?";
     const wrap = document.createElement("div");
-    wrap.style.width = "100%";
-    wrap.style.display = "flex";
-    wrap.style.flexDirection = "column";
-    wrap.style.alignItems = "center";
-    wrap.style.gap = "15px";
-
+    wrap.style.cssText = "width:100%; display:flex; flex-direction:column; align-items:center; gap:15px;";
     wrap.innerHTML = `
         <div class="shape-field">
             <div class="geo-shape geo-circle" style="width:36px;height:36px;left:25px;top:20px;"></div>
@@ -1129,289 +420,144 @@ function renderLevel5() {
         <div class="options-grid" id="cOpts"></div>
     `;
     DOM.levelContent.appendChild(wrap);
-
     const cOpts = wrap.querySelector("#cOpts");
     ["1", "2", "3", "4"].forEach((ans, idx) => {
-        const btn = document.createElement("button");
-        btn.className = "blue-choice";
-        btn.textContent = ans;
-        cOpts.appendChild(btn);
-        btn.addEventListener("pointerup", () => {
-            if (idx === 2) completeLevel(); // 3 círculos
-            else failLevel();
-        });
+        const btn = document.createElement("button"); btn.className = "blue-choice"; btn.textContent = ans; cOpts.appendChild(btn);
+        btn.addEventListener("pointerup", () => { if (idx === 2) completeLevel(); else failLevel(); });
     });
 }
 
-/* Nível 6: Círculos em sequência */
 function renderLevel6() {
     DOM.levelQuestion.textContent = "Acompanhe os círculos.";
-    const wrap = document.createElement("div");
-    wrap.style.position = "absolute";
-    wrap.style.inset = "0";
-
+    const wrap = document.createElement("div"); wrap.style.cssText = "position:absolute; inset:0;";
     const pos = [["15%", "25%"], ["70%", "22%"], ["48%", "45%"], ["22%", "72%"], ["76%", "70%"]];
     pos.forEach(([l, t], i) => {
-        const c = document.createElement("div");
-        c.className = "blue-choice";
-        c.style.position = "absolute";
-        c.style.width = "40px";
-        c.style.height = "40px";
-        c.style.borderRadius = "50%";
-        c.style.left = l;
-        c.style.top = t;
-        c.style.display = "none";
+        const c = document.createElement("div"); c.className = "blue-choice";
+        c.style.cssText = `position:absolute; width:40px; height:40px; border-radius:50%; left:${l}; top:${t}; display:none;`;
         wrap.appendChild(c);
-
         addLevelTimer(setTimeout(() => { c.style.display = "block"; }, i * 600));
     });
-
     addLevelTimer(setTimeout(() => {
-        wrap.querySelectorAll("div").forEach(c => {
-            c.style.display = "block";
-            c.addEventListener("pointerup", completeLevel, { once: true });
-        });
+        wrap.querySelectorAll("div").forEach(c => { c.style.display = "block"; c.addEventListener("pointerup", completeLevel, { once: true }); });
     }, 5 * 600 + 200));
-
     DOM.levelContent.appendChild(wrap);
 }
 
-/* Nível 7: Ratos em círculo + 6º rato girando na pergunta */
 function renderLevel7() {
-    DOM.levelQuestion.innerHTML = `
-        <span class="question-with-rat">
-            <span class="small-hiding-rat">🐭</span>
-            Quantos ratos tem na tela?
-        </span>
-    `;
-    const wrap = document.createElement("div");
-    wrap.className = "rats-wrap";
-    wrap.innerHTML = `
-        <div class="circling-rat" style="top:25%; left:30%;">🐭</div>
-        <div class="circling-rat" style="top:25%; left:70%;">🐭</div>
-        <div class="circling-rat" style="top:75%; left:30%;">🐭</div>
-        <div class="circling-rat" style="top:75%; left:70%;">🐭</div>
-        <div class="circling-rat" style="top:50%; left:50%;">🐭</div>
-    `;
+    DOM.levelQuestion.innerHTML = `<span class="question-with-rat"><span class="small-hiding-rat">🐀</span>Quantos ratos tem na tela?</span>`;
+    const wrap = document.createElement("div"); wrap.className = "rats-wrap";
     
-    const optWrap = document.createElement("div");
-    optWrap.className = "options-grid";
+    // Círculo perfeito
+    const radius = 80;
+    const center = document.createElement("div"); center.className = "orbit-center";
+    for(let i=0; i<5; i++) {
+        const angle = (i * 72) * (Math.PI / 180);
+        const rat = document.createElement("div"); rat.className = "circling-rat"; rat.textContent = "🐀";
+        rat.style.left = Math.cos(angle) * radius + "px";
+        rat.style.top = Math.sin(angle) * radius + "px";
+        rat.style.transform = `rotate(${i * 72 + 90}deg)`; // Ratos acompanhando a curva
+        center.appendChild(rat);
+    }
+    wrap.appendChild(center);
+    
+    const optWrap = document.createElement("div"); optWrap.className = "options-grid";
     ["3", "4", "5", "6"].forEach((ans, idx) => {
-        const btn = document.createElement("button");
-        btn.className = "blue-choice";
-        btn.textContent = ans;
-        optWrap.appendChild(btn);
-        btn.addEventListener("pointerup", () => {
-            if (idx === 3) completeLevel(); // 6 ratos
-            else failLevel();
-        });
+        const btn = document.createElement("button"); btn.className = "blue-choice"; btn.textContent = ans; optWrap.appendChild(btn);
+        btn.addEventListener("pointerup", () => { if (idx === 3) completeLevel(); else failLevel(); });
     });
 
-    DOM.levelContent.appendChild(wrap);
-    DOM.levelContent.appendChild(optWrap);
+    DOM.levelContent.appendChild(wrap); DOM.levelContent.appendChild(optWrap);
 }
 
-/* Nível 8: Cores em barra lado a lado (estilo volume) */
 function renderLevel8() {
     DOM.levelQuestion.textContent = "Memorize a sequência de cores.";
-    const sequence = ["c-red", "c-blue", "c-green", "c-yellow", "c-purple", "c-orange", "c-white"];
-    const shuffled = ["c-green", "c-orange", "c-red", "c-white", "c-purple", "c-blue", "c-yellow"];
+    const sequence = ["c-red", "c-blue", "c-green", "c-yellow", "c-purple"];
+    const shuffled = ["c-green", "c-red", "c-purple", "c-blue", "c-yellow"];
 
-    const wrap = document.createElement("div");
-    wrap.className = "color-bar-container";
-
-    const bar = document.createElement("div");
-    bar.className = "color-sequence-bar";
-    sequence.forEach(col => {
-        const seg = document.createElement("div");
-        seg.className = `color-segment ${col}`;
-        bar.appendChild(seg);
-    });
-    wrap.appendChild(bar);
-
-    const optGrid = document.createElement("div");
-    optGrid.className = "options-grid";
-    shuffled.forEach(col => {
-        const btn = document.createElement("button");
-        btn.className = "blue-choice";
-        btn.style.height = "50px";
-        const inner = document.createElement("div");
-        inner.style.width = "30px";
-        inner.style.height = "20px";
-        inner.className = `color-segment ${col}`;
-        btn.appendChild(inner);
-        btn.dataset.color = col;
-        optGrid.appendChild(btn);
-    });
-    wrap.appendChild(optGrid);
+    const wrap = document.createElement("div"); wrap.className = "color-bar-container";
+    
+    // Fase 1: Mostra Sequência
+    sequence.forEach(col => { const seg = document.createElement("div"); seg.className = `color-segment ${col}`; wrap.appendChild(seg); });
     DOM.levelContent.appendChild(wrap);
 
-    GAME.state.colorSeq = sequence;
-    GAME.state.colorIdx = 0;
+    GAME.state.colorSeq = sequence; GAME.state.colorIdx = 0;
 
     addLevelTimer(setTimeout(() => {
-        bar.style.opacity = "0";
+        wrap.innerHTML = ""; // Limpa a fase 1
         DOM.levelQuestion.textContent = "Repita a sequência.";
-    }, 4500));
-
-    optGrid.querySelectorAll("button").forEach(btn => {
-        btn.addEventListener("pointerup", () => {
-            const exp = GAME.state.colorSeq[GAME.state.colorIdx];
-            if (btn.dataset.color !== exp) {
-                failLevel();
-                return;
-            }
-            GAME.state.colorIdx++;
-            if (GAME.state.colorIdx >= GAME.state.colorSeq.length) {
-                completeLevel();
-            } else {
-                feedbackCorrect();
-            }
+        // Fase 2: Mostra Opções no mesmo formato de barra
+        shuffled.forEach(col => {
+            const btn = document.createElement("button"); btn.className = `color-segment ${col}`; btn.dataset.color = col; wrap.appendChild(btn);
+            btn.addEventListener("pointerup", () => {
+                const exp = GAME.state.colorSeq[GAME.state.colorIdx];
+                if (btn.dataset.color !== exp) { failLevel(); return; }
+                GAME.state.colorIdx++;
+                if (GAME.state.colorIdx >= GAME.state.colorSeq.length) { completeLevel(); } else { feedbackCorrect(); }
+            });
         });
-    });
+    }, 4500));
 }
 
-/* Nível 9: Setas no centro */
 function renderLevel9() {
     DOM.levelQuestion.textContent = "Memorize a sequência.";
     const seq = ["↑", "→", "↓", "←"];
-    const wrap = document.createElement("div");
-    wrap.style.display = "flex";
-    wrap.style.flexDirection = "column";
-    wrap.style.alignItems = "center";
-    wrap.style.gap = "15px";
+    const wrap = document.createElement("div"); wrap.style.cssText = "display:flex; flex-direction:column; align-items:center; gap:15px;";
+    const display = document.createElement("div"); display.className = "arrow-sequence-display";
+    seq.forEach(d => { const sp = document.createElement("span"); sp.textContent = d; display.appendChild(sp); });
+    wrap.appendChild(display); DOM.levelContent.appendChild(wrap);
 
-    const display = document.createElement("div");
-    display.className = "arrow-sequence-display";
-    seq.forEach(d => {
-        const sp = document.createElement("span");
-        sp.textContent = d;
-        display.appendChild(sp);
-    });
-    wrap.appendChild(display);
-    DOM.levelContent.appendChild(wrap);
-
-    GAME.state.arrowSeq = seq;
-    GAME.state.arrowIdx = 0;
+    GAME.state.arrowSeq = seq; GAME.state.arrowIdx = 0;
 
     addLevelTimer(setTimeout(() => {
-        display.style.opacity = "0";
-        DOM.levelQuestion.textContent = "Repita a sequência.";
-        showArrowButtons(wrap);
+        display.style.opacity = "0"; DOM.levelQuestion.textContent = "Repita a sequência.";
+        const grid = document.createElement("div"); grid.className = "options-grid";
+        ["↑", "→", "↓", "←"].forEach(dir => {
+            const btn = document.createElement("button"); btn.className = "blue-choice"; btn.textContent = dir; grid.appendChild(btn);
+            btn.addEventListener("pointerup", () => {
+                const exp = GAME.state.arrowSeq[GAME.state.arrowIdx];
+                if (dir !== exp) { failLevel(); return; }
+                GAME.state.arrowIdx++;
+                if (GAME.state.arrowIdx >= GAME.state.arrowSeq.length) { completeLevel(); } else { feedbackCorrect(); }
+            });
+        });
+        wrap.appendChild(grid);
     }, 4500));
 }
 
-function showArrowButtons(wrap) {
-    const grid = document.createElement("div");
-    grid.className = "options-grid";
-    ["↑", "→", "↓", "←"].forEach(dir => {
-        const btn = document.createElement("button");
-        btn.className = "blue-choice";
-        btn.textContent = dir;
-        grid.appendChild(btn);
-        btn.addEventListener("pointerup", () => {
-            const exp = GAME.state.arrowSeq[GAME.state.arrowIdx];
-            if (dir !== exp) {
-                failLevel();
-                return;
-            }
-            GAME.state.arrowIdx++;
-            if (GAME.state.arrowIdx >= GAME.state.arrowSeq.length) {
-                completeLevel();
-            } else {
-                feedbackCorrect();
-            }
-        });
-    });
-    wrap.appendChild(grid);
-}
-
-/* Nível 10: Camuflado com tons próximos ao vermelho */
 function renderLevel10() {
-    DOM.levelQuestion.innerHTML = `Toque no <span style="color: #cc4444;">vermelho</span>.`;
-    const wrap = document.createElement("div");
-    wrap.className = "red-trap-grid";
+    DOM.levelQuestion.innerHTML = `Toque no <span id="secretRedTarget">vermelho</span>.`;
+    const wrap = document.createElement("div"); wrap.className = "red-trap-grid";
     
-    // Tons parecidos, mas nenhum vermelho puro
-    const tones = ["#b23b3b", "#a83232", "#c44d4d", "#9e2a2a"];
-    tones.forEach((tone, idx) => {
-        const btn = document.createElement("button");
-        btn.className = "red-trap-btn";
-        btn.style.background = tone;
-        btn.textContent = "BOTÃO";
-        wrap.appendChild(btn);
-        btn.addEventListener("pointerup", () => {
-            // Nenhum deles é a resposta certa do botão; a resposta está na pegadinha da frase ou em outro elemento?
-            // Espere, o usuário disse: "a resposta esta na frase toque no vermelho e não, ( toque no botão vermelho"
-            // Logo, clicar nos botões é erro, ou o texto da pergunta é o botão clicável!
-            failLevel();
-        });
+    ["#b23b3b", "#a83232", "#c44d4d", "#9e2a2a"].forEach((tone) => {
+        const btn = document.createElement("button"); btn.className = "red-trap-btn"; btn.style.background = tone;
+        wrap.appendChild(btn); btn.addEventListener("pointerup", failLevel);
     });
-
     DOM.levelContent.appendChild(wrap);
 
-    // Permitir clicar na palavra "vermelho" do enunciado para avançar
-    DOM.levelQuestion.addEventListener("pointerup", () => {
-        completeLevel();
-    }, { once: true });
+    // O listener precisa estar no header, já que o ID secretRedTarget foi injetado lá
+    setTimeout(() => {
+        document.getElementById("secretRedTarget").addEventListener("pointerup", completeLevel, { once: true });
+    }, 50);
 }
 
 function finishGame() {
-    clearLevelTimers();
-    GAME.finished = true;
-    soundVictory();
-    vibrate([80, 60, 80, 60, 180]);
-    showOverlay("PARABÉNS", "Você concluiu os primeiros 10 níveis com sucesso!", "REINICIAR", () => {
-        closeOverlay();
-        goHome();
-    });
+    clearLevelTimers(); GAME.finished = true; soundVictory(); vibrate([80, 60, 80, 60, 180]);
+    showOverlay("PARABÉNS", "Você concluiu os primeiros 10 níveis com sucesso!", "REINICIAR", () => { closeOverlay(); goHome(); });
 }
 
-function updateSettingsUI() {
-    DOM.soundButton.textContent = CONFIG.SOUND_ENABLED ? "ON" : "OFF";
-    DOM.vibrationButton.textContent = CONFIG.VIBRATION_ENABLED ? "ON" : "OFF";
-}
-
-DOM.soundButton.addEventListener("pointerup", () => {
-    CONFIG.SOUND_ENABLED = !CONFIG.SOUND_ENABLED;
-    updateSettingsUI();
-});
-
-DOM.vibrationButton.addEventListener("pointerup", () => {
-    CONFIG.VIBRATION_ENABLED = !CONFIG.VIBRATION_ENABLED;
-    updateSettingsUI();
-    if (CONFIG.VIBRATION_ENABLED) vibrate(30);
-});
-
-DOM.startButton.addEventListener("pointerup", () => {
-    const ctx = getAudioContext();
-    if (ctx && ctx.state === "suspended") ctx.resume().catch(() => {});
-    startGame();
-});
-
-DOM.menuButton.addEventListener("pointerup", () => {
-    showScreen(DOM.settingsScreen);
-});
-
-DOM.backButton.addEventListener("pointerup", () => {
-    showScreen(DOM.homeScreen);
-    startHallAnimation();
-});
+function updateSettingsUI() { DOM.soundButton.textContent = CONFIG.SOUND_ENABLED ? "ON" : "OFF"; DOM.vibrationButton.textContent = CONFIG.VIBRATION_ENABLED ? "ON" : "OFF"; }
+DOM.soundButton.addEventListener("pointerup", () => { CONFIG.SOUND_ENABLED = !CONFIG.SOUND_ENABLED; updateSettingsUI(); });
+DOM.vibrationButton.addEventListener("pointerup", () => { CONFIG.VIBRATION_ENABLED = !CONFIG.VIBRATION_ENABLED; updateSettingsUI(); if (CONFIG.VIBRATION_ENABLED) vibrate(30); });
+DOM.startButton.addEventListener("pointerup", () => { const ctx = getAudioContext(); if (ctx && ctx.state === "suspended") ctx.resume().catch(() => {}); startGame(); });
+DOM.menuButton.addEventListener("pointerup", () => { showScreen(DOM.settingsScreen); });
+DOM.backButton.addEventListener("pointerup", () => { showScreen(DOM.homeScreen); startHallAnimation(); });
 
 document.addEventListener("contextmenu", e => e.preventDefault());
 document.addEventListener("gesturestart", e => e.preventDefault());
 document.addEventListener("touchmove", e => { if (e.cancelable) e.preventDefault(); }, { passive: false });
 
-function init() {
-    GAME.lives = CONFIG.STARTING_LIVES;
-    updateLives();
-    renderHall();
-    updateSettingsUI();
-    startHallAnimation();
-}
-
+function init() { GAME.lives = CONFIG.STARTING_LIVES; updateLives(); renderHall(); updateSettingsUI(); startHallAnimation(); }
 init();
 </script>
-
 </body>
 </html>
