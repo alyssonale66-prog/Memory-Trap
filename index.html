@@ -48,19 +48,19 @@ button {
     align-items: center; justify-content: center;
 }
 
-/* TELA INICIAL */
+/* TELA INICIAL (LAYOUT AJUSTADO CONFORME REFERÊNCIA) */
 #homeScreen {
     justify-content: center;
     padding: calc(env(safe-area-inset-top) + 15px) 20px calc(env(safe-area-inset-bottom) + 15px);
-    gap: 22px;
+    gap: 16px;
 }
 
 .logo { text-align: center; line-height: .82; pointer-events: none; }
-.logo-main { display: block; font-size: clamp(42px, 13vw, 76px); font-weight: 900; letter-spacing: .10em; }
-.logo-sub { display: block; margin-top: 10px; font-size: clamp(16px, 4.5vw, 26px); font-weight: 700; letter-spacing: .45em; padding-left: .45em; }
-.logo-line { width: min(240px, 60vw); height: 1px; margin: 15px auto 0; background: rgba(255,255,255,.45); }
+.logo-main { display: block; font-size: clamp(40px, 12vw, 70px); font-weight: 900; letter-spacing: .10em; }
+.logo-sub { display: block; margin-top: 8px; font-size: clamp(15px, 4vw, 24px); font-weight: 700; letter-spacing: .45em; padding-left: .45em; }
+.logo-line { width: min(220px, 55vw); height: 1px; margin: 12px auto 0; background: rgba(255,255,255,.45); }
 
-/* VIDAS */
+/* VIDAS (VERMELHO VIBRANTE #ff3b30) */
 .lives { display: flex; justify-content: center; align-items: center; gap: 12px; }
 .heart { position: relative; width: 22px; height: 22px; transform: rotate(-45deg); border-radius: 3px; background: #ff3b30; }
 .heart::before, .heart::after { content: ""; position: absolute; width: 22px; height: 22px; border-radius: 50%; background: #ff3b30; }
@@ -69,30 +69,30 @@ button {
 .heart.empty, .heart.empty::before, .heart.empty::after { background: #333333; }
 
 .start-button {
-    position: relative; width: min(320px, 82vw); min-height: 76px; padding: 16px 24px;
+    position: relative; width: min(320px, 82vw); min-height: 72px; padding: 14px 24px;
     border: 1px solid rgba(255,255,255,.75); border-radius: 6px; background: #050505;
 }
 .start-button:active { transform: scale(.97); }
-.start-title { display: block; font-size: 25px; font-weight: 900; letter-spacing: .15em; }
-.start-subtitle { display: block; margin-top: 5px; font-size: 11px; letter-spacing: .25em; opacity: .55; }
+.start-title { display: block; font-size: 24px; font-weight: 900; letter-spacing: .15em; }
+.start-subtitle { display: block; margin-top: 4px; font-size: 11px; letter-spacing: .25em; opacity: .55; }
 
 /* HALL */
 .hall {
-    position: relative; width: min(370px, 90vw); height: 150px; overflow: hidden;
+    position: relative; width: min(370px, 90vw); height: 130px; overflow: hidden;
     border-top: 1px solid rgba(255,255,255,.12); border-bottom: 1px solid rgba(255,255,255,.12);
 }
-.hall-title { position: absolute; top: 10px; left: 0; right: 0; z-index: 3; text-align: center; font-size: 10px; letter-spacing: .25em; opacity: .5; }
-.hall-mask { position: absolute; inset: 0; overflow: hidden; padding-top: 34px; }
-.hall-list { display: flex; flex-direction: column; align-items: center; gap: 14px; }
-.hall-name { font-size: 15px; font-weight: 700; letter-spacing: .12em; opacity: .82; }
-.hall-empty { margin-top: 35px; font-size: 11px; letter-spacing: .15em; opacity: .28; }
+.hall-title { position: absolute; top: 8px; left: 0; right: 0; z-index: 3; text-align: center; font-size: 10px; letter-spacing: .25em; opacity: .5; }
+.hall-mask { position: absolute; inset: 0; overflow: hidden; padding-top: 28px; }
+.hall-list { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.hall-name { font-size: 14px; font-weight: 700; letter-spacing: .12em; opacity: .82; }
+.hall-empty { margin-top: 30px; font-size: 11px; letter-spacing: .15em; opacity: .28; }
 .home-menu { position: absolute; right: 20px; bottom: calc(env(safe-area-inset-bottom) + 15px); width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; font-size: 20px; opacity: .7; }
 
 /* TELA DE JOGO */
 #gameScreen { justify-content: flex-start; background: #000; }
 .game-header { position: relative; width: 100%; text-align: center; padding-top: calc(env(safe-area-inset-top) + 15px); z-index: 20; }
 .level-number { font-size: 18px; font-weight: 700; letter-spacing: .15em; }
-.level-question { width: 90%; margin: 8px auto 0; text-align: center; font-size: clamp(16px, 4vw, 20px); font-weight: 700; line-height: 1.3; }
+.level-question { width: 90%; margin: 8px auto 0; text-align: center; font-size: clamp(15px, 3.8vw, 19px); font-weight: 700; line-height: 1.3; }
 .level-content { position: relative; width: 100%; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 20px 70px; gap: 15px; }
 .game-lives { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 15px); z-index: 30; }
 
@@ -106,11 +106,11 @@ button {
 .blue-choice:active { transform: scale(.96); background: #1a53cc; }
 
 /* NÍVEL 1 */
-.broken-container { display: flex; flex-direction: column; align-items: center; gap: 40px; width: 100%; }
-.broken-top { width: 220px; height: 110px; background: #246bff; border-radius: 10px; clip-path: polygon(0% 0%, 100% 0%, 100% 40%, 80% 100%, 60% 50%, 40% 100%, 20% 60%, 0% 100%); }
-.broken-pieces-pool { display: flex; gap: 15px; justify-content: center; width: 100%; }
+.broken-container { display: flex; flex-direction: column; align-items: center; gap: 30px; width: 100%; margin-top: -20px; }
+.broken-top { width: 240px; height: 120px; background: #246bff; border-radius: 10px; clip-path: polygon(0% 0%, 100% 0%, 100% 45%, 85% 100%, 70% 50%, 50% 90%, 30% 40%, 15% 90%, 0% 50%); }
+.broken-pieces-pool { display: flex; gap: 12px; justify-content: center; width: 100%; }
 .puzzle-piece {
-    width: 60px; height: 60px; background: #246bff; border-radius: 8px;
+    width: 55px; height: 55px; background: #246bff; border-radius: 8px;
     touch-action: none; cursor: grab; transition: transform 0.2s ease;
 }
 .puzzle-piece.dragging { transition: none; z-index: 50; }
@@ -118,8 +118,8 @@ button {
 /* NÍVEL 2 */
 .grid2-large { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, 75px); gap: 14px; width: min(380px, 94vw); }
 
-/* NÍVEL 5 (Formas soltas) */
-.shape-field { position: relative; width: min(360px, 92vw); height: 170px; }
+/* NÍVEL 5 (Formas soltas espalhadas) */
+.shape-field { position: relative; width: 100%; height: 220px; }
 .geo-shape { position: absolute; background: #fff; }
 .geo-circle { border-radius: 50%; }
 .geo-square { border-radius: 4px; }
@@ -127,22 +127,25 @@ button {
 .geo-pentagon { clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
 .geo-hexagon { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
 
+/* NÍVEL 6 */
+.click-circle { position: absolute; width: 45px; height: 45px; border-radius: 50%; background: #246bff; border: 1px solid #fff; }
+
 /* NÍVEL 7 (Ratos) */
 .rats-wrap { position: relative; width: 220px; height: 220px; margin-bottom: 20px; }
 .orbit-center { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; transform: translate(-5%, -5%); animation: spin 4s linear infinite; }
 .circling-rat { position: absolute; font-size: 26px; transform-origin: center; }
 @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
 .question-with-rat { position: relative; display: inline-block; padding: 0 15px; }
-.small-hiding-rat { position: absolute; font-size: 14px; top: -16px; left: 50%; transform: translateX(-50%); animation: ratPeekAround 3s ease-in-out infinite; }
-@keyframes ratPeekAround { 0%, 100% { transform: translateX(-60px) translateY(0); } 50% { transform: translateX(45px) translateY(-4px); } }
+.small-hiding-rat { position: absolute; font-size: 12px; top: -12px; left: -20px; animation: ratFastRun 2s linear infinite; }
+@keyframes ratFastRun { 0% { transform: translateX(-40px); } 100% { transform: translateX(180px); } }
 
-/* NÍVEL 8 (Cores Verticais) */
-.color-bar-container { display: flex; gap: 8px; justify-content: center; align-items: center; height: 120px; }
-.color-segment { width: 35px; height: 100%; border-radius: 6px; }
+/* NÍVEL 8 (Cores Verticais Finas com Espaçamento Igual) */
+.color-bar-container { display: flex; gap: 12px; justify-content: center; align-items: center; height: 160px; }
+.color-segment { width: 22px; height: 140px; border-radius: 4px; }
 .color-segment:active { transform: scale(.95); }
 .c-red { background: #ff3030; } .c-blue { background: #3080ff; }
 .c-green { background: #35c96b; } .c-yellow { background: #ffd83d; }
-.c-purple { background: #9c55ff; } .c-orange { background: #ff8a30; } .c-white { background: #fff; }
+.c-purple { background: #9c55ff; } .c-orange { background: #ff8a30; }
 
 /* NÍVEL 9 */
 .arrow-sequence-display { display: flex; gap: 16px; font-size: 40px; font-weight: 900; margin: 15px 0; }
@@ -208,7 +211,7 @@ button {
 </div>
 
 <script>
-const CONFIG = { TOTAL_LEVELS: 10, STARTING_LIVES: 5, SOUND_ENABLED: true, VIBRATION_ENABLED: true, SURVIVORS_KEY: "memory_trap_survivors_v1" };
+const CONFIG = { TOTAL_LEVELS: 100, STARTING_LIVES: 5, SOUND_ENABLED: true, VIBRATION_ENABLED: true, SURVIVORS_KEY: "memory_trap_survivors_v1" };
 const GAME = { currentLevel: 0, lives: CONFIG.STARTING_LIVES, totalAttempts: 0, mistakes: 0, levelTimers: [], state: {}, finished: false };
 
 const DOM = {
@@ -225,6 +228,7 @@ const LEVELS = {
     5: { type: "count-circles" }, 6: { type: "appearing-circles" }, 7: { type: "no-number-rats", hiddenNumber: true },
     8: { type: "color-memory" }, 9: { type: "arrow-memory" }, 10: { type: "camouflaged-command" }
 };
+for (let i = 11; i <= 100; i++) LEVELS[i] = { name: "Nível " + i, type: "unimplemented" };
 
 function clearLevelTimers() { GAME.levelTimers.forEach(t => { clearTimeout(t); clearInterval(t); }); GAME.levelTimers = []; }
 function addLevelTimer(t) { GAME.levelTimers.push(t); }
@@ -315,7 +319,7 @@ function failLevel() {
         showOverlay("SEM VIDAS", "Você perdeu as 5 vidas. O jogo será reiniciado do Nível 1.", "RECOMEÇAR", () => { GAME.lives = CONFIG.STARTING_LIVES; updateLives(); closeOverlay(); loadLevel(1); });
         return;
     }
-    // Piscar erro sem recarregar a tela (ajuste no layout)
+    showOverlay("ERRO", "Você continua no mesmo nível.", "TENTAR NOVAMENTE", () => { closeOverlay(); loadLevel(GAME.currentLevel); });
 }
 
 function completeLevel() {
@@ -335,15 +339,15 @@ function renderLevel(number, level) {
         case "count-circles": renderLevel5(); break; case "appearing-circles": renderLevel6(); break;
         case "no-number-rats": renderLevel7(); break; case "color-memory": renderLevel8(); break;
         case "arrow-memory": renderLevel9(); break; case "camouflaged-command": renderLevel10(); break;
-        default: completeLevel(); break;
+        default: renderUnimplementedLevel(number, level); break;
     }
 }
 
-/* NÍVEIS 1 A 10 */
+/* NÍVEL 1: Peça Quebrada (Drag and Drop com 4 peças quase idênticas) */
 function renderLevel1() {
     DOM.levelQuestion.textContent = "Complete a figura.";
     const wrap = document.createElement("div"); wrap.className = "broken-container";
-    wrap.innerHTML = `<div class="broken-top" id="targetArea"></div><div class="broken-pieces-pool" id="piecesPool"><div class="puzzle-piece" data-correct="false"></div><div class="puzzle-piece" data-correct="true"></div><div class="puzzle-piece" data-correct="false"></div><div class="puzzle-piece" data-correct="false"></div></div>`;
+    wrap.innerHTML = `<div class="broken-top" id="targetArea"></div><div class="broken-pieces-pool"><div class="puzzle-piece" data-correct="false"></div><div class="puzzle-piece" data-correct="true"></div><div class="puzzle-piece" data-correct="false"></div><div class="puzzle-piece" data-correct="false"></div></div>`;
     DOM.levelContent.appendChild(wrap);
 
     const pieces = wrap.querySelectorAll(".puzzle-piece");
@@ -374,6 +378,7 @@ function renderLevel1() {
     });
 }
 
+/* NÍVEL 2: Grade 2x2 */
 function renderLevel2() {
     DOM.levelQuestion.textContent = "Aperte no correto.";
     const wrap = document.createElement("div"); wrap.className = "grid2-large";
@@ -384,16 +389,24 @@ function renderLevel2() {
     DOM.levelContent.appendChild(wrap);
 }
 
+/* NÍVEL 3: Qual a cor do ícone do jogo? (4 cores próximas sem texto) */
 function renderLevel3() {
-    DOM.levelQuestion.textContent = "Qual destas palavras é exatamente a resposta?";
-    const wrap = document.createElement("div"); wrap.className = "options-grid";
-    ["NÃO", "TALVEZ", "CERTO", "ERRADO"].forEach((txt, idx) => {
-        const btn = document.createElement("button"); btn.className = "blue-choice"; btn.textContent = txt; wrap.appendChild(btn);
-        btn.addEventListener("pointerup", () => { if (idx === 2) completeLevel(); else failLevel(); });
+    DOM.levelQuestion.textContent = "Qual a cor do ícone do jogo?";
+    const wrap = document.createElement("div"); wrap.className = "grid2-large";
+    const tones = ["#246bff", "#1e5acc", "#2b73ff", "#1a4ebb"];
+    tones.forEach((tone, idx) => {
+        const btn = document.createElement("button"); btn.className = "blue-choice";
+        btn.style.background = tone;
+        wrap.appendChild(btn);
+        btn.addEventListener("pointerup", () => {
+            if (idx === 0) completeLevel();
+            else failLevel();
+        });
     });
     DOM.levelContent.appendChild(wrap);
 }
 
+/* NÍVEL 4: Pi */
 function renderLevel4() {
     DOM.levelQuestion.textContent = "Qual o número mais próximo de Pi?";
     const wrap = document.createElement("div"); wrap.className = "options-grid";
@@ -404,58 +417,92 @@ function renderLevel4() {
     DOM.levelContent.appendChild(wrap);
 }
 
+/* NÍVEL 5: Contagem de Formas Variadas (~20 formas, 1 círculo minúsculo, resposta 6) */
 function renderLevel5() {
     DOM.levelQuestion.textContent = "Quantos círculos tem na tela?";
     const wrap = document.createElement("div");
-    wrap.style.cssText = "width:100%; display:flex; flex-direction:column; align-items:center; gap:15px;";
+    wrap.style.cssText = "width:100%; display:flex; flex-direction:column; align-items:center; gap:10px;";
     wrap.innerHTML = `
         <div class="shape-field">
-            <div class="geo-shape geo-circle" style="width:36px;height:36px;left:25px;top:20px;"></div>
-            <div class="geo-shape geo-circle" style="width:28px;height:28px;left:140px;top:85px;"></div>
-            <div class="geo-shape geo-circle" style="width:42px;height:42px;left:270px;top:100px;"></div>
-            <div class="geo-shape geo-square" style="width:30px;height:30px;left:90px;top:110px;"></div>
-            <div class="geo-shape geo-pentagon" style="width:35px;height:35px;left:200px;top:20px;"></div>
-            <div class="geo-shape geo-hexagon" style="width:38px;height:38px;left:300px;top:25px;"></div>
+            <div class="geo-shape geo-circle" style="width:28px;height:28px;left:20px;top:10px;"></div>
+            <div class="geo-shape geo-circle" style="width:22px;height:22px;left:120px;top:40px;"></div>
+            <div class="geo-shape geo-circle" style="width:32px;height:32px;left:260px;top:15px;"></div>
+            <div class="geo-shape geo-circle" style="width:25px;height:25px;left:80px;top:130px;"></div>
+            <div class="geo-shape geo-circle" style="width:30px;height:30px;left:200px;top:100px;"></div>
+            <div class="geo-shape geo-circle" style="width:10px;height:10px;left:310px;top:120px;"></div> <!-- Pequeno -->
+            <div class="geo-shape geo-square" style="width:25px;height:25px;left:50px;top:80px;"></div>
+            <div class="geo-shape geo-square" style="width:28px;height:28px;left:150px;top:160px;"></div>
+            <div class="geo-shape geo-square" style="width:24px;height:24px;left:280px;top:70px;"></div>
+            <div class="geo-shape geo-rect" style="width:40px;height:18px;left:100px;top:10px;"></div>
+            <div class="geo-shape geo-rect" style="width:35px;height:15px;left:230px;top:140px;"></div>
+            <div class="geo-shape geo-pentagon" style="width:28px;height:28px;left:10px;top:150px;"></div>
+            <div class="geo-shape geo-pentagon" style="width:30px;height:30px;left:170px;top:10px;"></div>
+            <div class="geo-shape geo-hexagon" style="width:26px;height:26px;left:320px;top:20px;"></div>
+            <div class="geo-shape geo-hexagon" style="width:28px;height:28px;left:240px;top:90px;"></div>
         </div>
         <div class="options-grid" id="cOpts"></div>
     `;
     DOM.levelContent.appendChild(wrap);
     const cOpts = wrap.querySelector("#cOpts");
-    ["1", "2", "3", "4"].forEach((ans, idx) => {
+    ["4", "5", "6", "7"].forEach((ans, idx) => {
         const btn = document.createElement("button"); btn.className = "blue-choice"; btn.textContent = ans; cOpts.appendChild(btn);
         btn.addEventListener("pointerup", () => { if (idx === 2) completeLevel(); else failLevel(); });
     });
 }
 
+/* Nível 6: Círculos aparecem em lugares diferentes (3s cada, precisa tocar em todos) */
 function renderLevel6() {
-    DOM.levelQuestion.textContent = "Acompanhe os círculos.";
+    DOM.levelQuestion.textContent = "Acompanhe e toque nos círculos.";
     const wrap = document.createElement("div"); wrap.style.cssText = "position:absolute; inset:0;";
-    const pos = [["15%", "25%"], ["70%", "22%"], ["48%", "45%"], ["22%", "72%"], ["76%", "70%"]];
-    pos.forEach(([l, t], i) => {
-        const c = document.createElement("div"); c.className = "blue-choice";
-        c.style.cssText = `position:absolute; width:40px; height:40px; border-radius:50%; left:${l}; top:${t}; display:none;`;
+    const coords = [["20%", "30%"], ["70%", "25%"], ["50%", "50%"], ["25%", "70%"], ["75%", "65%"]];
+    let clickedCount = 0;
+    let failed = false;
+
+    coords.forEach(([l, t], i) => {
+        const c = document.createElement("div"); c.className = "click-circle";
+        c.style.cssText = `position:absolute; left:${l}; top:${t}; display:none;`;
         wrap.appendChild(c);
-        addLevelTimer(setTimeout(() => { c.style.display = "block"; }, i * 600));
+
+        addLevelTimer(setTimeout(() => {
+            if (failed) return;
+            c.style.display = "block";
+            const hideTimer = setTimeout(() => {
+                if (c.style.display === "block" && !failed) {
+                    failed = true;
+                    failLevel();
+                }
+            }, 3000);
+            addLevelTimer(hideTimer);
+
+            c.addEventListener("pointerup", () => {
+                if (c.style.display === "block") {
+                    c.style.display = "none";
+                    clickedCount++;
+                    feedbackCorrect();
+                    if (clickedCount === coords.length && !failed) {
+                        completeLevel();
+                    }
+                }
+            }, { once: true });
+        }, i * 3200));
     });
-    addLevelTimer(setTimeout(() => {
-        wrap.querySelectorAll("div").forEach(c => { c.style.display = "block"; c.addEventListener("pointerup", completeLevel, { once: true }); });
-    }, 5 * 600 + 200));
+
     DOM.levelContent.appendChild(wrap);
 }
 
+/* Nível 7: 5 ratos em círculo + 6º rato minúsculo correndo rápido no topo */
 function renderLevel7() {
     DOM.levelQuestion.innerHTML = `<span class="question-with-rat"><span class="small-hiding-rat">🐀</span>Quantos ratos tem na tela?</span>`;
     const wrap = document.createElement("div"); wrap.className = "rats-wrap";
     
-    // Círculo perfeito
-    const radius = 80;
+    const radius = 75;
     const center = document.createElement("div"); center.className = "orbit-center";
-    for(let i=0; i<5; i++) {
+    for(let i = 0; i < 5; i++) {
         const angle = (i * 72) * (Math.PI / 180);
         const rat = document.createElement("div"); rat.className = "circling-rat"; rat.textContent = "🐀";
         rat.style.left = Math.cos(angle) * radius + "px";
         rat.style.top = Math.sin(angle) * radius + "px";
-        rat.style.transform = `rotate(${i * 72 + 90}deg)`; // Ratos acompanhando a curva
+        rat.style.transform = `rotate(${i * 72 + 90}deg)`;
         center.appendChild(rat);
     }
     wrap.appendChild(center);
@@ -469,23 +516,22 @@ function renderLevel7() {
     DOM.levelContent.appendChild(wrap); DOM.levelContent.appendChild(optWrap);
 }
 
+/* Nível 8: 6 Cores em Barras Verticais Finas com Espaçamento Igual */
 function renderLevel8() {
     DOM.levelQuestion.textContent = "Memorize a sequência de cores.";
-    const sequence = ["c-red", "c-blue", "c-green", "c-yellow", "c-purple"];
-    const shuffled = ["c-green", "c-red", "c-purple", "c-blue", "c-yellow"];
+    const sequence = ["c-red", "c-blue", "c-green", "c-yellow", "c-purple", "c-orange"];
+    const shuffled = ["c-green", "c-red", "c-orange", "c-purple", "c-blue", "c-yellow"];
 
     const wrap = document.createElement("div"); wrap.className = "color-bar-container";
     
-    // Fase 1: Mostra Sequência
     sequence.forEach(col => { const seg = document.createElement("div"); seg.className = `color-segment ${col}`; wrap.appendChild(seg); });
     DOM.levelContent.appendChild(wrap);
 
     GAME.state.colorSeq = sequence; GAME.state.colorIdx = 0;
 
     addLevelTimer(setTimeout(() => {
-        wrap.innerHTML = ""; // Limpa a fase 1
+        wrap.innerHTML = "";
         DOM.levelQuestion.textContent = "Repita a sequência.";
-        // Fase 2: Mostra Opções no mesmo formato de barra
         shuffled.forEach(col => {
             const btn = document.createElement("button"); btn.className = `color-segment ${col}`; btn.dataset.color = col; wrap.appendChild(btn);
             btn.addEventListener("pointerup", () => {
@@ -498,6 +544,7 @@ function renderLevel8() {
     }, 4500));
 }
 
+/* Nível 9: Setas no Centro */
 function renderLevel9() {
     DOM.levelQuestion.textContent = "Memorize a sequência.";
     const seq = ["↑", "→", "↓", "←"];
@@ -524,6 +571,7 @@ function renderLevel9() {
     }, 4500));
 }
 
+/* Nível 10: Botão Camuflado (Palavra "vermelho" no enunciado) */
 function renderLevel10() {
     DOM.levelQuestion.innerHTML = `Toque no <span id="secretRedTarget">vermelho</span>.`;
     const wrap = document.createElement("div"); wrap.className = "red-trap-grid";
@@ -534,18 +582,40 @@ function renderLevel10() {
     });
     DOM.levelContent.appendChild(wrap);
 
-    // O listener precisa estar no header, já que o ID secretRedTarget foi injetado lá
     setTimeout(() => {
         document.getElementById("secretRedTarget").addEventListener("pointerup", completeLevel, { once: true });
     }, 50);
 }
 
-function finishGame() {
-    clearLevelTimers(); GAME.finished = true; soundVictory(); vibrate([80, 60, 80, 60, 180]);
-    showOverlay("PARABÉNS", "Você concluiu os primeiros 10 níveis com sucesso!", "REINICIAR", () => { closeOverlay(); goHome(); });
+/* NÍVEIS 11 A 100 (VAZIOS / RESERVADOS) */
+function renderUnimplementedLevel(number, level) {
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "text-align: center; width: 100%;";
+    wrap.innerHTML = `
+        <div class="level-question">
+            ${level.name}
+        </div>
+        <div style="font-size: 12px; opacity: .5; margin-top: 20px; letter-spacing: .12em;">
+            MECÂNICA RESERVADA
+        </div>
+        <button class="blue-choice" style="display:block; width:180px; margin:30px auto 0;">
+            TESTAR
+        </button>
+    `;
+    DOM.levelContent.appendChild(wrap);
+    wrap.querySelector("button").addEventListener("pointerup", completeLevel);
 }
 
-function updateSettingsUI() { DOM.soundButton.textContent = CONFIG.SOUND_ENABLED ? "ON" : "OFF"; DOM.vibrationButton.textContent = CONFIG.VIBRATION_ENABLED ? "ON" : "OFF"; }
+function finishGame() {
+    clearLevelTimers(); GAME.finished = true; soundVictory(); vibrate([80, 60, 80, 60, 180]);
+    showOverlay("PARABÉNS", "Você concluiu o MEMORY TRAP com sucesso!", "REINICIAR", () => { closeOverlay(); goHome(); });
+}
+
+function updateSettingsUI() {
+    DOM.soundButton.textContent = CONFIG.SOUND_ENABLED ? "ON" : "OFF";
+    DOM.vibrationButton.textContent = CONFIG.VIBRATION_ENABLED ? "ON" : "OFF";
+}
+
 DOM.soundButton.addEventListener("pointerup", () => { CONFIG.SOUND_ENABLED = !CONFIG.SOUND_ENABLED; updateSettingsUI(); });
 DOM.vibrationButton.addEventListener("pointerup", () => { CONFIG.VIBRATION_ENABLED = !CONFIG.VIBRATION_ENABLED; updateSettingsUI(); if (CONFIG.VIBRATION_ENABLED) vibrate(30); });
 DOM.startButton.addEventListener("pointerup", () => { const ctx = getAudioContext(); if (ctx && ctx.state === "suspended") ctx.resume().catch(() => {}); startGame(); });
@@ -556,7 +626,13 @@ document.addEventListener("contextmenu", e => e.preventDefault());
 document.addEventListener("gesturestart", e => e.preventDefault());
 document.addEventListener("touchmove", e => { if (e.cancelable) e.preventDefault(); }, { passive: false });
 
-function init() { GAME.lives = CONFIG.STARTING_LIVES; updateLives(); renderHall(); updateSettingsUI(); startHallAnimation(); }
+function init() {
+    GAME.lives = CONFIG.STARTING_LIVES;
+    updateLives();
+    renderHall();
+    updateSettingsUI();
+    startHallAnimation();
+}
 init();
 </script>
 </body>
