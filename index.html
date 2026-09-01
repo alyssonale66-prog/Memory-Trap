@@ -2,292 +2,3572 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1,
+               maximum-scale=1,
+               user-scalable=no,
+               viewport-fit=cover">
+
+<meta name="theme-color" content="#000000">
+
 <title>MEMORY TRAP</title>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:"Courier New",monospace;font-weight:900}
-body{background:#000;color:#fff;display:flex;flex-direction:column;min-height:100vh;padding:20px}
-#top{width:100%;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #fff;padding-bottom:12px;font-size:18px;letter-spacing:2px}
-#levelNum{color:#555}
-#lives{font-size:16px;white-space:nowrap}
-#box{flex:1;width:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;text-transform:uppercase;text-align:center}
-.btn{width:100%;max-width:400px;padding:18px;margin:10px 0;border:3px solid #fff;background:#fff;color:#000;font-size:20px;cursor:pointer;text-transform:uppercase;font-family:inherit;font-weight:900}
-.btn:active{transform:translate(4px,4px)}
-.btnB{background:#000;color:#fff}
-input{width:100%;max-width:400px;padding:16px;background:#000;color:#fff;border:3px solid #fff;font-size:22px;font-family:inherit;font-weight:900;text-transform:uppercase;outline:none;margin-bottom:15px;text-align:center}
-input:focus{box-shadow:4px 4px 0 #fff}
-#tapBox{width:180px;height:180px;background:#fff;border:4px solid #000;display:flex;align-items:center;justify-content:center;color:#000;font-size:24px;box-shadow:6px 6px 0 #000;cursor:pointer;user-select:none}
-.shake{animation:shake .3s}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
-#msg{color:#777;font-size:14px;min-height:24px;text-align:center;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
-.hall{width:100%;max-width:450px;margin-top:15px;text-align:left;font-size:12px;max-height:200px;overflow-y:auto;line-height:18px}
-.big{font-size:50px;letter-spacing:4px;margin:20px 0}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:100%;max-width:400px}
+/* ============================================================
+   MEMORY TRAP
+   CSS — BASE VISUAL
+   ============================================================ */
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+    touch-action: none;
+}
+
+body {
+    position: fixed;
+    inset: 0;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+    border: 0;
+    outline: 0;
+    background: none;
+    touch-action: none;
+}
+
+#app {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+}
+
+/* ============================================================
+   TELAS
+   ============================================================ */
+
+.screen {
+    position: absolute;
+    inset: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* ============================================================
+   HOME
+   ============================================================ */
+
+#homeScreen {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding:
+        calc(env(safe-area-inset-top) + 28px)
+        22px
+        calc(env(safe-area-inset-bottom) + 20px);
+}
+
+.logo {
+    text-align: center;
+    line-height: .82;
+    margin-top: 10px;
+    pointer-events: none;
+}
+
+.logo-main {
+    display: block;
+    font-size: clamp(46px, 15vw, 88px);
+    font-weight: 900;
+    letter-spacing: .10em;
+}
+
+.logo-sub {
+    display: block;
+    margin-top: 12px;
+    font-size: clamp(18px, 5vw, 30px);
+    font-weight: 700;
+    letter-spacing: .45em;
+    padding-left: .45em;
+}
+
+.logo-line {
+    width: min(280px, 70vw);
+    height: 1px;
+    margin: 20px auto 0;
+    background: rgba(255,255,255,.45);
+}
+
+/* ============================================================
+   VIDAS
+   ============================================================ */
+
+.lives {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.home-lives {
+    margin-top: 32px;
+}
+
+.heart {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    transform: rotate(-45deg);
+    border-radius: 3px;
+    background: #fff;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+.heart::before {
+    top: -11px;
+    left: 0;
+}
+
+.heart::after {
+    top: 0;
+    left: 11px;
+}
+
+.heart.empty {
+    background: #202020;
+}
+
+.heart.empty::before,
+.heart.empty::after {
+    background: #202020;
+}
+
+/* ============================================================
+   BOTÃO PRINCIPAL
+   ============================================================ */
+
+.start-button {
+    position: relative;
+    width: min(330px, 84vw);
+    min-height: 82px;
+    margin-top: 42px;
+    padding: 18px 28px;
+    border: 1px solid rgba(255,255,255,.75);
+    border-radius: 4px;
+    background: #050505;
+    overflow: hidden;
+}
+
+.start-button::before {
+    content: "";
+    position: absolute;
+    inset: -100%;
+    background: linear-gradient(
+        120deg,
+        transparent 42%,
+        rgba(255,255,255,.12) 50%,
+        transparent 58%
+    );
+    animation: buttonShine 4s linear infinite;
+}
+
+.start-button:active {
+    transform: scale(.97);
+}
+
+.start-title {
+    position: relative;
+    display: block;
+    font-size: 27px;
+    font-weight: 900;
+    letter-spacing: .15em;
+}
+
+.start-subtitle {
+    position: relative;
+    display: block;
+    margin-top: 7px;
+    font-size: 11px;
+    letter-spacing: .25em;
+    opacity: .55;
+}
+
+@keyframes buttonShine {
+    0% {
+        transform: translate(-30%, -30%);
+    }
+
+    100% {
+        transform: translate(30%, 30%);
+    }
+}
+
+/* ============================================================
+   HALL
+   ============================================================ */
+
+.hall {
+    position: relative;
+    width: min(390px, 92vw);
+    height: 190px;
+    margin-top: 35px;
+    overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,.12);
+    border-bottom: 1px solid rgba(255,255,255,.12);
+}
+
+.hall-title {
+    position: absolute;
+    top: 12px;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: .28em;
+    opacity: .5;
+}
+
+.hall-mask {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    padding-top: 38px;
+}
+
+.hall-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    transform: translateY(0);
+}
+
+.hall-name {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    white-space: nowrap;
+    opacity: .82;
+}
+
+.hall-empty {
+    margin-top: 48px;
+    font-size: 12px;
+    letter-spacing: .18em;
+    opacity: .28;
+}
+
+/* ============================================================
+   MENU SECUNDÁRIO
+   ============================================================ */
+
+.home-menu {
+    position: absolute;
+    right: 20px;
+    bottom: calc(env(safe-area-inset-bottom) + 20px);
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 50%;
+    font-size: 22px;
+    opacity: .7;
+}
+
+.home-menu:active {
+    transform: scale(.9);
+}
+
+/* ============================================================
+   GAME SCREEN
+   ============================================================ */
+
+#gameScreen {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: #000;
+}
+
+.game-header {
+    position: absolute;
+    top: calc(env(safe-area-inset-top) + 18px);
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 20;
+}
+
+.level-number {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: .15em;
+}
+
+.level-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding:
+        80px
+        20px
+        100px;
+}
+
+/* ============================================================
+   VIDAS NO JOGO
+   ============================================================ */
+
+.game-lives {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(env(safe-area-inset-bottom) + 20px);
+    z-index: 30;
+}
+
+/* ============================================================
+   TEXTOS
+   ============================================================ */
+
+.level-question {
+    width: 100%;
+    text-align: center;
+    font-size: clamp(19px, 5vw, 27px);
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.small-text {
+    font-size: 12px;
+    opacity: .5;
+    letter-spacing: .12em;
+}
+
+/* ============================================================
+   OPÇÕES
+   ============================================================ */
+
+.options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    width: min(360px, 90vw);
+    margin-top: 25px;
+}
+
+.choice {
+    min-height: 64px;
+    border: 1px solid rgba(255,255,255,.45);
+    background: #050505;
+    border-radius: 3px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.choice:active {
+    transform: scale(.95);
+    background: #151515;
+}
+
+/* ============================================================
+   NÍVEL 1
+   ============================================================ */
+
+.broken-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.broken-shape {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin-bottom: 35px;
+}
+
+.broken-square {
+    position: absolute;
+    width: 75px;
+    height: 75px;
+    border: 3px solid #fff;
+}
+
+.bs1 {
+    top: 0;
+    left: 0;
+}
+
+.bs2 {
+    top: 0;
+    right: 0;
+}
+
+.bs3 {
+    bottom: 0;
+    left: 0;
+}
+
+.bs4 {
+    bottom: 0;
+    right: 0;
+}
+
+.bs-missing {
+    position: absolute;
+    width: 75px;
+    height: 75px;
+    top: 37.5px;
+    left: 37.5px;
+}
+
+/* ============================================================
+   NÍVEL 2
+   ============================================================ */
+
+.grid2 {
+    display: grid;
+    grid-template-columns: repeat(2, 75px);
+    grid-template-rows: repeat(2, 75px);
+    gap: 5px;
+}
+
+.blue-block {
+    background: #246bff;
+    border-radius: 2px;
+}
+
+/* ============================================================
+   NÍVEL 5
+   ============================================================ */
+
+.circle-field {
+    position: relative;
+    width: min(350px, 90vw);
+    height: 270px;
+}
+
+.target-circle,
+.target-square,
+.target-rect {
+    position: absolute;
+}
+
+.target-circle {
+    border-radius: 50%;
+    background: #fff;
+}
+
+.target-square {
+    background: #fff;
+}
+
+.target-rect {
+    background: #fff;
+}
+
+/* ============================================================
+   NÍVEL 6
+   ============================================================ */
+
+.appear-circle {
+    position: absolute;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+/* ============================================================
+   NÍVEL 8
+   ============================================================ */
+
+.color-memory {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.color-sequence {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 35px;
+}
+
+.color-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 3px;
+}
+
+.color-red { background: #ff3030; }
+.color-blue { background: #3080ff; }
+.color-green { background: #35c96b; }
+.color-yellow { background: #ffd83d; }
+.color-purple { background: #9c55ff; }
+.color-orange { background: #ff8a30; }
+.color-white { background: #fff; }
+
+.color-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: min(340px, 90vw);
+}
+
+.color-option {
+    height: 58px;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 3px;
+}
+
+/* ============================================================
+   NÍVEL 9
+   ============================================================ */
+
+.arrow-memory {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    justify-content: center;
+}
+
+.memory-arrow {
+    font-size: 45px;
+    font-weight: 900;
+}
+
+/* ============================================================
+   NÍVEL 10
+   ============================================================ */
+
+.camouflage-area {
+    position: relative;
+    width: min(360px, 90vw);
+    min-height: 240px;
+}
+
+.fake-button {
+    position: absolute;
+    width: 120px;
+    height: 55px;
+    border: 1px solid #151515;
+    color: #101010;
+    background: #050505;
+}
+
+.hidden-real-button {
+    position: absolute;
+    color: #090909;
+    background: #000;
+    font-size: 16px;
+}
+
+/* ============================================================
+   TRANSIÇÕES
+   ============================================================ */
+
+.fade-out {
+    animation: fadeOut .22s ease forwards;
+}
+
+.fade-in {
+    animation: fadeIn .25s ease forwards;
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ============================================================
+   OVERLAY
+   ============================================================ */
+
+#overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+}
+
+#overlay.active {
+    display: flex;
+}
+
+.overlay-content {
+    width: min(350px, 88vw);
+    text-align: center;
+}
+
+.overlay-title {
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: .1em;
+}
+
+.overlay-text {
+    margin-top: 15px;
+    font-size: 14px;
+    line-height: 1.5;
+    opacity: .7;
+}
+
+.overlay-button {
+    margin-top: 28px;
+    padding: 15px 28px;
+    border: 1px solid rgba(255,255,255,.5);
+}
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+
+#settingsScreen {
+    flex-direction: column;
+    align-items: center;
+    padding:
+        calc(env(safe-area-inset-top) + 40px)
+        25px
+        calc(env(safe-area-inset-bottom) + 25px);
+}
+
+.settings-title {
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: .15em;
+}
+
+.setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: min(360px, 90vw);
+    margin-top: 25px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+}
+
+.setting-button {
+    min-width: 70px;
+    padding: 9px 15px;
+    border: 1px solid rgba(255,255,255,.3);
+}
+
+.back-button {
+    position: absolute;
+    left: 20px;
+    top: calc(env(safe-area-inset-top) + 20px);
+    padding: 10px;
+    opacity: .6;
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+   ============================================================ */
+
+@media (max-height: 650px) {
+    .logo-main {
+        font-size: 45px;
+    }
+
+    .home-lives {
+        margin-top: 20px;
+    }
+
+    .start-button {
+        margin-top: 25px;
+    }
+
+    .hall {
+        margin-top: 20px;
+        height: 140px;
+    }
+}
 </style>
 </head>
+
 <body>
-  <header id="top">
-    <span id="levelNum"></span>
-    <span id="lives"></span>
-  </header>
-  <section id="box"></section>
-  <div id="msg"></div>
+
+<div id="app">
+
+    <!-- ========================================================
+         TELA INICIAL
+         ======================================================== -->
+
+    <section id="homeScreen" class="screen active">
+
+        <div class="logo">
+            <span class="logo-main">MEMORY</span>
+            <span class="logo-sub">TRAP</span>
+            <div class="logo-line"></div>
+        </div>
+
+        <div
+            id="homeLives"
+            class="lives home-lives">
+        </div>
+
+        <button
+            id="startButton"
+            class="start-button">
+
+            <span class="start-title">
+                INICIAR
+            </span>
+
+            <span class="start-subtitle">
+                MEMORY TRAP
+            </span>
+
+        </button>
+
+        <div class="hall">
+
+            <div class="hall-title">
+                HALL DOS SOBREVIVENTES
+            </div>
+
+            <div class="hall-mask">
+                <div
+                    id="hallList"
+                    class="hall-list">
+                </div>
+            </div>
+
+        </div>
+
+        <button
+            id="menuButton"
+            class="home-menu"
+            aria-label="Menu">
+            ☰
+        </button>
+
+    </section>
+
+
+    <!-- ========================================================
+         TELA DO JOGO
+         ======================================================== -->
+
+    <section id="gameScreen" class="screen">
+
+        <div class="game-header">
+            <div
+                id="levelNumber"
+                class="level-number">
+            </div>
+        </div>
+
+        <div
+            id="levelContent"
+            class="level-content">
+        </div>
+
+        <div
+            id="gameLives"
+            class="lives game-lives">
+        </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         CONFIGURAÇÕES
+         ======================================================== -->
+
+    <section id="settingsScreen" class="screen">
+
+        <button
+            id="backButton"
+            class="back-button">
+            ←
+        </button>
+
+        <div class="settings-title">
+            CONFIGURAÇÕES
+        </div>
+
+        <div class="setting-row">
+            <span>SOM</span>
+            <button
+                id="soundButton"
+                class="setting-button">
+                ON
+            </button>
+        </div>
+
+        <div class="setting-row">
+            <span>VIBRAÇÃO</span>
+            <button
+                id="vibrationButton"
+                class="setting-button">
+                ON
+            </button>
+        </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         OVERLAY
+         ======================================================== -->
+
+    <div id="overlay">
+
+        <div class="overlay-content">
+
+            <div
+                id="overlayTitle"
+                class="overlay-title">
+            </div>
+
+            <div
+                id="overlayText"
+                class="overlay-text">
+            </div>
+
+            <button
+                id="overlayButton"
+                class="overlay-button">
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 <script>
-"use strict";
+/* ============================================================
+   MEMORY TRAP
+   JAVASCRIPT
+   ============================================================ */
 
-const MAX_LIVES = 5;
-const NO_NUM = [7, 27, 47, 67, 87];
-const COLORS = ["VERMELHO", "AZUL", "VERDE", "AMARELO", "ROXO"];
 
-let level = 1, lives = 5, deaths = 0;
-let memColors = [];
-let timers = [];
-let busy = false;
-let level44Clicks = 0;
+/* ============================================================
+   CONFIGURAÇÃO
+   ============================================================ */
 
-const $ = id => document.getElementById(id);
+const CONFIG = {
 
-function clearTimers() { timers.forEach(clearTimeout); timers = []; busy = false; }
-function later(fn, ms) { const t = setTimeout(() => { timers = timers.filter(x => x !== t); fn(); }, ms); timers.push(t); return t; }
+    TOTAL_LEVELS: 100,
 
-function render() {
-  $("levelNum").textContent = NO_NUM.includes(level) ? "" : "LVL " + level;
-  $("lives").textContent = "❤️".repeat(Math.max(0, lives));
+    STARTING_LIVES: 5,
+
+    SOUND_ENABLED: true,
+
+    VIBRATION_ENABLED: true,
+
+    STORAGE_KEY: "memory_trap_save_v1",
+
+    SURVIVORS_KEY: "memory_trap_survivors_v1"
+
+};
+
+
+/* ============================================================
+   ESTADO DO JOGO
+   ============================================================ */
+
+const GAME = {
+
+    currentLevel: 0,
+
+    lives: CONFIG.STARTING_LIVES,
+
+    totalAttempts: 0,
+
+    mistakes: 0,
+
+    levelAttempts: 0,
+
+    startedAt: null,
+
+    levelStartedAt: null,
+
+    timer: null,
+
+    levelTimers: [],
+
+    sequenceIndex: 0,
+
+    state: {},
+
+    finished: false
+
+};
+
+
+/* ============================================================
+   ELEMENTOS
+   ============================================================ */
+
+const DOM = {
+
+    homeScreen:
+        document.getElementById("homeScreen"),
+
+    gameScreen:
+        document.getElementById("gameScreen"),
+
+    settingsScreen:
+        document.getElementById("settingsScreen"),
+
+    homeLives:
+        document.getElementById("homeLives"),
+
+    gameLives:
+        document.getElementById("gameLives"),
+
+    levelNumber:
+        document.getElementById("levelNumber"),
+
+    levelContent:
+        document.getElementById("levelContent"),
+
+    startButton:
+        document.getElementById("startButton"),
+
+    menuButton:
+        document.getElementById("menuButton"),
+
+    backButton:
+        document.getElementById("backButton"),
+
+    soundButton:
+        document.getElementById("soundButton"),
+
+    vibrationButton:
+        document.getElementById("vibrationButton"),
+
+    hallList:
+        document.getElementById("hallList"),
+
+    overlay:
+        document.getElementById("overlay"),
+
+    overlayTitle:
+        document.getElementById("overlayTitle"),
+
+    overlayText:
+        document.getElementById("overlayText"),
+
+    overlayButton:
+        document.getElementById("overlayButton")
+
+};
+
+
+/* ============================================================
+   LISTA OFICIAL DOS 100 NÍVEIS
+   ============================================================ */
+
+const LEVELS = {
+
+1: {
+    name: "Peça Quebrada",
+    type: "broken-shape"
+},
+
+2: {
+    name: "Quadrado Azul",
+    type: "grid"
+},
+
+3: {
+    name: "Toque no Certo",
+    type: "direct-answer"
+},
+
+4: {
+    name: "Mais Próximo de Pi",
+    type: "pi"
+},
+
+5: {
+    name: "Quantos Círculos?",
+    type: "count-circles"
+},
+
+6: {
+    name: "Círculos em Sequência",
+    type: "appearing-circles"
+},
+
+7: {
+    name: "Sem Número — Ratos",
+    type: "no-number-rats",
+    hiddenNumber: true
+},
+
+8: {
+    name: "Memória das Cores",
+    type: "color-memory"
+},
+
+9: {
+    name: "Memória Direcional",
+    type: "arrow-memory"
+},
+
+10: {
+    name: "Botão Camuflado",
+    type: "camouflaged-command"
+},
+
+11: {
+    name: "Caminho Correto",
+    type: "arrow-path"
+},
+
+12: {
+    name: "Segure Exatamente",
+    type: "hold-two-seconds"
+},
+
+13: {
+    name: "Ritmo Circular",
+    type: "circle-rhythm"
+},
+
+14: {
+    name: "Ordem Inversa",
+    type: "reverse-sequence"
+},
+
+15: {
+    name: "Pixel Cego",
+    type: "blind-pixel"
+},
+
+16: {
+    name: "Arraste para Fora",
+    type: "drag-box"
+},
+
+17: {
+    name: "Exclusão Circular",
+    type: "circle-exclusion"
+},
+
+18: {
+    name: "Botão Fugitivo",
+    type: "escape-button"
+},
+
+19: {
+    name: "Intruso",
+    type: "letter-intruder"
+},
+
+20: {
+    name: "Memória da Peça",
+    type: "memory-level-one"
+},
+
+21: {
+    name: "Menor Texto",
+    type: "smallest-text"
+},
+
+22: {
+    name: "Espere",
+    type: "passive-wait"
+},
+
+23: {
+    name: "Três Toques",
+    type: "three-taps"
+},
+
+24: {
+    name: "Comando Invertido",
+    type: "inverted-command"
+},
+
+25: {
+    name: "Elementos Ocultos",
+    type: "hidden-elements"
+},
+
+26: {
+    name: "Piscar",
+    type: "blink-word"
+},
+
+27: {
+    name: "Sem Número — Respiro Falso",
+    type: "no-number-respite",
+    hiddenNumber: true
+},
+
+28: {
+    name: "Sequência Numérica",
+    type: "number-sequence"
+},
+
+29: {
+    name: "Stroop",
+    type: "stroop"
+},
+
+30: {
+    name: "O Menor",
+    type: "smallest-shape"
+},
+
+31: {
+    name: "Botão Inútil",
+    type: "useless-button"
+},
+
+32: {
+    name: "Setas Rápidas",
+    type: "fast-arrows"
+},
+
+33: {
+    name: "Rodapé Oculto",
+    type: "hidden-footer"
+},
+
+34: {
+    name: "Símbolo Idêntico",
+    type: "visual-match"
+},
+
+35: {
+    name: "Número Relâmpago",
+    type: "numeric-flash"
+},
+
+36: {
+    name: "Intruso de Símbolo",
+    type: "symbol-grid"
+},
+
+37: {
+    name: "Sem Número — 37",
+    type: "thirty-seventh",
+    hiddenNumber: true
+},
+
+38: {
+    name: "Espelho Numérico",
+    type: "numeric-mirror"
+},
+
+39: {
+    name: "Memória do Nível 9",
+    type: "repeat-level-nine"
+},
+
+40: {
+    name: "Não Pense",
+    type: "do-not-think"
+},
+
+41: {
+    name: "Apagão",
+    type: "blackout"
+},
+
+42: {
+    name: "Flash Rápido",
+    type: "fast-flash"
+},
+
+43: {
+    name: "Círculo Difícil",
+    type: "hard-circle"
+},
+
+44: {
+    name: "Ansiedade",
+    type: "anxiety-boxes"
+},
+
+45: {
+    name: "Psicologia Reversa",
+    type: "reverse-psychology"
+},
+
+46: {
+    name: "Labirinto Cego",
+    type: "blind-maze"
+},
+
+47: {
+    name: "Sem Número — Memória",
+    type: "no-number-memory",
+    hiddenNumber: true
+},
+
+48: {
+    name: "Esconda o Rato",
+    type: "hide-mouse"
+},
+
+49: {
+    name: "Prova da Memória",
+    type: "memory-test"
+},
+
+50: {
+    name: "Portão Cruel",
+    type: "checkpoint",
+    checkpoint: true
+},
+
+51: {
+    name: "Alinhamento Falso",
+    type: "false-alignment"
+},
+
+52: {
+    name: "Maior para Menor",
+    type: "size-order"
+},
+
+53: {
+    name: "Coração Escondido",
+    type: "hidden-heart"
+},
+
+54: {
+    name: "Centro Exato",
+    type: "exact-center"
+},
+
+55: {
+    name: "Caça aos Triângulos",
+    type: "triangle-hunt"
+},
+
+56: {
+    name: "Comando Trapaceiro",
+    type: "cheater-command"
+},
+
+57: {
+    name: "Objeto Fantasma",
+    type: "ghost-object"
+},
+
+58: {
+    name: "Resistência ao Toque",
+    type: "touch-resistance"
+},
+
+59: {
+    name: "Encaixe Visual",
+    type: "visual-fitting"
+},
+
+60: {
+    name: "Mundo Invertido",
+    type: "upside-down"
+},
+
+61: {
+    name: "Preto no Preto",
+    type: "black-on-black"
+},
+
+62: {
+    name: "Botão Encanado",
+    type: "cornered-button"
+},
+
+63: {
+    name: "Memória do Fundo",
+    type: "background-memory"
+},
+
+64: {
+    name: "Linha Invisível",
+    type: "invisible-line"
+},
+
+65: {
+    name: "Botão Mentiroso",
+    type: "lying-button"
+},
+
+66: {
+    name: "Dois Pontos",
+    type: "two-point-hold"
+},
+
+67: {
+    name: "Respiro",
+    type: "respite"
+},
+
+68: {
+    name: "Número Camuflado",
+    type: "camouflaged-seven"
+},
+
+69: {
+    name: "Volume Invisível",
+    type: "hidden-volume"
+},
+
+70: {
+    name: "Labirinto Giratório",
+    type: "rotating-maze"
+},
+
+71: {
+    name: "Cores ao Contrário",
+    type: "reverse-colors"
+},
+
+72: {
+    name: "Estilingue Visual",
+    type: "visual-slingshot"
+},
+
+73: {
+    name: "Desvio Rápido",
+    type: "fast-dodge"
+},
+
+74: {
+    name: "Linha Perfeita",
+    type: "thin-line"
+},
+
+75: {
+    name: "Símbolos Relâmpago",
+    type: "symbol-flash"
+},
+
+76: {
+    name: "Engrenagem Solta",
+    type: "loose-gear"
+},
+
+77: {
+    name: "Reflexo Relâmpago",
+    type: "lightning-reflex"
+},
+
+78: {
+    name: "Mutação",
+    type: "shape-mutation"
+},
+
+79: {
+    name: "Fuga III",
+    type: "escape-three"
+},
+
+80: {
+    name: "Velocidade Extrema",
+    type: "extreme-speed"
+},
+
+81: {
+    name: "Mosaico Alinhado",
+    type: "aligned-mosaic"
+},
+
+82: {
+    name: "Perspectiva Enganosa",
+    type: "perspective"
+},
+
+83: {
+    name: "Ordem Tátil",
+    type: "tactile-order"
+},
+
+84: {
+    name: "Sombra Invertida",
+    type: "inverted-shadow"
+},
+
+85: {
+    name: "Toque Cirúrgico",
+    type: "surgical-touch"
+},
+
+86: {
+    name: "Botão Trapaceiro",
+    type: "cheater-button"
+},
+
+87: {
+    name: "Chefão dos Sem Número",
+    type: "no-number-boss"
+},
+
+88: {
+    name: "Pressão de Foco",
+    type: "focus-pressure"
+},
+
+89: {
+    name: "Fio Cruzado",
+    type: "crossed-wire"
+},
+
+90: {
+    name: "Caos Total",
+    type: "total-chaos"
+},
+
+91: {
+    name: "Mosaico Perfeito",
+    type: "perfect-mosaic"
+},
+
+92: {
+    name: "Microponto",
+    type: "micro-point"
+},
+
+93: {
+    name: "Cascata Seletiva",
+    type: "selective-cascade"
+},
+
+94: {
+    name: "Espelho de Luz",
+    type: "light-mirror"
+},
+
+95: {
+    name: "Reversão Mental",
+    type: "mental-reversal"
+},
+
+96: {
+    name: "Sequência Final",
+    type: "final-sequence"
+},
+
+97: {
+    name: "Resistência Final",
+    type: "final-resistance"
+},
+
+98: {
+    name: "Caos Glitch",
+    type: "glitch-chaos"
+},
+
+99: {
+    name: "Inversão da Glória",
+    type: "glory-inversion"
+},
+
+100: {
+    name: "BOSS FINAL — A ÚLTIMA ARMADILHA",
+    type: "final-boss",
+    finalBoss: true
 }
 
-function message(t, ms = 900) {
-  $("msg").textContent = t;
-  later(() => { $("msg").textContent = ""; }, ms);
+};
+
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function fail(text = "ERROU") {
-  const box = $("box");
-  box.classList.remove("shake");
-  void box.offsetWidth;
-  box.classList.add("shake");
-  if (navigator.vibrate) navigator.vibrate(200);
-  message(text);
-  lives--; deaths++; render();
-  
-  if (lives <= 0) {
-    lives = MAX_LIVES;
-    level = level <= 50 ? 1 : 50;
-    render(); load(); return;
-  }
-  if (level !== 44) load();
-}
 
-function pass() {
-  level++;
-  if (level > 100) win();
-  else load();
-}
+function clearLevelTimers() {
 
-function load() {
-  clearTimers();
-  render();
-  const box = $("box");
-  box.style.background = "#000";
-  box.style.color = "#fff";
-  box.innerHTML = "";
-  box.onclick = null;
+    GAME.levelTimers.forEach(timer => {
+        clearTimeout(timer);
+        clearInterval(timer);
+    });
 
-  // 1 ao 6: Fácil para viciar
-  if (level >= 1 && level <= 6) {
-    box.innerHTML = `<p style="margin-bottom:20px">TOQUE NO BOTÃO CORRETO</p><button class="btn" onclick="pass()">SEGUIR</button><button class="btn btnB" onclick="fail('ERRADO')">ARMADILHA</button>`;
-    return;
-  }
+    GAME.levelTimers = [];
 
-  // Nível 7: Sem número
-  if (level === 7) {
-    box.innerHTML = `<p style="margin-bottom:20px">PRIMEIRA TRAP<br>QUAL O SEU PRÓXIMO PASSO?</p><button class="btn" onclick="pass()">CONTINUAR</button>`;
-    return;
-  }
-
-  // Nível 9: As 5 cores
-  if (level === 9) {
-    memColors = [...COLORS];
-    box.innerHTML = `<p style="margin-bottom:15px">DECORE AS 5 CORES (5s)</p>` + memColors.map((c, i) => `<p style="margin:6px">${i+1}. ${c}</p>`).join("");
-    busy = true;
-    later(() => {
-      busy = false;
-      box.innerHTML = `<p style="margin-bottom:15px">QUAL ERA A 2ª COR?</p>` + memColors.map(c => `<button class="btn btnB" onclick="if('${c}'==='${memColors[1]}')pass();else fail('ESQUECEU')">${c}</button>`).join("");
-    }, 5000);
-    return;
-  }
-
-  // Nível 10: Figura quebrada
-  if (level === 10) {
-    box.innerHTML = `<p style="margin-bottom:15px">FIGURA QUEBRADA<br>QUAL PEÇA ENCAIXA?</p><button class="btn btnB" onclick="fail('QUEBROU')">[ | ]</button><button class="btn" onclick="pass()">[ | | ]</button><button class="btn btnB" onclick="fail('FALTOU PEDAÇO')">[ / ]</button>`;
-    return;
-  }
-
-  // Nível 27: Sem número
-  if (level === 27) {
-    box.innerHTML = `<p style="margin-bottom:20px">MAIS UM SEM NÚMERO</p><button class="btn" onclick="pass()">SEGUIR EM FRENTE</button>`;
-    return;
-  }
-
-  // Nível 39: 3ª cor do nível 9
-  if (level === 39) {
-    box.innerHTML = `<p style="margin-bottom:15px">MEMÓRIA DO LVL 9<br>QUAL ERA A 3ª COR?</p>` + memColors.map(c => `<button class="btn btnB" onclick="if('${c}'==='${memColors[2]}')pass();else fail('ESQUECEU')">${c}</button>`).join("");
-    return;
-  }
-
-  // Nível 40: Tela Branca Traumatizante
-  if (level === 40) {
-    box.style.background = "#fff";
-    box.style.color = "#000";
-    box.innerHTML = `<p style="font-size:24px;margin-bottom:15px">TOQUE NA TELA</p><p style="font-size:12px;color:#555">a pegadinha é não ter pegadinha?</p>`;
-    box.onclick = () => { pass(); };
-    return;
-  }
-
-  // Nível 44: Caixa da Ansiedade
-  if (level === 44) {
-    level44Clicks = 0;
-    busy = true;
-    box.innerHTML = `<div id="tapBox">APERTE</div><p id="ct" style="margin-top:15px">0/5</p>`;
-    $("tapBox").onclick = () => {
-      if (!busy || level44Clicks >= 5) return;
-      level44Clicks++;
-      if (level44Clicks === 5) {
-        busy = false;
-        box.innerHTML = `<div id="tapBox" style="background:#555;color:#fff">ESPERE</div><p style="margin-top:15px">5s sem tocar...</p>`;
-        box.onclick = () => {
-          if (busy) return;
-          busy = true;
-          lives--; deaths++; render();
-          message("PERDEU 1 VIDA ESCONDIDA", 1200);
-          level = 45; load();
-        };
-        later(() => { if (level !== 44) return; level = 45; load(); }, 5000);
-      } else {
-        $("ct").textContent = level44Clicks + "/5";
-      }
-    };
-    return;
-  }
-
-  // Nível 47: Sem número + Pergunta
-  if (level === 47) {
-    box.innerHTML = `<p style="margin-bottom:15px">QUAL OUTRO NÍVEL ESTAVA SEM NÚMERO?</p><button class="btn btnB" onclick="pass()">7</button><button class="btn btnB" onclick="pass()">27</button><button class="btn btnB" onclick="fail('ERRADO')">15</button>`;
-    return;
-  }
-
-  // Nível 48: Pisca rápido 0.3s
-  if (level === 48) {
-    let secret = Math.floor(Math.random() * 90) + 10;
-    box.innerHTML = `<p class="big">${secret}</p>`;
-    busy = true;
-    later(() => {
-      busy = false;
-      box.innerHTML = `<p style="margin-bottom:15px">QUAL NÚMERO PISCOU?</p><input id="ans" type="number"><button class="btn" id="sub">ENVIAR</button>`;
-      const check = () => { if (parseInt($("ans").value) === secret) pass(); else fail(); };
-      $("sub").onclick = check;
-      $("ans").onkeydown = e => { if(e.key==="Enter") check(); };
-      $("ans").focus();
-    }, 300);
-    return;
-  }
-
-  // Nível 49: Prova final fase 1
-  if (level === 49) {
-    box.innerHTML = `<p style="margin-bottom:15px">PROVA DE MEMÓRIA<br>QUAL ERA A 3ª COR DO LVL 9?</p>` + memColors.map(c => `<button class="btn btnB" onclick="if('${c}'==='${memColors[2]}')pass();else fail('ERROU')">${c}</button>`).join("");
-    return;
-  }
-
-  // Nível 50: O Portão
-  if (level === 50) {
-    if (lives < 5) {
-      box.innerHTML = `<p style="font-size:26px;margin-bottom:15px">PORTÃO FECHADO</p><p style="margin-bottom:20px">Você chegou com ${lives}/5 vidas.<br>Exige 5 cheias. Volta ao LVL 1.</p><button class="btn" onclick="level=1;lives=5;load()">RECOMEÇAR</button>`;
-    } else {
-      box.innerHTML = `<p style="font-size:26px;margin-bottom:15px">PORTÃO ABERTO</p><p style="margin-bottom:20px">CHECKPOINT CONQUISTADO</p><button class="btn" onclick="pass()">ENTRAR</button>`;
+    if (GAME.timer) {
+        clearTimeout(GAME.timer);
+        clearInterval(GAME.timer);
+        GAME.timer = null;
     }
-    return;
-  }
-
-  // Nível 67: Sem número
-  if (level === 67) {
-    box.innerHTML = `<p style="margin-bottom:15px">MAIS UM SEM NÚMERO</p><button class="btn" onclick="pass()">AVANÇAR</button>`;
-    return;
-  }
-
-  // Nível 87: Chefão dos sem número
-  if (level === 87) {
-    box.innerHTML = `<p style="margin-bottom:15px">CHEFE: QUAIS NÍVEIS ESTAVAM SEM NÚMERO?</p><input id="ans87" placeholder="EX: 7,27,47,67"><button class="btn" onclick="val87()">ENVIAR</button>`;
-    return;
-  }
-
-  // Nível 100: Boss Final
-  if (level === 100) {
-    box.innerHTML = `<p style="font-size:22px;margin-bottom:15px">BOSS FINAL<br>QUAL ERA A 1ª COR DO LVL 9?</p>` + memColors.map(c => `<button class="btn btnB" onclick="if('${c}'==='${memColors[0]}')pass();else fail('NO FINAL ERROU')">${c}</button>`).join("");
-    return;
-  }
-
-  // Níveis intermediários / fáceis (sem contas)
-  let type = level % 4;
-  if (type === 0) {
-    box.innerHTML = `<p style="margin-bottom:15px">ESCOLHA COM CUIDADO</p><button class="btn btnB" onclick="fail('ARMADILHA')">ERRADO</button><button class="btn" onclick="pass()">CERTO</button>`;
-  } else if (type === 1) {
-    let syms = ["#", "@", "$", "%"];
-    let chosen = syms[Math.floor(Math.random()*syms.length)];
-    box.innerHTML = `<p>MEMÓRIA RÁPIDA</p><p class="big">${chosen}</p>`;
-    busy = true;
-    later(() => {
-      busy = false;
-      box.innerHTML = `<p style="margin-bottom:15px">QUAL SÍMBOLO APARECEU?</p>` + syms.map(s => `<button class="btn btnB" onclick="if('${s}'==='${chosen}')pass();else fail()">${s}</button>`).join("");
-    }, 500);
-  } else if (type === 2) {
-    box.innerHTML = `<p style="margin-bottom:15px">TOQUE NO BOTÃO DEBAIXO</p><button class="btn btnB" onclick="fail('ERRADO')">ESTE</button><button class="btn" onclick="pass()">E ESTE</button>`;
-  } else {
-    box.innerHTML = `<p style="margin-bottom:15px">TOQUE RÁPIDO</p><button class="btn" onclick="pass()">AGORA</button>`;
-  }
 }
 
-function val87() {
-  let v = $("ans87").value.replace(/\s/g, "");
-  if (v === "7,27,47,67" || v === "7,27,47,67,87") pass();
-  else fail("FALTOU ALGUM");
+
+function addLevelTimer(timer) {
+    GAME.levelTimers.push(timer);
 }
 
-function getHall() {
-  try { const x = JSON.parse(localStorage.getItem("memoryTrapHall") || "[]"); return Array.isArray(x) ? x : []; } catch { return []; }
+
+/* ============================================================
+   SOM
+   ============================================================ */
+
+let audioContext = null;
+
+
+function getAudioContext() {
+
+    if (!audioContext) {
+
+        const AudioCtx =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        if (!AudioCtx) {
+            return null;
+        }
+
+        audioContext = new AudioCtx();
+    }
+
+    return audioContext;
 }
 
-function saveHall(code) {
-  let name = ($("pname").value || "ANON").trim().toUpperCase();
-  let hall = getHall();
-  hall.push({ nome: name, mortes: deaths, codigo: code, data: new Date().toLocaleDateString("pt-BR") });
-  localStorage.setItem("memoryTrapHall", JSON.stringify(hall));
-  renderHall();
-  message("SALVO NO HALL", 1200);
+
+function playTone(
+    frequency,
+    duration,
+    type = "sine",
+    volume = 0.035
+) {
+
+    if (!CONFIG.SOUND_ENABLED) {
+        return;
+    }
+
+    const ctx = getAudioContext();
+
+    if (!ctx) {
+        return;
+    }
+
+    if (ctx.state === "suspended") {
+        ctx.resume().catch(() => {});
+    }
+
+    const oscillator =
+        ctx.createOscillator();
+
+    const gain =
+        ctx.createGain();
+
+    oscillator.type = type;
+
+    oscillator.frequency.setValueAtTime(
+        frequency,
+        ctx.currentTime
+    );
+
+    gain.gain.setValueAtTime(
+        volume,
+        ctx.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        ctx.currentTime + duration
+    );
+
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+
+    oscillator.start();
+
+    oscillator.stop(
+        ctx.currentTime + duration
+    );
 }
+
+
+function soundCorrect() {
+
+    playTone(720, .08, "sine", .035);
+
+    setTimeout(() => {
+        playTone(960, .07, "sine", .025);
+    }, 45);
+}
+
+
+function soundError() {
+
+    playTone(130, .15, "square", .04);
+}
+
+
+function soundLifeLost() {
+
+    playTone(95, .25, "sawtooth", .05);
+}
+
+
+function soundCheckpoint() {
+
+    playTone(330, .12);
+    setTimeout(() => playTone(440, .12), 120);
+    setTimeout(() => playTone(660, .2), 240);
+}
+
+
+function soundVictory() {
+
+    const notes = [
+        392,
+        494,
+        587,
+        784
+    ];
+
+    notes.forEach((note, index) => {
+
+        setTimeout(() => {
+            playTone(
+                note,
+                .25,
+                "sine",
+                .045
+            );
+        }, index * 150);
+
+    });
+}
+
+
+/* ============================================================
+   VIBRAÇÃO
+   ============================================================ */
+
+function vibrate(pattern) {
+
+    if (!CONFIG.VIBRATION_ENABLED) {
+        return;
+    }
+
+    if (!("vibrate" in navigator)) {
+        return;
+    }
+
+    try {
+        navigator.vibrate(pattern);
+    } catch (error) {
+        /* dispositivo não suporta */
+    }
+}
+
+
+function feedbackCorrect() {
+
+    soundCorrect();
+    vibrate(18);
+}
+
+
+function feedbackError() {
+
+    soundError();
+    vibrate(45);
+}
+
+
+function feedbackLifeLost() {
+
+    soundLifeLost();
+    vibrate([60, 40, 80]);
+}
+
+
+/* ============================================================
+   VIDAS
+   ============================================================ */
+
+function renderLives(container) {
+
+    container.innerHTML = "";
+
+    for (
+        let i = 0;
+        i < CONFIG.STARTING_LIVES;
+        i++
+    ) {
+
+        const heart =
+            document.createElement("div");
+
+        heart.className = "heart";
+
+        if (i >= GAME.lives) {
+            heart.classList.add("empty");
+        }
+
+        container.appendChild(heart);
+    }
+}
+
+
+function updateLives() {
+
+    renderLives(DOM.homeLives);
+    renderLives(DOM.gameLives);
+}
+
+
+/* ============================================================
+   NAVEGAÇÃO
+   ============================================================ */
+
+function showScreen(screen) {
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(element => {
+            element.classList.remove("active");
+        });
+
+    screen.classList.add("active");
+}
+
+
+function goHome() {
+
+    clearLevelTimers();
+
+    GAME.finished = false;
+
+    updateLives();
+
+    showScreen(DOM.homeScreen);
+
+    startHallAnimation();
+}
+
+
+/* ============================================================
+   HALL DOS SOBREVIVENTES
+   ============================================================ */
+
+function getSurvivors() {
+
+    try {
+
+        const raw =
+            localStorage.getItem(
+                CONFIG.SURVIVORS_KEY
+            );
+
+        if (!raw) {
+            return [];
+        }
+
+        const parsed = JSON.parse(raw);
+
+        return Array.isArray(parsed)
+            ? parsed
+            : [];
+
+    } catch {
+        return [];
+    }
+}
+
+
+function saveSurvivor(name, stats) {
+
+    const survivors =
+        getSurvivors();
+
+    survivors.push({
+        name,
+        attempts: stats.attempts,
+        mistakes: stats.mistakes,
+        time: stats.time,
+        date: Date.now()
+    });
+
+    localStorage.setItem(
+        CONFIG.SURVIVORS_KEY,
+        JSON.stringify(survivors)
+    );
+
+    renderHall();
+}
+
 
 function renderHall() {
-  let d = $("hallList");
-  if (!d) return;
-  let h = getHall();
-  d.innerHTML = `<p style="color:#fff;margin-bottom:6px">HALL DA FAMA:</p>` + (h.length ? h.slice(-15).reverse().map((x, i) => `${i+1}. ${x.nome} — ${x.mortes}M [${x.codigo}]`).join("<br>") : "<span style='color:#777'>NENHUM REGISTRO.</span>");
+
+    const survivors =
+        getSurvivors();
+
+    DOM.hallList.innerHTML = "";
+
+    if (survivors.length === 0) {
+
+        const empty =
+            document.createElement("div");
+
+        empty.className = "hall-empty";
+
+        empty.textContent =
+            "NINGUM SOBREVIVEU AINDA";
+
+        DOM.hallList.appendChild(empty);
+
+        return;
+    }
+
+    survivors
+        .slice(-20)
+        .reverse()
+        .forEach(player => {
+
+            const name =
+                document.createElement("div");
+
+            name.className = "hall-name";
+
+            name.textContent =
+                String(player.name)
+                    .slice(0, 20)
+                    .toUpperCase();
+
+            DOM.hallList.appendChild(name);
+
+        });
 }
 
-function win() {
-  clearTimers();
-  let code = "TRAP-" + Math.floor(1000 + Math.random() * 9000);
-  $("levelNum").textContent = "HALL";
-  $("box").innerHTML = `
-    <p style="font-size:26px;color:#fff;margin-bottom:10px">VOCÊ QUEBROU A TRAP</p>
-    <p style="font-size:12px;color:#777;margin-bottom:15px">CÓDIGO: ${code} | MORTES: ${deaths}</p>
-    <input id="pname" maxlength="20" placeholder="SEU NOME">
-    <button class="btn" onclick="saveHall('${code}')">SALVAR NO HALL</button>
-    <div id="hallList" class="hall"></div>
-    <button class="btn btnB" style="margin-top:15px;font-size:14px;padding:12px" onclick="if(confirm('Apagar Hall?')){localStorage.removeItem('memoryTrapHall');renderHall()}">RESETAR HALL</button>
-  `;
-  renderHall();
+
+let hallAnimationFrame = null;
+let hallPosition = 0;
+
+
+function startHallAnimation() {
+
+    if (hallAnimationFrame) {
+        cancelAnimationFrame(
+            hallAnimationFrame
+        );
+    }
+
+    hallPosition = 0;
+
+    function animate() {
+
+        if (
+            !DOM.homeScreen.classList.contains(
+                "active"
+            )
+        ) {
+            return;
+        }
+
+        const height =
+            DOM.hallList.offsetHeight;
+
+        const visible =
+            DOM.hallList.parentElement
+                .offsetHeight;
+
+        if (height > visible) {
+
+            hallPosition += 0.18;
+
+            if (
+                hallPosition >
+                height - visible + 30
+            ) {
+                hallPosition = 0;
+            }
+
+            DOM.hallList.style.transform =
+                `translateY(-${hallPosition}px)`;
+        }
+
+        hallAnimationFrame =
+            requestAnimationFrame(
+                animate
+            );
+    }
+
+    animate();
 }
 
-load();
+
+/* ============================================================
+   INICIAR JOGO
+   ============================================================ */
+
+function startGame() {
+
+    clearLevelTimers();
+
+    GAME.currentLevel = 1;
+
+    GAME.lives =
+        CONFIG.STARTING_LIVES;
+
+    GAME.totalAttempts = 0;
+
+    GAME.mistakes = 0;
+
+    GAME.levelAttempts = 0;
+
+    GAME.startedAt =
+        Date.now();
+
+    GAME.finished = false;
+
+    updateLives();
+
+    showScreen(DOM.gameScreen);
+
+    loadLevel(1);
+}
+
+
+/* ============================================================
+   CARREGAR NÍVEL
+   ============================================================ */
+
+function loadLevel(levelNumber) {
+
+    clearLevelTimers();
+
+    GAME.currentLevel =
+        levelNumber;
+
+    GAME.levelStartedAt =
+        Date.now();
+
+    GAME.levelAttempts = 0;
+
+    GAME.sequenceIndex = 0;
+
+    GAME.state = {};
+
+    const level =
+        LEVELS[levelNumber];
+
+    if (!level) {
+        return;
+    }
+
+    if (level.hiddenNumber) {
+        DOM.levelNumber.textContent = "";
+    } else {
+        DOM.levelNumber.textContent =
+            levelNumber;
+    }
+
+    DOM.levelContent.innerHTML = "";
+
+    renderLevel(
+        levelNumber,
+        level
+    );
+
+    updateLives();
+}
+
+
+/* ============================================================
+   ERRO
+   ============================================================ */
+
+function failLevel() {
+
+    if (GAME.finished) {
+        return;
+    }
+
+    GAME.levelAttempts++;
+
+    GAME.totalAttempts++;
+
+    GAME.mistakes++;
+
+    GAME.lives--;
+
+    feedbackLifeLost();
+
+    updateLives();
+
+    if (GAME.lives <= 0) {
+
+        clearLevelTimers();
+
+        showOverlay(
+            "SEM VIDAS",
+            "Você perdeu as 5 vidas. O nível será reiniciado.",
+            "RECOMEÇAR",
+            () => {
+
+                GAME.lives =
+                    CONFIG.STARTING_LIVES;
+
+                updateLives();
+
+                closeOverlay();
+
+                loadLevel(
+                    GAME.currentLevel
+                );
+
+            }
+        );
+
+        return;
+    }
+
+    showOverlay(
+        "ERRO",
+        "Você continua no mesmo nível.",
+        "TENTAR NOVAMENTE",
+        () => {
+
+            closeOverlay();
+
+            loadLevel(
+                GAME.currentLevel
+            );
+
+        }
+    );
+}
+
+
+/* ============================================================
+   ACERTO
+   ============================================================ */
+
+function completeLevel() {
+
+    if (GAME.finished) {
+        return;
+    }
+
+    feedbackCorrect();
+
+    const next =
+        GAME.currentLevel + 1;
+
+    if (
+        GAME.currentLevel ===
+        CONFIG.TOTAL_LEVELS
+    ) {
+
+        finishGame();
+
+        return;
+    }
+
+    setTimeout(() => {
+        loadLevel(next);
+    }, 180);
+}
+
+
+/* ============================================================
+   OVERLAY
+   ============================================================ */
+
+function showOverlay(
+    title,
+    text,
+    buttonText,
+    action
+) {
+
+    DOM.overlayTitle.textContent =
+        title;
+
+    DOM.overlayText.textContent =
+        text;
+
+    DOM.overlayButton.textContent =
+        buttonText;
+
+    DOM.overlayButton.onclick =
+        action;
+
+    DOM.overlay.classList.add(
+        "active"
+    );
+}
+
+
+function closeOverlay() {
+
+    DOM.overlay.classList.remove(
+        "active"
+    );
+}
+
+
+/* ============================================================
+   RENDERIZAÇÃO DOS NÍVEIS
+   ============================================================ */
+
+function renderLevel(
+    number,
+    level
+) {
+
+    switch (level.type) {
+
+        case "broken-shape":
+            renderLevel1();
+            break;
+
+        case "grid":
+            renderLevel2();
+            break;
+
+        case "direct-answer":
+            renderLevel3();
+            break;
+
+        case "pi":
+            renderLevel4();
+            break;
+
+        case "count-circles":
+            renderLevel5();
+            break;
+
+        case "appearing-circles":
+            renderLevel6();
+            break;
+
+        case "no-number-rats":
+            renderLevel7();
+            break;
+
+        case "color-memory":
+            renderLevel8();
+            break;
+
+        case "arrow-memory":
+            renderLevel9();
+            break;
+
+        case "camouflaged-command":
+            renderLevel10();
+            break;
+
+        default:
+            renderUnimplementedLevel(
+                number,
+                level
+            );
+            break;
+    }
+}
+
+
+/* ============================================================
+   NÍVEL 1
+   PEÇA QUEBRADA
+   ============================================================ */
+
+function renderLevel1() {
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.className =
+        "broken-wrap";
+
+    wrap.innerHTML = `
+
+        <div class="broken-shape">
+
+            <div class="broken-square bs1"></div>
+            <div class="broken-square bs2"></div>
+            <div class="broken-square bs3"></div>
+            <div class="broken-square bs4"></div>
+
+        </div>
+
+        <div class="level-question">
+            Complete a figura.
+        </div>
+
+        <div class="options">
+
+            <button class="choice"
+                    data-answer="wrong">
+                A
+            </button>
+
+            <button class="choice"
+                    data-answer="correct">
+                B
+            </button>
+
+            <button class="choice"
+                    data-answer="wrong">
+                C
+            </button>
+
+            <button class="choice"
+                    data-answer="wrong">
+                D
+            </button>
+
+        </div>
+    `;
+
+    DOM.levelContent.appendChild(wrap);
+
+    wrap
+        .querySelectorAll(".choice")
+        .forEach(button => {
+
+            button.addEventListener(
+                "pointerup",
+                () => {
+
+                    if (
+                        button.dataset.answer ===
+                        "correct"
+                    ) {
+                        completeLevel();
+                    } else {
+                        failLevel();
+                    }
+
+                }
+            );
+
+        });
+}
+
+
+/* ============================================================
+   NÍVEL 2
+   ============================================================ */
+
+function renderLevel2() {
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.style.textAlign =
+        "center";
+
+    wrap.innerHTML = `
+
+        <div class="grid2">
+
+            <div class="blue-block"></div>
+            <div class="blue-block"></div>
+            <div class="blue-block"></div>
+            <div class="blue-block"></div>
+
+        </div>
+
+        <div class="level-question"
+             style="margin-top:35px;">
+            Toque no terceiro.
+        </div>
+    `;
+
+    DOM.levelContent.appendChild(wrap);
+
+    const blocks =
+        wrap.querySelectorAll(
+            ".blue-block"
+        );
+
+    blocks.forEach(
+        (block, index) => {
+
+            block.addEventListener(
+                "pointerup",
+                () => {
+
+                    if (index === 2) {
+                        completeLevel();
+                    } else {
+                        failLevel();
+                    }
+
+                }
+            );
+
+        }
+    );
+}
+
+
+/* ============================================================
+   NÍVEL 3
+   ============================================================ */
+
+function renderLevel3() {
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.style.width =
+        "100%";
+
+    wrap.innerHTML = `
+
+        <div class="level-question">
+            Qual destas palavras é
+            exatamente a resposta?
+        </div>
+
+        <div class="options">
+
+            <button class="choice">NÃO</button>
+            <button class="choice">TALVEZ</button>
+            <button class="choice">CERTO</button>
+            <button class="choice">ERRADO</button>
+
+        </div>
+    `;
+
+    DOM.levelContent.appendChild(wrap);
+
+    const choices =
+        wrap.querySelectorAll(".choice");
+
+    choices.forEach(
+        (button, index) => {
+
+            button.addEventListener(
+                "pointerup",
+                () => {
+
+                    if (index === 2) {
+                        completeLevel();
+                    } else {
+                        failLevel();
+                    }
+
+                }
+            );
+
+        }
+    );
+}
+
+
+/* ============================================================
+   NÍVEL 4
+   PI
+   ============================================================ */
+
+function renderLevel4() {
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.style.width =
+        "100%";
+
+    wrap.innerHTML = `
+
+        <div class="level-question">
+            Qual o número mais próximo de Pi?
+        </div>
+
+        <div class="options">
+
+            <button class="choice">2,14</button>
+            <button class="choice">3,14</button>
+            <button class="choice">4,14</button>
+            <button class="choice">5,14</button>
+
+        </div>
+    `;
+
+    DOM.levelContent.appendChild(wrap);
+
+    const choices =
+        wrap.querySelectorAll(".choice");
+
+    choices.forEach(
+        (button, index) => {
+
+            button.addEventListener(
+                "pointerup",
+                () => {
+
+                    if (index === 1) {
+                        completeLevel();
+                    } else {
+                        failLevel();
+                    }
+
+                }
+            );
+
+        }
+    );
+}
+
+
+/* ============================================================
+   NÍVEL 5
+   ============================================================ */
+
+function renderLevel5() {
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.style.width =
+        "100%";
+
+    wrap.innerHTML = `
+
+        <div class="level-question">
+            Quantos círculos tem na tela?
+        </div>
+
+        <div class="circle-field">
+
+            <div class="target-circle"
+                 style="
+                 width:42px;
+                 height:42px;
+                 left:30px;
+                 top:35px;">
+            </div>
+
+            <div class="target-circle"
+                 style="
+                 width:30px;
+                 height:30px;
+                 left:180px;
+                 top:80px;">
+            </div>
+
+            <div class="target-circle"
+                 style="
+                 width:52px;
+                 height:52px;
+                 left:260px;
+                 top:170px;">
+            </div>
+
+            <div class="target-square"
+                 style="
+                 width:35px;
+                 height:35px;
+                 left:110px;
+                 top:180px;">
+            </div>
+
+            <div class="target-rect"
+                 style="
+                 width:65px;
+                 height:22px;
+                 left:230px;
+                 top:25px;">
+            </div>
+
+        </div>
+
+        <div class="options">
+
+            <button class="choice">1</button>
+            <button class="choice">2</button>
+            <button class="choice">3</button>
+            <button class="choice">4</button>
+
+        </div>
+    `;
+
+    DOM.levelContent.appendChild(wrap);
+
+    const choices =
+        wrap.querySelectorAll(".choice");
+
+    choices.forEach(
+        (button, index) => {
+
+            button.addEventListener(
+                "pointerup",
+                () => {
+
+                    if (index === 2) {
+                        completeLevel();
+                    } else {
+                        failLevel();
+                    }
+
+                }
+            );
+
+        }
+    );
+}
+
+
+/* ============================================================
+   NÍVEL 6
+   ============================================================ */
+
+function renderLevel6() {
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.style.position =
+        "absolute";
+
+    wrap.style.inset =
+        "0";
+
+    const positions = [
+        ["15%", "20%"],
+        ["70%", "18%"],
+        ["48%", "42%"],
+        ["22%", "70%"],
+        ["76%", "72%"],
+        ["48%", "82%"]
+    ];
+
+    positions.forEach(
+        ([left, top], index) => {
+
+            const circle =
+                document.createElement("div");
+
+            circle.className =
+                "appear-circle";
+
+            circle.style.left =
+                left;
+
+            circle.style.top =
+                top;
+
+            circle.style.display =
+                "none";
+
+            wrap.appendChild(circle);
+
+            const timer =
+                setTimeout(
+                    () => {
+
+                        circle.style.display =
+                            "block";
+
+                    },
+                    index * 700
+                );
+
+            addLevelTimer(timer);
+
+        }
+    );
+
+    const finalTimer =
+        setTimeout(() => {
+
+            const circles =
+                wrap.querySelectorAll(
+                    ".appear-circle"
+                );
+
+            circles.forEach(
+                circle => {
+                    circle.style.display =
+                        "block";
+
+                    circle.addEventListener(
+                        "pointerup",
+                        completeLevel,
+                        { once: true }
+                    );
+                }
+            );
+
+        }, 6 * 700 + 300);
+
+    addLevelTimer(finalTimer);
+
+    DOM.levelContent.appendChild(wrap);
+}
+
+
+/* ============================================================
+   NÍVEL 7
+   SEM NÚMERO
+   ============================================================ */
+
+function renderLevel7() {
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.style.width =
+        "100%";
+
+    wrap.innerHTML = `
+
+        <div class="level-question">
+            Quantos ratos tem na tela?
+        </div>
+
+        <div style="
+            position:relative;
+            height:150px;
+            margin-top:25px;
+        ">
+
+            <div style="
+                position:absolute;
+                left:18%;
+                top:25%;
+                font-size:32px;
+            ">🐭</div>
+
+            <div style="
+                position:absolute;
+                left:38%;
+                top:55%;
+                font-size:32px;
+            ">🐭</div>
+
+            <div style="
+                position:absolute;
+                left:62%;
+                top:22%;
+                font-size:32px;
+            ">🐭</div>
+
+            <div style="
+                position:absolute;
+                left:72%;
+                top:62%;
+                font-size:32px;
+            ">🐭</div>
+
+            <div style="
+                position:absolute;
+                left:45%;
+                top:5%;
+                font-size:25px;
+            ">🐭</div>
+
+        </div>
+
+        <div class="options">
+
+            <button class="choice">3</button>
+            <button class="choice">4</button>
+            <button class="choice">5</button>
+            <button class="choice">6</button>
+
+        </div>
+    `;
+
+    DOM.levelContent.appendChild(wrap);
+
+    const choices =
+        wrap.querySelectorAll(".choice");
+
+    choices.forEach(
+        (button, index) => {
+
+            button.addEventListener(
+                "pointerup",
+                () => {
+
+                    if (index === 2) {
+                        completeLevel();
+                    } else {
+                        failLevel();
+                    }
+
+                }
+            );
+
+        }
+    );
+}
+
+
+/* ============================================================
+   NÍVEL 8
+   ============================================================ */
+
+function renderLevel8() {
+
+    const sequence = [
+        "red",
+        "blue",
+        "green",
+        "yellow",
+        "purple",
+        "orange",
+        "white"
+    ];
+
+    const colors = {
+        red: "color-red",
+        blue: "color-blue",
+        green: "color-green",
+        yellow: "color-yellow",
+        purple: "color-purple",
+        orange: "color-orange",
+        white: "color-white"
+    };
+
+    const shuffled =
+        [
+            "green",
+            "orange",
+            "red",
+            "white",
+            "purple",
+            "blue",
+            "yellow"
+        ];
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.className =
+        "color-memory";
+
+    const sequenceElement =
+        document.createElement("div");
+
+    sequenceElement.className =
+        "color-sequence";
+
+    sequence.forEach(
+        color => {
+
+            const box =
+                document.createElement("div");
+
+            box.className =
+                `color-box ${colors[color]}`;
+
+            sequenceElement.appendChild(
+                box
+            );
+        }
+    );
+
+    wrap.appendChild(
+        sequenceElement
+    );
+
+    const question =
+        document.createElement("div");
+
+    question.className =
+        "level-question";
+
+    question.textContent =
+        "Memorize a sequência.";
+
+    wrap.appendChild(
+        question
+    );
+
+    const options =
+        document.createElement("div");
+
+    options.className =
+        "color-options";
+
+    shuffled.forEach(
+        color => {
+
+            const button =
+                document.createElement("button");
+
+            button.className =
+                `color-option ${colors[color]}`;
+
+            button.dataset.color =
+                color;
+
+            options.appendChild(
+                button
+            );
+        }
+    );
+
+    wrap.appendChild(options);
+
+    DOM.levelContent.appendChild(
+        wrap
+    );
+
+    GAME.state.colorSequence =
+        sequence;
+
+    GAME.state.colorIndex = 0;
+
+    setTimeout(() => {
+
+        sequenceElement.style.opacity =
+            "0";
+
+        question.textContent =
+            "Repita a sequência.";
+
+    }, 5000);
+
+    options
+        .querySelectorAll(".color-option")
+        .forEach(button => {
+
+            button.addEventListener(
+                "pointerup",
+                () => {
+
+                    const expected =
+                        GAME.state.colorSequence[
+                            GAME.state.colorIndex
+                        ];
+
+                    const selected =
+                        button.dataset.color;
+
+                    if (
+                        selected !==
+                        expected
+                    ) {
+
+                        failLevel();
+
+                        return;
+                    }
+
+                    GAME.state.colorIndex++;
+
+                    if (
+                        GAME.state.colorIndex >=
+                        GAME.state.colorSequence.length
+                    ) {
+                        completeLevel();
+                    } else {
+                        feedbackCorrect();
+                    }
+
+                }
+            );
+
+        });
+}
+
+
+/* ============================================================
+   NÍVEL 9
+   ESPECIAL — PADRÃO BASE
+   ============================================================ */
+
+function renderLevel9() {
+
+    const sequence = [
+        "↑",
+        "→",
+        "↓",
+        "←"
+    ];
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.className =
+        "arrow-memory";
+
+    sequence.forEach(
+        direction => {
+
+            const arrow =
+                document.createElement("div");
+
+            arrow.className =
+                "memory-arrow";
+
+            arrow.textContent =
+                direction;
+
+            wrap.appendChild(
+                arrow
+            );
+
+        }
+    );
+
+    DOM.levelContent.appendChild(
+        wrap
+    );
+
+    GAME.state.arrowSequence =
+        sequence;
+
+    GAME.state.arrowIndex =
+        0;
+
+    const hideTimer =
+        setTimeout(() => {
+
+            wrap.style.opacity =
+                "0";
+
+            showArrowButtons();
+
+        }, 5000);
+
+    addLevelTimer(hideTimer);
+}
+
+
+function showArrowButtons() {
+
+    const container =
+        document.createElement("div");
+
+    container.style.position =
+        "absolute";
+
+    container.style.inset =
+        "0";
+
+    container.style.display =
+        "grid";
+
+    container.style.gridTemplateColumns =
+        "repeat(2, 90px)";
+
+    container.style.gridTemplateRows =
+        "repeat(2, 70px)";
+
+    container.style.gap =
+        "14px";
+
+    container.style.alignItems =
+        "center";
+
+    container.style.justifyContent =
+        "center";
+
+    const arrows = [
+        "↑",
+        "→",
+        "↓",
+        "←"
+    ];
+
+    arrows.forEach(
+        direction => {
+
+            const button =
+                document.createElement("button");
+
+            button.className =
+                "choice";
+
+            button.textContent =
+                direction;
+
+            container.appendChild(
+                button
+            );
+
+            button.addEventListener(
+                "pointerup",
+                () => {
+
+                    const expected =
+                        GAME.state.arrowSequence[
+                            GAME.state.arrowIndex
+                        ];
+
+                    if (
+                        direction !==
+                        expected
+                    ) {
+
+                        failLevel();
+
+                        return;
+                    }
+
+                    GAME.state.arrowIndex++;
+
+                    if (
+                        GAME.state.arrowIndex >=
+                        GAME.state.arrowSequence.length
+                    ) {
+                        completeLevel();
+                    } else {
+                        feedbackCorrect();
+                    }
+
+                }
+            );
+
+        }
+    );
+
+    DOM.levelContent.appendChild(
+        container
+    );
+}
+
+
+/* ============================================================
+   NÍVEL 10
+   BOTÃO CAMUFLADO
+   ============================================================ */
+
+function renderLevel10() {
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.className =
+        "camouflage-area";
+
+    wrap.innerHTML = `
+
+        <div class="level-question">
+            Toque no botão vermelho.
+        </div>
+
+        <button
+            class="fake-button"
+            style="left:20px;top:90px;">
+            BOTÃO
+        </button>
+
+        <button
+            class="fake-button"
+            style="right:20px;top:90px;">
+            BOTÃO
+        </button>
+
+        <button
+            class="hidden-real-button"
+            style="
+                left:50%;
+                top:160px;
+                transform:translateX(-50%);
+            ">
+            vermelho
+        </button>
+
+    `;
+
+    DOM.levelContent.appendChild(
+        wrap
+    );
+
+    const fakeButtons =
+        wrap.querySelectorAll(
+            ".fake-button"
+        );
+
+    fakeButtons.forEach(
+        button => {
+
+            button.addEventListener(
+                "pointerup",
+                failLevel
+            );
+
+        }
+    );
+
+    const real =
+        wrap.querySelector(
+            ".hidden-real-button"
+        );
+
+    real.addEventListener(
+        "pointerup",
+        completeLevel
+    );
+}
+
+
+/* ============================================================
+   NÍVEIS AINDA NÃO IMPLEMENTADOS
+   ============================================================ */
+
+function renderUnimplementedLevel(
+    number,
+    level
+) {
+
+    /*
+       IMPORTANTE:
+
+       A lista dos 100 níveis já está
+       cadastrada acima.
+
+       Os níveis seguintes serão implementados
+       individualmente, mantendo as soluções
+       determinísticas.
+
+       Durante o teste estrutural, não vamos
+       inventar uma mecânica genérica que possa
+       alterar a proposta original.
+    */
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.style.textAlign =
+        "center";
+
+    wrap.style.width =
+        "100%";
+
+    wrap.innerHTML = `
+
+        <div class="level-question">
+            ${escapeHTML(level.name)}
+        </div>
+
+        <div class="small-text"
+             style="margin-top:20px;">
+            MECÂNICA RESERVADA
+        </div>
+
+        <button
+            class="choice"
+            style="
+                display:block;
+                width:180px;
+                margin:30px auto 0;
+            ">
+            TESTAR
+        </button>
+
+    `;
+
+    DOM.levelContent.appendChild(
+        wrap
+    );
+
+    /*
+       Apenas para testar navegação.
+       Será removido quando a mecânica
+       real desse nível for implementada.
+    */
+
+    wrap
+        .querySelector(".choice")
+        .addEventListener(
+            "pointerup",
+            completeLevel
+        );
+}
+
+
+/* ============================================================
+   ESCAPE HTML
+   ============================================================ */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+/* ============================================================
+   NÍVEL 50 — CHECKPOINT
+   ============================================================ */
+
+function handleCheckpoint() {
+
+    if (GAME.lives !== 5) {
+
+        soundError();
+        vibrate([100, 50, 100]);
+
+        showOverlay(
+            "PORTÃO CRUEL",
+            "Você só pode passar com 5 vidas. Você voltou para o início.",
+            "VOLTAR AO INÍCIO",
+            () => {
+
+                closeOverlay();
+
+                GAME.lives =
+                    CONFIG.STARTING_LIVES;
+
+                GAME.currentLevel = 1;
+
+                updateLives();
+
+                loadLevel(1);
+
+            }
+        );
+
+        return;
+    }
+
+    soundCheckpoint();
+
+    showOverlay(
+        "PORTÃO CRUEL",
+        "Você chegou com 5 vidas. Agora prove que realmente memorizou.",
+        "CONTINUAR",
+        () => {
+
+            closeOverlay();
+
+            completeLevel();
+
+        }
+    );
+}
+
+
+/* ============================================================
+   FINAL
+   ============================================================ */
+
+function finishGame() {
+
+    clearLevelTimers();
+
+    GAME.finished = true;
+
+    soundVictory();
+
+    vibrate([
+        80,
+        60,
+        80,
+        60,
+        180
+    ]);
+
+    const elapsed =
+        Date.now() -
+        GAME.startedAt;
+
+    const seconds =
+        Math.floor(
+            elapsed / 1000
+        );
+
+    showOverlay(
+        "VOCÊ ESCAPOU",
+        `MEMORY TRAP concluído. Tempo: ${formatTime(seconds)}. Tentativas: ${GAME.totalAttempts}.`,
+        "SALVAR NO HALL",
+        () => {
+
+            closeOverlay();
+
+            askForName(
+                seconds
+            );
+
+        }
+    );
+}
+
+
+function formatTime(seconds) {
+
+    const hours =
+        Math.floor(seconds / 3600);
+
+    const minutes =
+        Math.floor(
+            (seconds % 3600) / 60
+        );
+
+    const secs =
+        seconds % 60;
+
+    if (hours > 0) {
+
+        return `${hours}h ${String(minutes).padStart(2,"0")}m`;
+
+    }
+
+    return `${String(minutes).padStart(2,"0")}:${String(secs).padStart(2,"0")}`;
+}
+
+
+/* ============================================================
+   NOME DO SOBREVIVENTE
+   ============================================================ */
+
+function askForName(seconds) {
+
+    /*
+       A digitação só existe aqui,
+       depois que o jogo terminou.
+
+       Não existe teclado durante
+       nenhum dos níveis.
+    */
+
+    const name =
+        window.prompt(
+            "Você sobreviveu.\n\nDigite seu nome para entrar no Hall dos Sobreviventes:"
+        );
+
+    if (
+        name &&
+        name.trim().length > 0
+    ) {
+
+        saveSurvivor(
+            name.trim(),
+            {
+                attempts:
+                    GAME.totalAttempts,
+
+                mistakes:
+                    GAME.mistakes,
+
+                time:
+                    seconds
+            }
+        );
+
+    }
+
+    goHome();
+}
+
+
+/* ============================================================
+   CONFIGURAÇÕES
+   ============================================================ */
+
+function updateSettingsUI() {
+
+    DOM.soundButton.textContent =
+        CONFIG.SOUND_ENABLED
+            ? "ON"
+            : "OFF";
+
+    DOM.vibrationButton.textContent =
+        CONFIG.VIBRATION_ENABLED
+            ? "ON"
+            : "OFF";
+}
+
+
+DOM.soundButton.addEventListener(
+    "pointerup",
+    () => {
+
+        CONFIG.SOUND_ENABLED =
+            !CONFIG.SOUND_ENABLED;
+
+        updateSettingsUI();
+
+    }
+);
+
+
+DOM.vibrationButton.addEventListener(
+    "pointerup",
+    () => {
+
+        CONFIG.VIBRATION_ENABLED =
+            !CONFIG.VIBRATION_ENABLED;
+
+        updateSettingsUI();
+
+        if (
+            CONFIG.VIBRATION_ENABLED
+        ) {
+            vibrate(30);
+        }
+
+    }
+);
+
+
+/* ============================================================
+   EVENTOS PRINCIPAIS
+   ============================================================ */
+
+DOM.startButton.addEventListener(
+    "pointerup",
+    () => {
+
+        const ctx =
+            getAudioContext();
+
+        if (
+            ctx &&
+            ctx.state === "suspended"
+        ) {
+            ctx.resume().catch(() => {});
+        }
+
+        startGame();
+
+    }
+);
+
+
+DOM.menuButton.addEventListener(
+    "pointerup",
+    () => {
+
+        showScreen(
+            DOM.settingsScreen
+        );
+
+    }
+);
+
+
+DOM.backButton.addEventListener(
+    "pointerup",
+    () => {
+
+        showScreen(
+            DOM.homeScreen
+        );
+
+        startHallAnimation();
+
+    }
+);
+
+
+/* ============================================================
+   BLOQUEAR GESTOS INDESEJADOS
+   ============================================================ */
+
+document.addEventListener(
+    "contextmenu",
+    event => {
+        event.preventDefault();
+    }
+);
+
+
+document.addEventListener(
+    "gesturestart",
+    event => {
+        event.preventDefault();
+    }
+);
+
+
+document.addEventListener(
+    "touchmove",
+    event => {
+
+        if (
+            event.cancelable
+        ) {
+            event.preventDefault();
+        }
+
+    },
+    {
+        passive: false
+    }
+);
+
+
+/* ============================================================
+   INICIALIZAÇÃO
+   ============================================================ */
+
+function init() {
+
+    GAME.lives =
+        CONFIG.STARTING_LIVES;
+
+    updateLives();
+
+    renderHall();
+
+    updateSettingsUI();
+
+    startHallAnimation();
+}
+
+
+init();
+
 </script>
+
 </body>
 </html>
