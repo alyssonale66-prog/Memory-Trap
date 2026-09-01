@@ -48,20 +48,23 @@ button {
     align-items: center; justify-content: center;
 }
 
-/* TELA INICIAL (LAYOUT AJUSTADO CONFORME REFERÊNCIA) */
+/* TELA INICIAL — DISTRIBUIÇÃO VERTICAL CORRIGIDA EXATAMENTE CONFORME O DESENHO */
 #homeScreen {
-    justify-content: center;
-    padding: calc(env(safe-area-inset-top) + 15px) 20px calc(env(safe-area-inset-bottom) + 15px);
-    gap: 16px;
+    justify-content: flex-start;
+    padding-top: calc(env(safe-area-inset-top) + 15px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 15px);
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
-.logo { text-align: center; line-height: .82; pointer-events: none; }
-.logo-main { display: block; font-size: clamp(40px, 12vw, 70px); font-weight: 900; letter-spacing: .10em; }
-.logo-sub { display: block; margin-top: 8px; font-size: clamp(15px, 4vw, 24px); font-weight: 700; letter-spacing: .45em; padding-left: .45em; }
-.logo-line { width: min(220px, 55vw); height: 1px; margin: 12px auto 0; background: rgba(255,255,255,.45); }
+.logo { text-align: center; line-height: .82; pointer-events: none; margin-top: 10px; }
+.logo-main { display: block; font-size: clamp(38px, 11vw, 64px); font-weight: 900; letter-spacing: .10em; }
+.logo-sub { display: block; margin-top: 6px; font-size: clamp(14px, 3.8vw, 22px); font-weight: 700; letter-spacing: .45em; padding-left: .45em; }
+.logo-line { width: min(200px, 50vw); height: 1px; margin: 10px auto 0; background: rgba(255,255,255,.45); }
 
-/* VIDAS (VERMELHO VIBRANTE #ff3b30) */
+/* VIDAS (VERMELHO VIBRANTE #ff3b30 NO CENTRO) */
 .lives { display: flex; justify-content: center; align-items: center; gap: 12px; }
+.home-lives { margin-top: 35px; }
 .heart { position: relative; width: 22px; height: 22px; transform: rotate(-45deg); border-radius: 3px; background: #ff3b30; }
 .heart::before, .heart::after { content: ""; position: absolute; width: 22px; height: 22px; border-radius: 50%; background: #ff3b30; }
 .heart::before { top: -11px; left: 0; }
@@ -69,23 +72,25 @@ button {
 .heart.empty, .heart.empty::before, .heart.empty::after { background: #333333; }
 
 .start-button {
-    position: relative; width: min(320px, 82vw); min-height: 72px; padding: 14px 24px;
+    position: relative; width: min(320px, 82vw); min-height: 68px; padding: 12px 20px;
     border: 1px solid rgba(255,255,255,.75); border-radius: 6px; background: #050505;
+    margin-top: 35px;
 }
 .start-button:active { transform: scale(.97); }
-.start-title { display: block; font-size: 24px; font-weight: 900; letter-spacing: .15em; }
-.start-subtitle { display: block; margin-top: 4px; font-size: 11px; letter-spacing: .25em; opacity: .55; }
+.start-title { display: block; font-size: 22px; font-weight: 900; letter-spacing: .15em; }
+.start-subtitle { display: block; margin-top: 3px; font-size: 10px; letter-spacing: .25em; opacity: .55; }
 
-/* HALL */
+/* HALL DOS SOBREVIVENTES MAIS ABAIXO */
 .hall {
-    position: relative; width: min(370px, 90vw); height: 130px; overflow: hidden;
+    position: relative; width: min(370px, 90vw); height: 120px; overflow: hidden;
     border-top: 1px solid rgba(255,255,255,.12); border-bottom: 1px solid rgba(255,255,255,.12);
+    margin-top: 30px;
 }
 .hall-title { position: absolute; top: 8px; left: 0; right: 0; z-index: 3; text-align: center; font-size: 10px; letter-spacing: .25em; opacity: .5; }
 .hall-mask { position: absolute; inset: 0; overflow: hidden; padding-top: 28px; }
-.hall-list { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.hall-name { font-size: 14px; font-weight: 700; letter-spacing: .12em; opacity: .82; }
-.hall-empty { margin-top: 30px; font-size: 11px; letter-spacing: .15em; opacity: .28; }
+.hall-list { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.hall-name { font-size: 13px; font-weight: 700; letter-spacing: .12em; opacity: .82; }
+.hall-empty { margin-top: 25px; font-size: 10px; letter-spacing: .15em; opacity: .28; }
 .home-menu { position: absolute; right: 20px; bottom: calc(env(safe-area-inset-bottom) + 15px); width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; font-size: 20px; opacity: .7; }
 
 /* TELA DE JOGO */
@@ -118,7 +123,7 @@ button {
 /* NÍVEL 2 */
 .grid2-large { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, 75px); gap: 14px; width: min(380px, 94vw); }
 
-/* NÍVEL 5 (Formas soltas espalhadas) */
+/* NÍVEL 5 */
 .shape-field { position: relative; width: 100%; height: 220px; }
 .geo-shape { position: absolute; background: #fff; }
 .geo-circle { border-radius: 50%; }
@@ -130,7 +135,7 @@ button {
 /* NÍVEL 6 */
 .click-circle { position: absolute; width: 45px; height: 45px; border-radius: 50%; background: #246bff; border: 1px solid #fff; }
 
-/* NÍVEL 7 (Ratos) */
+/* NÍVEL 7 */
 .rats-wrap { position: relative; width: 220px; height: 220px; margin-bottom: 20px; }
 .orbit-center { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; transform: translate(-5%, -5%); animation: spin 4s linear infinite; }
 .circling-rat { position: absolute; font-size: 26px; transform-origin: center; }
@@ -139,7 +144,7 @@ button {
 .small-hiding-rat { position: absolute; font-size: 12px; top: -12px; left: -20px; animation: ratFastRun 2s linear infinite; }
 @keyframes ratFastRun { 0% { transform: translateX(-40px); } 100% { transform: translateX(180px); } }
 
-/* NÍVEL 8 (Cores Verticais Finas com Espaçamento Igual) */
+/* NÍVEL 8 */
 .color-bar-container { display: flex; gap: 12px; justify-content: center; align-items: center; height: 160px; }
 .color-segment { width: 22px; height: 140px; border-radius: 4px; }
 .color-segment:active { transform: scale(.95); }
@@ -177,11 +182,16 @@ button {
         <div class="logo">
             <span class="logo-main">MEMORY</span><span class="logo-sub">TRAP</span><div class="logo-line"></div>
         </div>
-        <div id="homeLives" class="lives"></div>
+        <div id="homeLives" class="lives home-lives"></div>
         <button id="startButton" class="start-button">
             <span class="start-title">INICIAR</span><span class="start-subtitle">MEMORY TRAP</span>
         </button>
-        <div class="hall"><div class="hall-title">HALL DOS SOBREVIVENTES</div><div class="hall-mask"><div id="hallList" class="hall-list"></div></div></div>
+        <div class="hall">
+            <div class="hall-title">HALL DOS SOBREVIVENTES</div>
+            <div class="hall-mask">
+                <div id="hallList" class="hall-list"></div>
+            </div>
+        </div>
         <button id="menuButton" class="home-menu" aria-label="Menu">☰</button>
     </section>
 
@@ -289,7 +299,11 @@ function startHallAnimation() {
     function animate() {
         if (!DOM.homeScreen.classList.contains("active")) return;
         const h = DOM.hallList.offsetHeight; const v = DOM.hallList.parentElement.offsetHeight;
-        if (h > v) { hallPos += 0.18; if (hallPos > h - v + 25) hallPos = 0; DOM.hallList.style.transform = `translateY(-${hallPos}px)`; }
+        if (h > v) {
+            hallPos += 0.18;
+            if (hallPos > h - v + 25) hallPos = 0;
+            DOM.hallList.style.transform = `translateY(-${hallPos}px)`;
+        }
         hallAnim = requestAnimationFrame(animate);
     }
     animate();
@@ -343,7 +357,7 @@ function renderLevel(number, level) {
     }
 }
 
-/* NÍVEL 1: Peça Quebrada (Drag and Drop com 4 peças quase idênticas) */
+/* NÍVEL 1 */
 function renderLevel1() {
     DOM.levelQuestion.textContent = "Complete a figura.";
     const wrap = document.createElement("div"); wrap.className = "broken-container";
@@ -378,7 +392,7 @@ function renderLevel1() {
     });
 }
 
-/* NÍVEL 2: Grade 2x2 */
+/* NÍVEL 2 */
 function renderLevel2() {
     DOM.levelQuestion.textContent = "Aperte no correto.";
     const wrap = document.createElement("div"); wrap.className = "grid2-large";
@@ -389,7 +403,7 @@ function renderLevel2() {
     DOM.levelContent.appendChild(wrap);
 }
 
-/* NÍVEL 3: Qual a cor do ícone do jogo? (4 cores próximas sem texto) */
+/* NÍVEL 3 */
 function renderLevel3() {
     DOM.levelQuestion.textContent = "Qual a cor do ícone do jogo?";
     const wrap = document.createElement("div"); wrap.className = "grid2-large";
@@ -406,7 +420,7 @@ function renderLevel3() {
     DOM.levelContent.appendChild(wrap);
 }
 
-/* NÍVEL 4: Pi */
+/* NÍVEL 4 */
 function renderLevel4() {
     DOM.levelQuestion.textContent = "Qual o número mais próximo de Pi?";
     const wrap = document.createElement("div"); wrap.className = "options-grid";
@@ -417,7 +431,7 @@ function renderLevel4() {
     DOM.levelContent.appendChild(wrap);
 }
 
-/* NÍVEL 5: Contagem de Formas Variadas (~20 formas, 1 círculo minúsculo, resposta 6) */
+/* NÍVEL 5 */
 function renderLevel5() {
     DOM.levelQuestion.textContent = "Quantos círculos tem na tela?";
     const wrap = document.createElement("div");
@@ -429,7 +443,7 @@ function renderLevel5() {
             <div class="geo-shape geo-circle" style="width:32px;height:32px;left:260px;top:15px;"></div>
             <div class="geo-shape geo-circle" style="width:25px;height:25px;left:80px;top:130px;"></div>
             <div class="geo-shape geo-circle" style="width:30px;height:30px;left:200px;top:100px;"></div>
-            <div class="geo-shape geo-circle" style="width:10px;height:10px;left:310px;top:120px;"></div> <!-- Pequeno -->
+            <div class="geo-shape geo-circle" style="width:10px;height:10px;left:310px;top:120px;"></div>
             <div class="geo-shape geo-square" style="width:25px;height:25px;left:50px;top:80px;"></div>
             <div class="geo-shape geo-square" style="width:28px;height:28px;left:150px;top:160px;"></div>
             <div class="geo-shape geo-square" style="width:24px;height:24px;left:280px;top:70px;"></div>
@@ -450,7 +464,7 @@ function renderLevel5() {
     });
 }
 
-/* Nível 6: Círculos aparecem em lugares diferentes (3s cada, precisa tocar em todos) */
+/* NÍVEL 6 */
 function renderLevel6() {
     DOM.levelQuestion.textContent = "Acompanhe e toque nos círculos.";
     const wrap = document.createElement("div"); wrap.style.cssText = "position:absolute; inset:0;";
@@ -490,7 +504,7 @@ function renderLevel6() {
     DOM.levelContent.appendChild(wrap);
 }
 
-/* Nível 7: 5 ratos em círculo + 6º rato minúsculo correndo rápido no topo */
+/* NÍVEL 7 */
 function renderLevel7() {
     DOM.levelQuestion.innerHTML = `<span class="question-with-rat"><span class="small-hiding-rat">🐀</span>Quantos ratos tem na tela?</span>`;
     const wrap = document.createElement("div"); wrap.className = "rats-wrap";
@@ -516,7 +530,7 @@ function renderLevel7() {
     DOM.levelContent.appendChild(wrap); DOM.levelContent.appendChild(optWrap);
 }
 
-/* Nível 8: 6 Cores em Barras Verticais Finas com Espaçamento Igual */
+/* NÍVEL 8 */
 function renderLevel8() {
     DOM.levelQuestion.textContent = "Memorize a sequência de cores.";
     const sequence = ["c-red", "c-blue", "c-green", "c-yellow", "c-purple", "c-orange"];
@@ -544,7 +558,7 @@ function renderLevel8() {
     }, 4500));
 }
 
-/* Nível 9: Setas no Centro */
+/* NÍVEL 9 */
 function renderLevel9() {
     DOM.levelQuestion.textContent = "Memorize a sequência.";
     const seq = ["↑", "→", "↓", "←"];
@@ -571,7 +585,7 @@ function renderLevel9() {
     }, 4500));
 }
 
-/* Nível 10: Botão Camuflado (Palavra "vermelho" no enunciado) */
+/* NÍVEL 10 */
 function renderLevel10() {
     DOM.levelQuestion.innerHTML = `Toque no <span id="secretRedTarget">vermelho</span>.`;
     const wrap = document.createElement("div"); wrap.className = "red-trap-grid";
@@ -587,7 +601,7 @@ function renderLevel10() {
     }, 50);
 }
 
-/* NÍVEIS 11 A 100 (VAZIOS / RESERVADOS) */
+/* NÍVEIS 11 A 100 */
 function renderUnimplementedLevel(number, level) {
     const wrap = document.createElement("div");
     wrap.style.cssText = "text-align: center; width: 100%;";
