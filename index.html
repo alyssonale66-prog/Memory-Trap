@@ -92,18 +92,30 @@ function fail(text = "ERROU") {
 function pass() { level++; if (level > 100) win(); else load(); }
 
 function inputNumber(correct, onSuccess = pass) {
-  $("box").innerHTML = `<input id="ans" type="number" inputmode="numeric" autocomplete="off" style="width:100%;padding:13px;background:#000;color:#a6ff00;border:3px solid #a6ff00;font-size:22px"><button class="btn" id="submit">ENVIAR</button>`;
+  $("box").innerHTML = `<input id="ans" type="number" inputmode="numeric" autocomplete="off" style="width:100%;padding:13px;background:#000;color:#a6ff00;border:3px solid #a6ff00;font-size:22px;margin-bottom:10px"><button class="btn" id="submit">ENVIAR</button>`;
   const check = () => { const v = Number.parseInt($("ans").value, 10); if (v === correct) onSuccess(); else fail("ERROU"); };
   $("submit").onclick = check; $("ans").onkeydown = e => { if (e.key === "Enter") check(); }; $("ans").focus();
 }
 
 function mathLevel(diff = 1) {
   const a = Math.floor(Math.random() * 10 * diff) + 1, b = Math.floor(Math.random() * 10 * diff) + 1, ans = a + b;
-  $("box").innerHTML = `<p style="font-size:36px;margin-bottom:20px">${a}+${b}=?</p>`;
-  inputNumber(ans, () => {
-    if (level === 7) lv7Ans = ans; // Salva apenas após acertar o nível 7
-    pass();
-  });
+  $("box").innerHTML = `
+    <p style="font-size:36px;margin-bottom:20px">${a}+${b}=?</p>
+    <input id="ans" type="number" inputmode="numeric" autocomplete="off" style="width:100%;padding:13px;background:#000;color:#a6ff00;border:3px solid #a6ff00;font-size:22px;margin-bottom:10px">
+    <button class="btn" id="submit">ENVIAR</button>
+  `;
+  const check = () => {
+    const v = Number.parseInt($("ans").value, 10);
+    if (v === ans) {
+      if (level === 7) lv7Ans = ans;
+      pass();
+    } else {
+      fail("ERROU");
+    }
+  };
+  $("submit").onclick = check;
+  $("ans").onkeydown = e => { if (e.key === "Enter") check(); };
+  $("ans").focus();
 }
 
 function sequenceLevel() {
@@ -116,7 +128,7 @@ function sequenceLevel() {
     if (!busy) return;
     $("box").innerHTML = `<p>QUAL ERA A SEQUÊNCIA?</p>`;
     const input = document.createElement("input"); input.id = "seq"; input.type = "text"; input.inputMode = "numeric"; input.autocomplete = "off";
-    input.style.cssText = "width:100%;padding:13px;background:#000;color:#a6ff00;border:3px solid #a6ff00;font-size:20px";
+    input.style.cssText = "width:100%;padding:13px;background:#000;color:#a6ff00;border:3px solid #a6ff00;font-size:20px;margin-bottom:10px";
     const btn = document.createElement("button"); btn.className = "btn"; btn.textContent = "ENVIAR";
     $("box").append(input, btn);
     const check = () => { busy = false; const v = input.value.replace(/\s/g, ""); if (v === memorySequence.join("")) pass(); else fail("MEMÓRIA QUEBROU"); };
@@ -179,7 +191,7 @@ function level47() {
 }
 
 function level49() {
-  $("box").innerHTML = `<p style="font-size:14px">PROVA DA MEMÓRIA</p><p style="font-size:12px;margin:10px 0">SOMA DO LVL 7</p><input id="a1" type="number" inputmode="numeric" style="width:100%;padding:10px;background:#000;color:#a6ff00;border:2px solid #a6ff00"><p style="font-size:12px;margin:10px 0">3ª COR DO LVL 9</p><div id="c49"></div>`;
+  $("box").innerHTML = `<p style="font-size:14px">PROVA DA MEMÓRIA</p><p style="font-size:12px;margin:10px 0">SOMA DO LVL 7</p><input id="a1" type="number" inputmode="numeric" style="width:100%;padding:10px;background:#000;color:#a6ff00;border:2px solid #a6ff00;margin-bottom:10px"><p style="font-size:12px;margin:10px 0">3ª COR DO LVL 9</p><div id="c49"></div>`;
   memColors.forEach(x => { const b = document.createElement("button"); b.className = "btn btnB"; b.textContent = x; b.onclick = () => { const v = Number.parseInt($("a1").value, 10); if (v !== lv7Ans) { fail("ERROU SOMA LVL 7"); return; } if (x !== memColors[2]) { fail("ERROU COR"); return; } pass(); }; $("c49").appendChild(b); });
 }
 
@@ -219,7 +231,7 @@ function oddOne() {
 }
 
 function level87() {
-  $("box").innerHTML = `<p>CHEFE DE MEMÓRIA</p><p style="margin:10px 0">QUAIS NÍVEIS ESTAVAM SEM NÚMERO?</p><input id="ans87" type="text" autocomplete="off" placeholder="7,27,47,67" style="width:100%;padding:12px;background:#000;color:#a6ff00;border:2px solid #a6ff00"><button class="btn" id="b87">ENVIAR</button>`;
+  $("box").innerHTML = `<p>CHEFE DE MEMÓRIA</p><p style="margin:10px 0">QUAIS NÍVEIS ESTAVAM SEM NÚMERO?</p><input id="ans87" type="text" autocomplete="off" placeholder="7,27,47,67" style="width:100%;padding:12px;background:#000;color:#a6ff00;border:2px solid #a6ff00;margin-bottom:10px"><button class="btn" id="b87">ENVIAR</button>`;
   $("b87").onclick = () => { const v = $("ans87").value.replace(/\s/g, ""); if (v === "7,27,47,67" || v === "7,27,47,67,87") pass(); else fail("FALTOU ALGUM"); };
 }
 
