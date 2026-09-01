@@ -108,18 +108,19 @@ button {
 }
 .blue-choice:active { transform: scale(.96); background: #1a53cc; }
 
-/* NÍVEL 1 (Peça Quebrada com recortes complexos e 4 opções quase idênticas) */
-.broken-container { display: flex; flex-direction: column; align-items: center; gap: 25px; width: 100%; margin-top: -15px; }
+/* NÍVEL 1 (Peça Quebrada: Topo aponta para baixo, peças da base apontam para CIMA para encaixar perfeitamente) */
+.broken-container { display: flex; flex-direction: column; align-items: center; gap: 30px; width: 100%; margin-top: -15px; }
 .broken-top { width: 240px; height: 110px; background: #246bff; border-radius: 8px; clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 82% 100%, 65% 60%, 50% 95%, 35% 60%, 18% 100%, 0% 50%); }
-.broken-pieces-pool { display: flex; gap: 10px; justify-content: center; width: 100%; }
+.broken-pieces-pool { display: flex; gap: 12px; justify-content: center; width: 100%; }
 .puzzle-piece {
     width: 60px; height: 60px; background: #246bff; border-radius: 6px;
     touch-action: none; cursor: grab; transition: transform 0.2s ease;
 }
-.puzzle-piece.p1 { clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 80% 90%, 65% 55%, 50% 85%, 35% 55%, 20% 90%, 0% 50%); }
-.puzzle-piece.p2 { clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 82% 100%, 65% 60%, 50% 95%, 35% 60%, 18% 100%, 0% 50%); } /* Correta */
-.puzzle-piece.p3 { clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 84% 95%, 65% 65%, 50% 90%, 35% 65%, 16% 95%, 0% 50%); }
-.puzzle-piece.p4 { clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 78% 85%, 65% 50%, 50% 80%, 35% 50%, 22% 85%, 0% 50%); }
+/* Peças com pontas viradas para CIMA para encaixar no molde superior */
+.puzzle-piece.p1 { clip-path: polygon(0% 100%, 100% 100%, 100% 50%, 80% 10%, 65% 45%, 50% 15%, 35% 45%, 20% 10%, 0% 50%); }
+.puzzle-piece.p2 { clip-path: polygon(0% 100%, 100% 100%, 100% 50%, 82% 0%, 65% 40%, 50% 5%, 35% 40%, 18% 0%, 0% 50%); } /* Encaixe correto */
+.puzzle-piece.p3 { clip-path: polygon(0% 100%, 100% 100%, 100% 50%, 84% 5%, 65% 35%, 50% 10%, 35% 35%, 16% 5%, 0% 50%); }
+.puzzle-piece.p4 { clip-path: polygon(0% 100%, 100% 100%, 100% 50%, 78% 15%, 65% 50%, 50% 20%, 35% 50%, 22% 15%, 0% 50%); }
 .puzzle-piece.dragging { transition: none; z-index: 50; }
 
 /* NÍVEL 2 */
@@ -150,9 +151,9 @@ button {
     100% { transform: translate(180px, 15px) scale(0.6); opacity: 0; }
 }
 
-/* NÍVEL 8 */
-.color-bar-container { display: flex; gap: 12px; justify-content: center; align-items: center; height: 160px; }
-.color-segment { width: 22px; height: 140px; border-radius: 4px; }
+/* NÍVEL 8 (Barras de Cores Espalhadas, Finas e Altas Ocupando Bem a Tela) */
+.color-bar-container { display: flex; justify-content: space-evenly; align-items: center; width: min(390px, 96vw); height: 180px; margin: 0 auto; }
+.color-segment { width: 26px; height: 155px; border-radius: 6px; }
 .color-segment:active { transform: scale(.95); }
 .c-red { background: #ff3030; } .c-blue { background: #3080ff; }
 .c-green { background: #35c96b; } .c-yellow { background: #ffd83d; }
@@ -363,7 +364,7 @@ function renderLevel(number, level) {
     }
 }
 
-/* NÍVEL 1 (Peça Quebrada com recortes complexos e 4 opções quase idênticas) */
+/* NÍVEL 1 (Peça Quebrada: Topo aponta para baixo, peças da base apontam para CIMA com encaixe corrigido) */
 function renderLevel1() {
     DOM.levelQuestion.textContent = "Complete a figura.";
     const wrap = document.createElement("div"); wrap.className = "broken-container";
