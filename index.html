@@ -48,23 +48,21 @@ button {
     align-items: center; justify-content: center;
 }
 
-/* TELA INICIAL — DISTRIBUIÇÃO VERTICAL CORRIGIDA EXATAMENTE CONFORME O DESENHO */
+/* TELA INICIAL — ESPAÇAMENTO EXATO SOLICITADO */
 #homeScreen {
-    justify-content: flex-start;
-    padding-top: calc(env(safe-area-inset-top) + 15px);
-    padding-bottom: calc(env(safe-area-inset-bottom) + 15px);
-    padding-left: 20px;
-    padding-right: 20px;
+    justify-content: space-between;
+    align-items: center;
+    padding: calc(env(safe-area-inset-top) + 20px) 20px calc(env(safe-area-inset-bottom) + 20px);
 }
 
-.logo { text-align: center; line-height: .82; pointer-events: none; margin-top: 10px; }
+.logo { text-align: center; line-height: .82; pointer-events: none; margin-top: 5px; }
 .logo-main { display: block; font-size: clamp(38px, 11vw, 64px); font-weight: 900; letter-spacing: .10em; }
 .logo-sub { display: block; margin-top: 6px; font-size: clamp(14px, 3.8vw, 22px); font-weight: 700; letter-spacing: .45em; padding-left: .45em; }
 .logo-line { width: min(200px, 50vw); height: 1px; margin: 10px auto 0; background: rgba(255,255,255,.45); }
 
-/* VIDAS (VERMELHO VIBRANTE #ff3b30 NO CENTRO) */
+/* VIDAS (VERMELHO VIBRANTE #ff3b30 NO MEIO DA TELA) */
 .lives { display: flex; justify-content: center; align-items: center; gap: 12px; }
-.home-lives { margin-top: 35px; }
+.home-lives { margin: auto 0; }
 .heart { position: relative; width: 22px; height: 22px; transform: rotate(-45deg); border-radius: 3px; background: #ff3b30; }
 .heart::before, .heart::after { content: ""; position: absolute; width: 22px; height: 22px; border-radius: 50%; background: #ff3b30; }
 .heart::before { top: -11px; left: 0; }
@@ -74,24 +72,24 @@ button {
 .start-button {
     position: relative; width: min(320px, 82vw); min-height: 68px; padding: 12px 20px;
     border: 1px solid rgba(255,255,255,.75); border-radius: 6px; background: #050505;
-    margin-top: 35px;
+    margin-bottom: 10px;
 }
 .start-button:active { transform: scale(.97); }
 .start-title { display: block; font-size: 22px; font-weight: 900; letter-spacing: .15em; }
 .start-subtitle { display: block; margin-top: 3px; font-size: 10px; letter-spacing: .25em; opacity: .55; }
 
-/* HALL DOS SOBREVIVENTES MAIS ABAIXO */
+/* HALL DOS SOBREVIVENTES NA PARTE INFERIOR */
 .hall {
-    position: relative; width: min(370px, 90vw); height: 120px; overflow: hidden;
+    position: relative; width: min(370px, 90vw); height: 110px; overflow: hidden;
     border-top: 1px solid rgba(255,255,255,.12); border-bottom: 1px solid rgba(255,255,255,.12);
-    margin-top: 30px;
+    margin-bottom: 10px;
 }
-.hall-title { position: absolute; top: 8px; left: 0; right: 0; z-index: 3; text-align: center; font-size: 10px; letter-spacing: .25em; opacity: .5; }
-.hall-mask { position: absolute; inset: 0; overflow: hidden; padding-top: 28px; }
-.hall-list { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.hall-title { position: absolute; top: 6px; left: 0; right: 0; z-index: 3; text-align: center; font-size: 10px; letter-spacing: .25em; opacity: .5; }
+.hall-mask { position: absolute; inset: 0; overflow: hidden; padding-top: 24px; }
+.hall-list { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .hall-name { font-size: 13px; font-weight: 700; letter-spacing: .12em; opacity: .82; }
-.hall-empty { margin-top: 25px; font-size: 10px; letter-spacing: .15em; opacity: .28; }
-.home-menu { position: absolute; right: 20px; bottom: calc(env(safe-area-inset-bottom) + 15px); width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; font-size: 20px; opacity: .7; }
+.hall-empty { margin-top: 20px; font-size: 10px; letter-spacing: .15em; opacity: .28; }
+.home-menu { position: absolute; right: 20px; bottom: calc(env(safe-area-inset-bottom) + 10px); width: 40px; height: 40px; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; font-size: 18px; opacity: .7; }
 
 /* TELA DE JOGO */
 #gameScreen { justify-content: flex-start; background: #000; }
@@ -110,21 +108,25 @@ button {
 }
 .blue-choice:active { transform: scale(.96); background: #1a53cc; }
 
-/* NÍVEL 1 */
-.broken-container { display: flex; flex-direction: column; align-items: center; gap: 30px; width: 100%; margin-top: -20px; }
-.broken-top { width: 240px; height: 120px; background: #246bff; border-radius: 10px; clip-path: polygon(0% 0%, 100% 0%, 100% 45%, 85% 100%, 70% 50%, 50% 90%, 30% 40%, 15% 90%, 0% 50%); }
-.broken-pieces-pool { display: flex; gap: 12px; justify-content: center; width: 100%; }
+/* NÍVEL 1 (Peça Quebrada com recortes complexos e 4 opções quase idênticas) */
+.broken-container { display: flex; flex-direction: column; align-items: center; gap: 25px; width: 100%; margin-top: -15px; }
+.broken-top { width: 240px; height: 110px; background: #246bff; border-radius: 8px; clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 82% 100%, 65% 60%, 50% 95%, 35% 60%, 18% 100%, 0% 50%); }
+.broken-pieces-pool { display: flex; gap: 10px; justify-content: center; width: 100%; }
 .puzzle-piece {
-    width: 55px; height: 55px; background: #246bff; border-radius: 8px;
+    width: 60px; height: 60px; background: #246bff; border-radius: 6px;
     touch-action: none; cursor: grab; transition: transform 0.2s ease;
 }
+.puzzle-piece.p1 { clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 80% 90%, 65% 55%, 50% 85%, 35% 55%, 20% 90%, 0% 50%); }
+.puzzle-piece.p2 { clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 82% 100%, 65% 60%, 50% 95%, 35% 60%, 18% 100%, 0% 50%); } /* Correta */
+.puzzle-piece.p3 { clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 84% 95%, 65% 65%, 50% 90%, 35% 65%, 16% 95%, 0% 50%); }
+.puzzle-piece.p4 { clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 78% 85%, 65% 50%, 50% 80%, 35% 50%, 22% 85%, 0% 50%); }
 .puzzle-piece.dragging { transition: none; z-index: 50; }
 
 /* NÍVEL 2 */
 .grid2-large { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, 75px); gap: 14px; width: min(380px, 94vw); }
 
-/* NÍVEL 5 */
-.shape-field { position: relative; width: 100%; height: 220px; }
+/* NÍVEL 5 (Formas espalhadas por toda a tela) */
+.shape-field-full { position: absolute; inset: 60px 10px 90px 10px; pointer-events: none; }
 .geo-shape { position: absolute; background: #fff; }
 .geo-circle { border-radius: 50%; }
 .geo-square { border-radius: 4px; }
@@ -136,13 +138,17 @@ button {
 .click-circle { position: absolute; width: 45px; height: 45px; border-radius: 50%; background: #246bff; border: 1px solid #fff; }
 
 /* NÍVEL 7 */
-.rats-wrap { position: relative; width: 220px; height: 220px; margin-bottom: 20px; }
+.rats-wrap { position: relative; width: 260px; height: 260px; margin-bottom: 10px; }
 .orbit-center { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; transform: translate(-5%, -5%); animation: spin 4s linear infinite; }
 .circling-rat { position: absolute; font-size: 26px; transform-origin: center; }
 @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
 .question-with-rat { position: relative; display: inline-block; padding: 0 15px; }
-.small-hiding-rat { position: absolute; font-size: 12px; top: -12px; left: -20px; animation: ratFastRun 2s linear infinite; }
-@keyframes ratFastRun { 0% { transform: translateX(-40px); } 100% { transform: translateX(180px); } }
+.small-hiding-rat { position: absolute; font-size: 14px; top: -15px; left: -30px; animation: ratArcRun 1.5s linear infinite; }
+@keyframes ratArcRun {
+    0% { transform: translate(0, 15px) scale(0.6); opacity: 0; }
+    50% { transform: translate(90px, -15px) scale(0.6); opacity: 1; }
+    100% { transform: translate(180px, 15px) scale(0.6); opacity: 0; }
+}
 
 /* NÍVEL 8 */
 .color-bar-container { display: flex; gap: 12px; justify-content: center; align-items: center; height: 160px; }
@@ -357,11 +363,19 @@ function renderLevel(number, level) {
     }
 }
 
-/* NÍVEL 1 */
+/* NÍVEL 1 (Peça Quebrada com recortes complexos e 4 opções quase idênticas) */
 function renderLevel1() {
     DOM.levelQuestion.textContent = "Complete a figura.";
     const wrap = document.createElement("div"); wrap.className = "broken-container";
-    wrap.innerHTML = `<div class="broken-top" id="targetArea"></div><div class="broken-pieces-pool"><div class="puzzle-piece" data-correct="false"></div><div class="puzzle-piece" data-correct="true"></div><div class="puzzle-piece" data-correct="false"></div><div class="puzzle-piece" data-correct="false"></div></div>`;
+    wrap.innerHTML = `
+        <div class="broken-top" id="targetArea"></div>
+        <div class="broken-pieces-pool">
+            <div class="puzzle-piece p1" data-correct="false"></div>
+            <div class="puzzle-piece p2" data-correct="true"></div>
+            <div class="puzzle-piece p3" data-correct="false"></div>
+            <div class="puzzle-piece p4" data-correct="false"></div>
+        </div>
+    `;
     DOM.levelContent.appendChild(wrap);
 
     const pieces = wrap.querySelectorAll(".puzzle-piece");
@@ -431,30 +445,30 @@ function renderLevel4() {
     DOM.levelContent.appendChild(wrap);
 }
 
-/* NÍVEL 5 */
+/* NÍVEL 5 (Formas espalhadas por toda a tela) */
 function renderLevel5() {
     DOM.levelQuestion.textContent = "Quantos círculos tem na tela?";
     const wrap = document.createElement("div");
-    wrap.style.cssText = "width:100%; display:flex; flex-direction:column; align-items:center; gap:10px;";
+    wrap.style.cssText = "width:100%; height:100%; position:relative;";
     wrap.innerHTML = `
-        <div class="shape-field">
-            <div class="geo-shape geo-circle" style="width:28px;height:28px;left:20px;top:10px;"></div>
-            <div class="geo-shape geo-circle" style="width:22px;height:22px;left:120px;top:40px;"></div>
-            <div class="geo-shape geo-circle" style="width:32px;height:32px;left:260px;top:15px;"></div>
-            <div class="geo-shape geo-circle" style="width:25px;height:25px;left:80px;top:130px;"></div>
-            <div class="geo-shape geo-circle" style="width:30px;height:30px;left:200px;top:100px;"></div>
-            <div class="geo-shape geo-circle" style="width:10px;height:10px;left:310px;top:120px;"></div>
-            <div class="geo-shape geo-square" style="width:25px;height:25px;left:50px;top:80px;"></div>
-            <div class="geo-shape geo-square" style="width:28px;height:28px;left:150px;top:160px;"></div>
-            <div class="geo-shape geo-square" style="width:24px;height:24px;left:280px;top:70px;"></div>
-            <div class="geo-shape geo-rect" style="width:40px;height:18px;left:100px;top:10px;"></div>
-            <div class="geo-shape geo-rect" style="width:35px;height:15px;left:230px;top:140px;"></div>
-            <div class="geo-shape geo-pentagon" style="width:28px;height:28px;left:10px;top:150px;"></div>
-            <div class="geo-shape geo-pentagon" style="width:30px;height:30px;left:170px;top:10px;"></div>
-            <div class="geo-shape geo-hexagon" style="width:26px;height:26px;left:320px;top:20px;"></div>
-            <div class="geo-shape geo-hexagon" style="width:28px;height:28px;left:240px;top:90px;"></div>
+        <div class="shape-field-full">
+            <div class="geo-shape geo-circle" style="width:28px;height:28px;left:10%;top:15%;"></div>
+            <div class="geo-shape geo-circle" style="width:22px;height:22px;left:75%;top:20%;"></div>
+            <div class="geo-shape geo-circle" style="width:32px;height:32px;left:45%;top:35%;"></div>
+            <div class="geo-shape geo-circle" style="width:25px;height:25px;left:20%;top:60%;"></div>
+            <div class="geo-shape geo-circle" style="width:30px;height:30px;left:80%;top:70%;"></div>
+            <div class="geo-shape geo-circle" style="width:10px;height:10px;left:55%;top:80%;"></div>
+            <div class="geo-shape geo-square" style="width:25px;height:25px;left:30%;top:25%;"></div>
+            <div class="geo-shape geo-square" style="width:28px;height:28px;left:60%;top:50%;"></div>
+            <div class="geo-shape geo-square" style="width:24px;height:24px;left:15%;top:85%;"></div>
+            <div class="geo-shape geo-rect" style="width:40px;height:18px;left:50%;top:10%;"></div>
+            <div class="geo-shape geo-rect" style="width:35px;height:15px;left:85%;top:45%;"></div>
+            <div class="geo-shape geo-pentagon" style="width:28px;height:28px;left:5%;top:45%;"></div>
+            <div class="geo-shape geo-pentagon" style="width:30px;height:30px;left:40%;top:65%;"></div>
+            <div class="geo-shape geo-hexagon" style="width:26px;height:26px;left:70%;top:85%;"></div>
+            <div class="geo-shape geo-hexagon" style="width:28px;height:28px;left:25%;top:40%;"></div>
         </div>
-        <div class="options-grid" id="cOpts"></div>
+        <div class="options-grid" id="cOpts" style="position:absolute; bottom:15px; left:50%; transform:translateX(-50%);"></div>
     `;
     DOM.levelContent.appendChild(wrap);
     const cOpts = wrap.querySelector("#cOpts");
@@ -509,7 +523,7 @@ function renderLevel7() {
     DOM.levelQuestion.innerHTML = `<span class="question-with-rat"><span class="small-hiding-rat">🐀</span>Quantos ratos tem na tela?</span>`;
     const wrap = document.createElement("div"); wrap.className = "rats-wrap";
     
-    const radius = 75;
+    const radius = 95;
     const center = document.createElement("div"); center.className = "orbit-center";
     for(let i = 0; i < 5; i++) {
         const angle = (i * 72) * (Math.PI / 180);
