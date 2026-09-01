@@ -1,11 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#000000">
-  <title>MEMORY TRAP</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>MEMORY TRAP</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Courier New",monospace;font-weight:900}
+body{background:#000;color:#a6ff00;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:12px}
+#game{width:100%;max-width:410px;background:#000;border:4px solid #a6ff00;padding:18px;box-shadow:8px 8px 0 #a6ff00}
+#top{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #a6ff00;padding-bottom:10px;font-size:14px;letter-spacing:2px;margin-bottom:14px;min-height:27px}
+#levelNum{color:#333}
+#lives{white-space:nowrap}
+#box{width:100%;min-height:360px;background:#000;border:3px solid #a6ff00;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;margin-bottom:14px;text-transform:uppercase;overflow:hidden}
+#box p{text-align:center}
+.btn{width:100%;padding:15px;margin:6px 0;border:3px solid #a6ff00;background:#a6ff00;color:#000;font-size:17px;cursor:pointer;text-transform:uppercase;font-family:inherit;font-weight:900}
+.btn:active{transform:translate(4px,4px)}
+.btnB{background:#000;color:#a6ff00}
+.btnW{background:#000;color:#fff;border-color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+input{font-family:inherit;font-weight:900;text-transform:uppercase;outline:none}
+input:focus{box-shadow:4px 4px 0 #a6ff00}
+#tapBox{width:160px;height:160px;background:#a6ff00;border:4px solid #000;display:flex;align-items:center;justify-content:center;color:#000;font-size:22px;box-shadow:6px 6px 0 #000;cursor:pointer;user-select:none;-webkit-user-select:none}
+.shake{animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+#msg{color:#555;font-size:11px;min-height:16px;text-align:center;text-transform:uppercase}
+.swatch{width:28px;height:28px;border:2px solid #a6ff00;display:inline-block;vertical-align:middle;margin-right:8px}
+.memory-row{display:flex;align-items:center;margin:6px}
+.mini{font-size:11px;color:#555}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.grid .btn{margin:0}
+.big{font-size:48px;line-height:1}
+.hall{width:100%;margin-top:10px;text-align:left;font-size:11px;max-height:135px;overflow-y:auto;line-height:17px}
+.hall-title{color:#a6ff00;margin-bottom:5px}
+@media(max-height:650px){#box{min-height:300px}}
+</style>
 </head>
 <body>
 <main id="game">
@@ -16,6 +45,267 @@
   <section id="box"></section>
   <div id="msg" aria-live="polite"></div>
 </main>
-<script src="script.js"></script>
+
+<script>
+"use strict";
+
+const MAX_LIVES = 5;
+const NO_NUMBER_LEVELS = [7, 27, 47, 67, 87];
+const COLORS = [
+  {name: "VERMELHO", css: "#ff3333", key: "red"},
+  {name: "AZUL", css: "#3366ff", key: "blue"},
+  {name: "VERDE", css: "#33cc66", key: "green"},
+  {name: "AMARELO", css: "#ffff33", key: "yellow"},
+  {name: "ROXO", css: "#9933ff", key: "purple"}
+];
+
+let level = 1, lives = 5, deaths = 0;
+let memColors = [];
+let lv7Ans = null;
+let memorySequence = [];
+let timers = [];
+let busy = false;
+let level44Clicks = 0;
+let checkpointUnlocked = false;
+
+const $ = id => document.getElementById(id);
+
+function clearTimers() { timers.forEach(clearTimeout); timers = []; busy = false; }
+function later(fn, ms) { const t = setTimeout(() => { timers = timers.filter(x => x !== t); fn(); }, ms); timers.push(t); return t; }
+function render() { showNum(); $("lives").textContent = "❤️".repeat(Math.max(0, lives)); }
+function showNum() { $("levelNum").textContent = NO_NUMBER_LEVELS.includes(level) ? "" : "LVL " + level; }
+function message(t, ms = 900) { $("msg").textContent = t; later(() => { $("msg").textContent = ""; }, ms); }
+
+function fail(text = "ERROU") {
+  $("box").classList.remove("shake"); void $("box").offsetWidth; $("box").classList.add("shake");
+  if (navigator.vibrate) navigator.vibrate(200);
+  message(text);
+  lives--; deaths++; render();
+  if (lives <= 0) {
+    lives = MAX_LIVES;
+    level = level < 50 ? 1 : 50;
+    render(); load(); return;
+  }
+  if (level !== 44) load();
+}
+
+function pass() { level++; if (level > 100) win(); else load(); }
+
+function inputNumber(correct, onSuccess = pass) {
+  $("box").innerHTML = `<input id="ans" type="number" inputmode="numeric" autocomplete="off" style="width:100%;padding:13px;background:#000;color:#a6ff00;border:3px solid #a6ff00;font-size:22px"><button class="btn" id="submit">ENVIAR</button>`;
+  const check = () => { const v = Number.parseInt($("ans").value, 10); if (v === correct) onSuccess(); else fail("ERROU"); };
+  $("submit").onclick = check; $("ans").onkeydown = e => { if (e.key === "Enter") check(); }; $("ans").focus();
+}
+
+function mathLevel(diff = 1) {
+  const a = Math.floor(Math.random() * 10 * diff) + 1, b = Math.floor(Math.random() * 10 * diff) + 1, ans = a + b;
+  $("box").innerHTML = `<p style="font-size:36px;margin-bottom:20px">${a}+${b}=?</p>`;
+  inputNumber(ans, () => {
+    if (level === 7) lv7Ans = ans; // Salva apenas após acertar o nível 7
+    pass();
+  });
+}
+
+function sequenceLevel() {
+  const len = level < 55 ? 3 : 4;
+  memorySequence = Array.from({length: len}, () => Math.floor(Math.random() * 9) + 1);
+  const shown = memorySequence.join(" — ");
+  $("box").innerHTML = `<p>DECORE A SEQUÊNCIA</p><p class="big" style="margin:22px 0">${shown}</p><p class="mini">VOCÊ TEM 2 SEGUNDOS</p>`;
+  busy = true;
+  later(() => {
+    if (!busy) return;
+    $("box").innerHTML = `<p>QUAL ERA A SEQUÊNCIA?</p>`;
+    const input = document.createElement("input"); input.id = "seq"; input.type = "text"; input.inputMode = "numeric"; input.autocomplete = "off";
+    input.style.cssText = "width:100%;padding:13px;background:#000;color:#a6ff00;border:3px solid #a6ff00;font-size:20px";
+    const btn = document.createElement("button"); btn.className = "btn"; btn.textContent = "ENVIAR";
+    $("box").append(input, btn);
+    const check = () => { busy = false; const v = input.value.replace(/\s/g, ""); if (v === memorySequence.join("")) pass(); else fail("MEMÓRIA QUEBROU"); };
+    btn.onclick = check; input.onkeydown = e => { if (e.key === "Enter") check(); }; input.focus();
+  }, 2000);
+}
+
+function stroop() {
+  const opts = COLORS.slice(0, 4), ink = opts[Math.floor(Math.random() * opts.length)], word = opts[Math.floor(Math.random() * opts.length)];
+  $("box").innerHTML = `<p>QUAL É A COR DO TEXTO?</p><p style="color:${ink.css};font-size:34px;margin:22px 0">${word.name}</p>`;
+  opts.forEach(x => {
+    const b = document.createElement("button"); b.className = "btn btnB"; b.textContent = x.name;
+    b.onclick = () => x.key === ink.key ? pass() : fail("LEU O NOME, NÃO A COR");
+    $("box").appendChild(b);
+  });
+}
+
+function memory9() {
+  memColors = COLORS.map(x => x.name);
+  $("box").innerHTML = `<p>DECORE AS 5 CORES</p><div style="margin-top:12px">${memColors.map((x, i) => { const c = COLORS[i]; return `<div class="memory-row"><span class="swatch" style="background:${c.css}"></span>${i + 1}. ${x}</div>`; }).join("")}</div><p class="mini" style="margin-top:8px">5s</p>`;
+  busy = true;
+  later(() => {
+    busy = false;
+    $("box").innerHTML = `<p>QUAL ERA A 2ª COR DO LVL 9?</p>`;
+    memColors.forEach(x => { const b = document.createElement("button"); b.className = "btn btnB"; b.textContent = x; b.onclick = () => x === memColors[1] ? pass() : fail("ESQUECEU"); $("box").appendChild(b); });
+  }, 5000);
+}
+
+function level39() {
+  $("box").innerHTML = `<p>MEMÓRIA LVL 9<br>QUAL ERA A 3ª COR?</p>`;
+  memColors.forEach(x => { const b = document.createElement("button"); b.className = "btn btnB"; b.textContent = x; b.onclick = () => x === memColors[2] ? pass() : fail("ESQUECEU"); $("box").appendChild(b); });
+}
+
+function level44() {
+  level44Clicks = 0; busy = true;
+  $("box").innerHTML = `<div id="tapBox">APERTE</div><p id="ct" style="margin-top:12px">0/5</p>`;
+  $("tapBox").onclick = () => {
+    if (!busy || level44Clicks >= 5) return;
+    level44Clicks++;
+    if (level44Clicks >= 5) {
+      level44Clicks = 5; busy = false;
+      $("box").innerHTML = `<div id="waitBox" style="width:160px;height:160px;background:#fff;border:4px solid #000;display:flex;align-items:center;justify-content:center;color:#000;font-size:22px;box-shadow:6px 6px 0 #000;cursor:pointer;user-select:none">ESPERE</div><p style="margin-top:10px">5s SEM TOCAR...</p>`;
+      $("waitBox").onclick = () => {
+        if (busy) return;
+        busy = true;
+        lives--; deaths++; render(); message("PERDEU 1 VIDA ESCONDIDA", 1200);
+        level = 45; load();
+      };
+      busy = false;
+      later(() => { if (level !== 44) return; level = 45; load(); }, 5000);
+    } else {
+      $("ct").textContent = level44Clicks + "/5";
+    }
+  };
+}
+
+function level47() {
+  $("box").innerHTML = `<p>QUAL OUTRO NÍVEL ESTAVA SEM NÚMERO?</p><p class="mini" style="margin:8px 0">PENSE ANTES DE TOCAR</p>`;
+  [7, 27, 67, 15].forEach(n => { const b = document.createElement("button"); b.className = "btn btnB"; b.textContent = n; b.onclick = () => [7, 27, 67].includes(n) ? pass() : fail("TEM MAIS"); $("box").appendChild(b); });
+}
+
+function level49() {
+  $("box").innerHTML = `<p style="font-size:14px">PROVA DA MEMÓRIA</p><p style="font-size:12px;margin:10px 0">SOMA DO LVL 7</p><input id="a1" type="number" inputmode="numeric" style="width:100%;padding:10px;background:#000;color:#a6ff00;border:2px solid #a6ff00"><p style="font-size:12px;margin:10px 0">3ª COR DO LVL 9</p><div id="c49"></div>`;
+  memColors.forEach(x => { const b = document.createElement("button"); b.className = "btn btnB"; b.textContent = x; b.onclick = () => { const v = Number.parseInt($("a1").value, 10); if (v !== lv7Ans) { fail("ERROU SOMA LVL 7"); return; } if (x !== memColors[2]) { fail("ERROU COR"); return; } pass(); }; $("c49").appendChild(b); });
+}
+
+function gate50() {
+  if (lives < 5) {
+    $("box").innerHTML = `<p style="color:#f00;font-size:26px">PORTÃO FECHADO</p><p style="margin:15px 0">VOCÊ CHEGOU COM ${lives}/5 VIDAS.<br>O PORTÃO EXIGE 5.</p><button class="btn" id="restart">VOLTAR AO LVL 1</button>`;
+    $("restart").onclick = () => { level = 1; lives = 5; load(); }; return;
+  }
+  checkpointUnlocked = true;
+  $("box").innerHTML = `<p style="font-size:28px">PORTÃO ABERTO</p><p style="margin:15px 0">CHECKPOINT LIBERADO</p><p style="font-size:12px">TROFÉU: PORTÃO ABERTO</p><button class="btn" id="enter">ENTRAR</button>`;
+  $("enter").onclick = pass;
+}
+
+function quickNumber(ms = 450, digits = 3) {
+  const n = Math.floor(Math.random() * (10 ** digits - 10 ** (digits - 1))) + 10 ** (digits - 1);
+  $("box").innerHTML = `<p class="big">${n}</p>`;
+  later(() => { if (level >= 51) { inputNumber(n); } }, ms);
+}
+
+function reverseMemory() {
+  const n = Math.floor(Math.random() * 9000) + 1000;
+  $("box").innerHTML = `<p>DECORE</p><p class="big" style="margin:20px 0">${n}</p>`;
+  later(() => { inputNumber(Number(String(n).split("").reverse().join(""))); }, 1000);
+}
+
+function countTrap() {
+  const target = Math.floor(Math.random() * 5) + 3;
+  $("box").innerHTML = `<p>CONTE OS QUADRADOS</p><div class="grid" id="squares"></div><button class="btn" id="countBtn">RESPONDER</button>`;
+  for (let i = 0; i < target + Math.floor(Math.random() * 4); i++) { const d = document.createElement("div"); d.style.height = "34px"; d.style.border = "3px solid #a6ff00"; $("squares").appendChild(d); }
+  $("countBtn").onclick = () => { const v = prompt("QUANTOS QUADRADOS?"); if (Number(v) === target) pass(); else fail("CONTAGEM ERRADA"); };
+}
+
+function oddOne() {
+  const correct = Math.floor(Math.random() * 9);
+  $("box").innerHTML = `<p>TOQUE NO DIFERENTE</p><div class="grid" id="odd"></div>`;
+  for (let i = 0; i < 9; i++) { const b = document.createElement("button"); b.className = "btn btnB"; b.textContent = i === correct ? "X" : "O"; b.onclick = () => i === correct ? pass() : fail("ERRADO"); $("odd").appendChild(b); }
+}
+
+function level87() {
+  $("box").innerHTML = `<p>CHEFE DE MEMÓRIA</p><p style="margin:10px 0">QUAIS NÍVEIS ESTAVAM SEM NÚMERO?</p><input id="ans87" type="text" autocomplete="off" placeholder="7,27,47,67" style="width:100%;padding:12px;background:#000;color:#a6ff00;border:2px solid #a6ff00"><button class="btn" id="b87">ENVIAR</button>`;
+  $("b87").onclick = () => { const v = $("ans87").value.replace(/\s/g, ""); if (v === "7,27,47,67" || v === "7,27,47,67,87") pass(); else fail("FALTOU ALGUM"); };
+}
+
+function level100() {
+  $("box").innerHTML = `<p style="font-size:20px">BOSS FINAL</p><p style="margin:12px 0">QUAL ERA A 1ª COR DO LVL 9?</p>`;
+  memColors.forEach(x => { const b = document.createElement("button"); b.className = "btn btnB"; b.textContent = x; b.onclick = () => x === memColors[0] ? pass() : fail("NO FINAL ERROU"); $("box").appendChild(b); });
+}
+
+function levelByNumber() {
+  if (level === 7 || level === 27 || level === 67) { mathLevel(level === 7 ? 1 : level === 27 ? 2 : 4); return; }
+  if (level <= 6 || level === 8) { mathLevel(1); return; }
+  if (level === 9) { memory9(); return; }
+  if (level >= 10 && level <= 18) { mathLevel(2); return; }
+  if (level === 19) { oddOne(); return; }
+  if (level >= 20 && level <= 26) { mathLevel(3); return; }
+  if (level === 28) { sequenceLevel(); return; }
+  if (level === 29 || level === 34 || level === 37 || level === 46 || level === 52 || level === 56 || level === 60 || level === 64 || level === 68 || level === 71 || level === 74 || level === 77 || level === 80 || level === 83 || level === 86 || level === 89 || level === 92 || level === 95 || level === 98) { stroop(); return; }
+  if (level >= 30 && level <= 33) { mathLevel(3); return; }
+  if (level === 35) { quickNumber(600, 2); return; }
+  if (level === 36) { oddOne(); return; }
+  if (level === 38) { reverseMemory(); return; }
+  if (level === 39) { level39(); return; }
+  if (level === 40) { $("box").innerHTML = `<p>40</p><p style="margin:12px 0">VOCÊ AINDA NÃO VIU NADA.</p><button class="btn" id="c40">CONTINUAR</button>`; $("c40").onclick = pass; return; }
+  if (level === 41 || level === 43 || level === 45) { mathLevel(4); return; }
+  if (level === 42) { quickNumber(400, 3); return; }
+  if (level === 44) { level44(); return; }
+  if (level === 47) { level47(); return; }
+  if (level === 48) { quickNumber(300, 2); return; }
+  if (level === 49) { level49(); return; }
+  if (level === 50) { gate50(); return; }
+  if (level === 51) { reverseMemory(); return; }
+  if (level === 53) { oddOne(); return; }
+  if (level === 54) { countTrap(); return; }
+  if (level === 55) { sequenceLevel(); return; }
+  if (level === 57) { quickNumber(250, 3); return; }
+  if (level === 58) { mathLevel(5); return; }
+  if (level === 59) { countTrap(); return; }
+  if (level >= 61 && level <= 63) { mathLevel(5); return; }
+  if (level === 65) { sequenceLevel(); return; }
+  if (level === 66) { quickNumber(220, 3); return; }
+  if (level === 69) { reverseMemory(); return; }
+  if (level === 70) { oddOne(); return; }
+  if (level === 72) { countTrap(); return; }
+  if (level === 73) { sequenceLevel(); return; }
+  if (level === 75) { quickNumber(190, 4); return; }
+  if (level === 76) { mathLevel(6); return; }
+  if (level === 78) { reverseMemory(); return; }
+  if (level === 79) { oddOne(); return; }
+  if (level === 81) { sequenceLevel(); return; }
+  if (level === 82) { quickNumber(170, 4); return; }
+  if (level === 84) { countTrap(); return; }
+  if (level === 85) { mathLevel(6); return; }
+  if (level === 87) { level87(); return; }
+  if (level === 88) { sequenceLevel(); return; }
+  if (level === 90) { reverseMemory(); return; }
+  if (level === 91) { oddOne(); return; }
+  if (level === 93) { countTrap(); return; }
+  if (level === 94) { quickNumber(140, 4); return; }
+  if (level === 96) { sequenceLevel(); return; }
+  if (level === 97) { mathLevel(7); return; }
+  if (level === 99) { reverseMemory(); return; }
+  if (level === 100) { level100(); return; }
+  mathLevel(6);
+}
+
+function load() { clearTimers(); render(); $("box").innerHTML = ""; $("box").onclick = null; levelByNumber(); }
+
+function getHall() { try { const x = JSON.parse(localStorage.getItem("memoryTrapHall") || "[]"); return Array.isArray(x) ? x : []; } catch { return []; } }
+function esc(s) { return String(s).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;"); }
+function saveHall(code) {
+  const name = ($("pname").value || "ANON").trim().toUpperCase() || "ANON";
+  const hall = getHall(); hall.push({nome: name, mortes: deaths, codigo: code, data: new Date().toLocaleDateString("pt-BR")});
+  localStorage.setItem("memoryTrapHall", JSON.stringify(hall)); renderHall(); $("pname").value = ""; message("SALVO NO HALL", 1400);
+}
+function renderHall() {
+  const d = $("hallList"); if (!d) return; const h = getHall();
+  d.innerHTML = `<p class="hall-title">HALL DA FAMA LOCAL:</p>` + (h.length ? h.slice(-20).reverse().map((x, i) => `${i + 1}. ${esc(x.nome)} — ${x.mortes}M [${esc(x.codigo)}] — ${esc(x.data)}`).join("<br>") : "<span style='color:#555'>NINGUÉM ZEROU AINDA.</span>");
+}
+function win() {
+  clearTimers(); const code = "TRAP-" + Math.floor(1000 + Math.random() * 9000);
+  $("levelNum").textContent = "HALL";
+  $("box").innerHTML = `<p style="font-size:24px">VOCÊ QUEBROU A TRAP</p><p style="font-size:11px;color:#555;margin:8px 0">CÓDIGO: ${code}</p><p style="font-size:11px;color:#555">MORTES TOTAIS: ${deaths}</p><input id="pname" maxlength="24" placeholder="SEU NOME" style="width:100%;padding:10px;margin:10px 0;background:#000;color:#a6ff00;border:2px solid #a6ff00"><button class="btn" id="save">SALVAR NO HALL</button><div id="hallList" class="hall"></div><button class="btn btnW" id="reset">RESETAR HALL</button>`;
+  $("save").onclick = () => saveHall(code); $("reset").onclick = () => { if (confirm("APAGAR O HALL DESTE CELULAR?")) { localStorage.removeItem("memoryTrapHall"); renderHall(); } }; renderHall();
+}
+
+load();
+</script>
 </body>
 </html>
