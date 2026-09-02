@@ -455,8 +455,6 @@ button {
     25% { transform: translateX(-6px); }
     75% { transform: translateX(6px); }
 }
-
-/* NÍVEL 12 MELHORADO COM BARRA DE PROGRESSO VISUAL */
 .hold-btn-12 {
     position: relative;
     width: 150px;
@@ -488,7 +486,6 @@ button {
     color: #fff;
     text-shadow: 0 1px 3px rgba(0,0,0,0.8);
 }
-
 .rhythm-target-13 {
     position: relative;
     width: 120px;
@@ -532,19 +529,32 @@ button {
     background: #246bff;
     border-color: #fff;
 }
-.blind-pixel-area-15 {
-    position: absolute;
-    inset: 0;
+
+/* NÍVEL 15 - 5 PORTAS ALINHADAS */
+.doors-container-15 {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    width: min(360px, 92vw);
 }
-.blind-pixel-15 {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 14px;
-    height: 14px;
-    background: transparent;
+.door-btn-15 {
+    background: #1c1c1e;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    width: 58px;
+    height: 85px;
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    transition: transform 0.15s ease, background 0.2s;
 }
+.door-btn-15:active {
+    transform: scale(0.95);
+}
+
 .drag-out-btn-16 {
     width: 140px;
     height: 60px;
@@ -780,7 +790,7 @@ const LEVELS = {
     5: { type: "count-circles" }, 6: { type: "appearing-circles" }, 7: { type: "no-number-rats", hiddenNumber: true },
     8: { type: "color-memory" }, 9: { type: "arrow-memory" }, 10: { type: "camouflaged-command" },
     11: { type: "labyrinth-arrows" }, 12: { type: "hold-two-seconds" }, 13: { type: "circle-rhythm" },
-    14: { type: "reverse-order" }, 15: { type: "blind-pixel" }, 16: { type: "drag-outside" },
+    14: { type: "reverse-order" }, 15: { type: "doors-exit" }, 16: { type: "drag-outside" },
     17: { type: "circle-exclusion" }, 18: { type: "escaping-button" }, 19: { type: "letter-intruder" },
     20: { type: "level1-recall" }
 };
@@ -981,7 +991,7 @@ function renderLevel(n, l) {
         case "hold-two-seconds": renderLevel12(); break;
         case "circle-rhythm": renderLevel13(); break;
         case "reverse-order": renderLevel14(); break;
-        case "blind-pixel": renderLevel15(); break;
+        case "doors-exit": renderLevel15(); break;
         case "drag-outside": renderLevel16(); break;
         case "circle-exclusion": renderLevel17(); break;
         case "escaping-button": renderLevel18(); break;
@@ -1417,7 +1427,6 @@ paths.forEach(path=>{
 });
 }
 
-/* NÍVEL 12 OTIMIZADO COM FEEDBACK VISUAL E TEMPO MAIS JUSTO */
 function renderLevel12() {
     DOM.levelQuestion.textContent = "Segure exatamente por 2 segundos.";
     const w = document.createElement("div");
@@ -1439,7 +1448,6 @@ function renderLevel12() {
         startTime = Date.now();
         fill.style.height = "0%";
         
-        // Atualiza a barra visualmente a cada 30ms (completa 100% em exatos 2 segundos)
         timerInterval = setInterval(() => {
             const elapsed = (Date.now() - startTime) / 1000;
             const percentage = Math.min((elapsed / 2.0) * 100, 100);
@@ -1456,7 +1464,6 @@ function renderLevel12() {
         const duration = (Date.now() - startTime) / 1000;
         fill.style.height = "0%";
         
-        // Janela ampliada para 1.5s a 2.5s para facilitar a passagem
         if (duration >= 1.5 && duration <= 2.5) {
             completeLevel();
         } else {
@@ -1534,15 +1541,40 @@ function renderLevel14() {
     }, 3600));
 }
 
+/* NÍVEL 15 - 5 PORTAS ALINHADAS */
 function renderLevel15() {
     DOM.levelQuestion.textContent = "Encontre a saída secreta.";
     const w = document.createElement("div");
-    w.className = "blind-pixel-area-15";
-    const p = document.createElement("div");
-    p.className = "blind-pixel-15";
-    w.appendChild(p);
+    w.style.cssText = "display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; gap:20px;";
+    
+    const doorsGrid = document.createElement("div");
+    doorsGrid.className = "doors-container-15";
+    
+    // Escolhe a 3ª porta (índice 2) como a saída correta
+    const correctDoor = 2;
+    
+    for (let i = 0; i < 5; i++) {
+        const door = document.createElement("button");
+        door.className = "door-btn-15";
+        door.textContent = "🚪";
+        
+        door.addEventListener("pointerup", () => {
+            if (i === correctDoor) {
+                door.textContent = "🔓";
+                door.style.background = "#246bff";
+                feedbackCorrect();
+                setTimeout(() => completeLevel(), 350);
+            } else {
+                door.textContent = "❌";
+                vibrate([40, 30, 40]);
+                failLevel();
+            }
+        });
+        doorsGrid.appendChild(door);
+    }
+    
+    w.appendChild(doorsGrid);
     DOM.levelContent.appendChild(w);
-    p.addEventListener("pointerup", completeLevel);
 }
 
 function renderLevel16() {
