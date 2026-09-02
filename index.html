@@ -455,18 +455,40 @@ button {
     25% { transform: translateX(-6px); }
     75% { transform: translateX(6px); }
 }
+
+/* NÍVEL 12 MELHORADO COM BARRA DE PROGRESSO VISUAL */
 .hold-btn-12 {
-    width: 140px;
-    height: 140px;
+    position: relative;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
-    background: #246bff;
+    background: #1a1a1a;
     border: 4px solid #fff;
     font-size: 16px;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
 }
+.hold-fill-12 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: #ff3b30;
+    transition: height 0.05s linear;
+    z-index: 1;
+}
+.hold-text-12 {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
 .rhythm-target-13 {
     position: relative;
     width: 120px;
@@ -919,7 +941,6 @@ function failLevel() {
         });
         return;
     }
-    // Reinicia o nível instantaneamente sem mostrar a mensagem de erro/overlay incômoda
     clearLevelTimers();
     loadLevel(GAME.currentLevel);
 }
@@ -1113,7 +1134,6 @@ function renderLevel5() {
     });
 }
 
-/* NÍVEL 6 CORRIGIDO E ROBUSTO */
 function renderLevel6() {
     DOM.levelQuestion.textContent = "Acompanhe e toque nos círculos.";
     const wrap = document.createElement("div");
@@ -1155,7 +1175,7 @@ function renderLevel6() {
                 c.style.transform = "translate(-50%, -50%) scale(0)";
                 failLevel();
             }
-        }, 1200); // 1.2s para dar tempo hábil de clique
+        }, 1200);
         addLevelTimer(hideTimer);
 
         c.addEventListener("pointerup", () => {
@@ -1173,7 +1193,6 @@ function renderLevel6() {
         }, { once: true });
     }
 
-    // Pequeno atraso inicial de segurança para evitar erro imediato ao carregar o nível
     const startDelay = setTimeout(() => {
         showNextCircle();
     }, 400);
@@ -1398,31 +1417,57 @@ paths.forEach(path=>{
 });
 }
 
+/* NÍVEL 12 OTIMIZADO COM FEEDBACK VISUAL E TEMPO MAIS JUSTO */
 function renderLevel12() {
     DOM.levelQuestion.textContent = "Segure exatamente por 2 segundos.";
     const w = document.createElement("div");
     w.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:20px";
+    
     const b = document.createElement("button");
     b.className = "hold-btn-12";
-    b.textContent = "SEGURE";
-    let st = 0, hd = false;
-    b.addEventListener("pointerdown", () => {
-        hd = true;
-        st = Date.now();
-        b.style.background = "#ff3b30";
-        b.textContent = "SOLTE...";
-    });
-    const rel = () => {
-        if (!hd) return;
-        hd = false;
-        const d = (Date.now() - st) / 1000;
-        b.style.background = "#246bff";
-        b.textContent = "SEGURE";
-        if (d >= 1.8 && d <= 2.2) completeLevel();
-        else failLevel();
+    b.innerHTML = `<div class="hold-fill-12" id="holdFill"></div><span class="hold-text-12">SEGURE</span>`;
+    
+    const fill = b.querySelector("#holdFill");
+    let startTime = 0;
+    let timerInterval = null;
+    let holding = false;
+
+    const startHold = (e) => {
+        e.preventDefault();
+        if (holding) return;
+        holding = true;
+        startTime = Date.now();
+        fill.style.height = "0%";
+        
+        // Atualiza a barra visualmente a cada 30ms (completa 100% em exatos 2 segundos)
+        timerInterval = setInterval(() => {
+            const elapsed = (Date.now() - startTime) / 1000;
+            const percentage = Math.min((elapsed / 2.0) * 100, 100);
+            fill.style.height = percentage + "%";
+        }, 30);
+        addLevelTimer(timerInterval);
     };
-    b.addEventListener("pointerup", rel);
-    b.addEventListener("pointercancel", rel);
+
+    const releaseHold = (e) => {
+        if (!holding) return;
+        holding = false;
+        clearInterval(timerInterval);
+        
+        const duration = (Date.now() - startTime) / 1000;
+        fill.style.height = "0%";
+        
+        // Janela ampliada para 1.5s a 2.5s para facilitar a passagem
+        if (duration >= 1.5 && duration <= 2.5) {
+            completeLevel();
+        } else {
+            failLevel();
+        }
+    };
+
+    b.addEventListener("pointerdown", startHold);
+    b.addEventListener("pointerup", releaseHold);
+    b.addEventListener("pointercancel", releaseHold);
+
     w.appendChild(b);
     DOM.levelContent.appendChild(w);
 }
