@@ -6,212 +6,1633 @@
 <meta name="theme-color" content="#000000">
 <title>MEMORY TRAP</title>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:Arial,Helvetica,sans-serif;touch-action:none;position:fixed;inset:0}
-button{font:inherit;color:inherit;border:0;outline:0;background:none;touch-action:none}
-#app{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;background:#000}
-.screen{position:absolute;inset:0;display:none;width:100%;height:100%;overflow:hidden}
-.screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center}
-#homeScreen{justify-content:center;align-items:center;gap:24px;padding:calc(env(safe-area-inset-top) + 25px) 20px calc(env(safe-area-inset-bottom) + 20px)}
-.logo{text-align:center;line-height:1.1;pointer-events:none;margin:0}
-.logo-main{display:block;font-size:clamp(38px,11vw,64px);font-weight:900;letter-spacing:.10em;line-height:.90}
-.logo-sub{display:block;margin-top:14px;font-size:clamp(14px,3.8vw,22px);font-weight:700;letter-spacing:.55em;padding-left:.55em;line-height:1}
-.logo-line{width:min(200px,50vw);height:1px;margin:18px auto 0;background:rgba(255,255,255,.45)}
-.lives{display:flex;justify-content:center;align-items:center;gap:20px}
-.heart{position:relative;width:22px;height:22px;transform:rotate(-45deg);border-radius:3px;background:#ff3b30}
-.heart::before,.heart::after{content:"";position:absolute;width:22px;height:22px;border-radius:50%;background:#ff3b30}
-.heart::before{top:-11px;left:0}.heart::after{top:0;left:11px}
-.heart.empty,.heart.empty::before,.heart.empty::after{background:#333}
-.start-button{position:relative;width:min(320px,82vw);min-height:68px;padding:12px 20px;border:1px solid rgba(255,255,255,.75);border-radius:6px;background:#050505}
-.start-title{display:block;font-size:22px;font-weight:900;letter-spacing:.15em}
-.start-subtitle{display:block;margin-top:3px;font-size:10px;letter-spacing:.25em;opacity:.55}
-.hall{position:relative;width:min(370px,90vw);height:110px;overflow:hidden;border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}
-.hall-title{position:absolute;top:6px;left:0;right:0;z-index:3;text-align:center;font-size:10px;letter-spacing:.25em;opacity:.5}
-.hall-mask{position:absolute;inset:0;overflow:hidden;padding-top:24px}
-.hall-list{display:flex;flex-direction:column;align-items:center;gap:8px}
-.hall-name{font-size:13px;font-weight:700;letter-spacing:.12em;opacity:.82}
-.hall-empty{margin-top:20px;font-size:10px;letter-spacing:.15em;opacity:.28}
-.home-menu{position:absolute;right:20px;bottom:calc(env(safe-area-inset-bottom) + 10px);width:40px;height:40px;border:1px solid rgba(255,255,255,.22);border-radius:50%;font-size:18px;opacity:.7}
-#gameScreen{justify-content:flex-start;background:#000}
-.game-header{position:relative;width:100%;text-align:center;padding-top:calc(env(safe-area-inset-top) + 15px);z-index:20}
-.level-number{font-size:18px;font-weight:700;letter-spacing:.15em}
-.level-question{width:90%;margin:8px auto 0;text-align:center;font-size:clamp(15px,3.8vw,19px);font-weight:700;line-height:1.3}
-.level-content{position:relative;width:100%;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 12px 70px;gap:15px}
-.game-lives{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 15px);z-index:30}
-.options-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(380px,94vw);margin:0 auto}
-.blue-choice{min-height:65px;background:#246bff;border:1px solid rgba(255,255,255,.25);border-radius:14px;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:10px;text-align:center}
-.broken-container{display:flex;flex-direction:column;align-items:center;gap:18px;width:100%;justify-content:flex-start;padding-top:10px}
-.broken-top{width:min(42vw,165px);height:min(28vw,110px);background:#246bff;border-radius:8px 8px 4px 4px;clip-path:polygon(0% 0%,100% 0%,100% 52%,88% 100%,76% 62%,63% 100%,51% 60%,37% 100%,25% 60%,12% 100%,0% 52%);transition:all 0.3s ease;box-shadow:0 0 0 1px rgba(255,255,255,.15) inset}
-.broken-top.filled{clip-path:none}
-.broken-pieces-pool{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:min(92vw,360px);justify-items:center}
-.puzzle-piece{width:min(42vw,165px);height:min(28vw,110px);background:#246bff;border-radius:8px;touch-action:none;cursor:grab;transition:transform 0.38s cubic-bezier(.2,.8,.3,1.2);border:1px solid rgba(255,255,255,.12)}
-.puzzle-piece.dragging{transition:none;z-index:50;scale:1.08;box-shadow:0 8px 24px rgba(0,0,0,.6)}
-.puzzle-piece.wrong-shake{animation:shakeWrong 0.4s ease}
-@keyframes shakeWrong{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
-.grid2-large{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,75px);gap:14px;width:min(380px,94vw)}
-.shape-field-full{position:absolute;inset:0 0 95px 0;pointer-events:none}
-.geo-shape{position:absolute;background:#fff}
-.geo-circle{border-radius:50%}.geo-square{border-radius:4px}.geo-rect{border-radius:3px}
-.geo-pentagon{clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%)}
-.geo-hexagon{clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%)}
-.click-circle{position:absolute;width:48px;height:48px;border-radius:50%;background:#246bff;border:1.5px solid #fff}
-.rats-wrap{position:relative;width:260px;height:260px;margin-bottom:10px}
-.orbit-center{position:absolute;top:50%;left:50%;width:10px;height:10px;transform:translate(-5%,-5%);animation:spin 4s linear infinite}
-.circling-rat{position:absolute;font-size:26px;transform-origin:center}
-@keyframes spin{100%{transform:translate(-50%,-50%) rotate(360deg)}}
-.question-with-rat{position:relative;display:inline-block;padding:0 15px}
-.small-hiding-rat{position:absolute;font-size:14px;top:-15px;left:-30px;animation:ratArcRun 1.5s linear infinite}
-@keyframes ratArcRun{0%{transform:translate(0,15px) scale(0.6);opacity:0}50%{transform:translate(90px,-15px) scale(0.6);opacity:1}100%{transform:translate(180px,15px) scale(0.6);opacity:0}}
-.color-bar-container{display:flex;justify-content:space-evenly;align-items:center;width:min(390px,96vw);height:180px;margin:0 auto}
-.color-segment{width:26px;height:155px;border-radius:6px}
-.c-red{background:#ff3030}.c-blue{background:#3080ff}.c-green{background:#35c96b}.c-yellow{background:#ffd83d}.c-purple{background:#9c55ff}.c-orange{background:#ff8a30}
-.arrow-sequence-display{display:flex;gap:16px;font-size:40px;font-weight:900;margin:15px 0}
-.red-trap-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(380px,94vw)}
-.red-trap-btn{min-height:65px;border:1px solid rgba(255,255,255,.25);border-radius:14px}
-.arrow-labyrinth-11{position:relative;width:min(380px,96vw);height:min(420px,78vh);background:#000;border:none;overflow:visible;margin:0 auto}
-.maze-line{position:absolute;background:rgba(255,255,255,.95);border-radius:2px}
-.dot-point{position:absolute;width:6px;height:6px;background:#fff;border-radius:50%;transform:translate(-50%,-50%)}
-.lab-arrow-node{position:absolute;width:34px;height:34px;background:transparent;border:none;color:#fff;font-size:26px;font-weight:900;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;line-height:1;transition:transform 0.65s cubic-bezier(.2,.9,.2,1),opacity 0.5s ease}
-.lab-arrow-node.wrong-shake{animation:shake11 0.3s ease}
-@keyframes shake11{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.hold-btn-12{width:140px;height:140px;border-radius:50%;background:#246bff;border:4px solid #fff;font-size:16px;font-weight:bold;display:flex;align-items:center;justify-content:center}
-.rhythm-target-13{position:relative;width:120px;height:120px;border-radius:50%;border:3px dashed #246bff;display:flex;align-items:center;justify-content:center}
-.rhythm-pulse-13{width:40px;height:40px;border-radius:50%;background:#ff3b30;animation:pulseAnim 1.2s infinite ease-in-out}
-@keyframes pulseAnim{0%{transform:scale(0.5);opacity:0.5}50%{transform:scale(1.4);opacity:1}100%{transform:scale(0.5);opacity:0.5}}
-.reverse-grid-14{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;width:min(300px,90vw)}
-.rev-btn-14{height:75px;background:#333;border-radius:12px;font-size:22px;font-weight:bold;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,0.2)}
-.rev-btn-14.lit{background:#246bff;border-color:#fff}
-.blind-pixel-area-15{position:absolute;inset:0}.blind-pixel-15{position:absolute;top:15px;right:15px;width:14px;height:14px;background:transparent;cursor:pointer}
-.drag-out-btn-16{width:140px;height:60px;background:#246bff;border-radius:10px;font-weight:bold;display:flex;align-items:center;justify-content:center;touch-action:none;position:absolute}
-.exclusion-field-17{position:relative;width:min(360px,92vw);height:260px;border:1px dashed rgba(255,255,255,0.2);border-radius:12px;overflow:hidden}
-.exc-item{position:absolute;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px}
-.exc-circle{width:40px;height:40px;border-radius:50%;background:#246bff}.exc-square{width:40px;height:40px;border-radius:6px;background:#ff3b30}
-.escaping-btn-18{width:130px;height:60px;background:#246bff;border-radius:12px;font-weight:bold;position:absolute;transition:transform 0.15s ease;display:flex;align-items:center;justify-content:center}
-.intruder-grid-19{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:min(320px,90vw)}
-.intruder-cell{aspect-ratio:1;background:#1c1c1e;border-radius:6px;font-size:20px;font-weight:bold;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.8)}
-.recall-grid-20{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;width:min(340px,90vw)}
-.recall-shape-btn{height:100px;background:#1c1c1e;border:2px solid rgba(255,255,255,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center}
-.recall-mini-shape{width:70px;height:40px;background:#246bff;border-radius:6px}
-#overlay{position:absolute;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:#000}
-#overlay.active{display:flex}.overlay-content{width:min(340px,86vw);text-align:center}
-.overlay-title{font-size:28px;font-weight:900;letter-spacing:.1em}.overlay-text{margin-top:12px;font-size:14px;line-height:1.4;opacity:.7}
-.overlay-button{margin-top:24px;padding:14px 26px;border:1px solid rgba(255,255,255,.5);border-radius:8px}
-#settingsScreen{flex-direction:column;align-items:center;justify-content:flex-start;padding:calc(env(safe-area-inset-top) + 40px) 25px 25px}
-.settings-title{font-size:24px;font-weight:900;letter-spacing:.15em}
-.setting-row{display:flex;align-items:center;justify-content:space-between;width:min(360px,90vw);margin-top:22px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.12)}
-.setting-button{min-width:70px;padding:8px 14px;border:1px solid rgba(255,255,255,.3);border-radius:8px}
-.back-button{position:absolute;left:20px;top:calc(env(safe-area-inset-top) + 15px);padding:10px;opacity:.6}
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    touch-action: none;
+    position: fixed;
+    inset: 0;
+}
+button {
+    font: inherit;
+    color: inherit;
+    border: 0;
+    outline: 0;
+    background: none;
+    touch-action: none;
+}
+#app {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+}
+.screen {
+    position: absolute;
+    inset: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.screen.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#homeScreen {
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    padding: calc(env(safe-area-inset-top) + 25px) 20px calc(env(safe-area-inset-bottom) + 20px);
+}
+.logo {
+    text-align: center;
+    line-height: 1.1;
+    pointer-events: none;
+    margin: 0;
+}
+.logo-main {
+    display: block;
+    font-size: clamp(38px, 11vw, 64px);
+    font-weight: 900;
+    letter-spacing: .10em;
+    line-height: .90;
+}
+.logo-sub {
+    display: block;
+    margin-top: 14px;
+    font-size: clamp(14px, 3.8vw, 22px);
+    font-weight: 700;
+    letter-spacing: .55em;
+    padding-left: .55em;
+    line-height: 1;
+}
+.logo-line {
+    width: min(200px, 50vw);
+    height: 1px;
+    margin: 18px auto 0;
+    background: rgba(255,255,255,.45);
+}
+.lives {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.heart {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    transform: rotate(-45deg);
+    border-radius: 3px;
+    background: #ff3b30;
+}
+.heart::before, .heart::after {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #ff3b30;
+}
+.heart::before {
+    top: -11px;
+    left: 0;
+}
+.heart::after {
+    top: 0;
+    left: 11px;
+}
+.heart.empty, .heart.empty::before, .heart.empty::after {
+    background: #333;
+}
+.start-button {
+    position: relative;
+    width: min(320px, 82vw);
+    min-height: 68px;
+    padding: 12px 20px;
+    border: 1px solid rgba(255,255,255,.75);
+    border-radius: 6px;
+    background: #050505;
+}
+.start-title {
+    display: block;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: .15em;
+}
+.start-subtitle {
+    display: block;
+    margin-top: 3px;
+    font-size: 10px;
+    letter-spacing: .25em;
+    opacity: .55;
+}
+.hall {
+    position: relative;
+    width: min(370px, 90vw);
+    height: 110px;
+    overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,.12);
+    border-bottom: 1px solid rgba(255,255,255,.12);
+}
+.hall-title {
+    position: absolute;
+    top: 6px;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: .25em;
+    opacity: .5;
+}
+.hall-mask {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    padding-top: 24px;
+}
+.hall-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.hall-name {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    opacity: .82;
+}
+.hall-empty {
+    margin-top: 20px;
+    font-size: 10px;
+    letter-spacing: .15em;
+    opacity: .28;
+}
+.home-menu {
+    position: absolute;
+    right: 20px;
+    bottom: calc(env(safe-area-inset-bottom) + 10px);
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 50%;
+    font-size: 18px;
+    opacity: .7;
+}
+#gameScreen {
+    justify-content: flex-start;
+    background: #000;
+}
+.game-header {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    padding-top: calc(env(safe-area-inset-top) + 15px);
+    z-index: 20;
+}
+.level-number {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: .15em;
+}
+.level-question {
+    width: 90%;
+    margin: 8px auto 0;
+    text-align: center;
+    font-size: clamp(15px, 3.8vw, 19px);
+    font-weight: 700;
+    line-height: 1.3;
+}
+.level-content {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 12px 70px;
+    gap: 15px;
+}
+.game-lives {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(env(safe-area-inset-bottom) + 15px);
+    z-index: 30;
+}
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    width: min(380px, 94vw);
+    margin: 0 auto;
+}
+.blue-choice {
+    min-height: 65px;
+    background: #246bff;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 14px;
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    text-align: center;
+}
+.broken-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+    justify-content: flex-start;
+    padding-top: 10px;
+}
+.broken-top {
+    width: min(42vw, 165px);
+    height: min(28vw, 110px);
+    background: #246bff;
+    border-radius: 8px 8px 4px 4px;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 52%, 88% 100%, 76% 62%, 63% 100%, 51% 60%, 37% 100%, 25% 60%, 12% 100%, 0% 52%);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.15) inset;
+}
+.broken-top.filled {
+    clip-path: none;
+}
+.broken-pieces-pool {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    width: min(92vw, 360px);
+    justify-items: center;
+}
+.puzzle-piece {
+    width: min(42vw, 165px);
+    height: min(28vw, 110px);
+    background: #246bff;
+    border-radius: 8px;
+    touch-action: none;
+    cursor: grab;
+    transition: transform 0.38s cubic-bezier(.2,.8,.3,1.2);
+    border: 1px solid rgba(255,255,255,.12);
+}
+.puzzle-piece.dragging {
+    transition: none;
+    z-index: 50;
+    scale: 1.08;
+    box-shadow: 0 8px 24px rgba(0,0,0,.6);
+}
+.puzzle-piece.wrong-shake {
+    animation: shakeWrong 0.4s ease;
+}
+@keyframes shakeWrong {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+}
+.grid2-large {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, 75px);
+    gap: 14px;
+    width: min(380px, 94vw);
+}
+.shape-field-full {
+    position: absolute;
+    inset: 0 0 95px 0;
+    pointer-events: none;
+}
+.geo-shape {
+    position: absolute;
+    background: #fff;
+}
+.geo-circle { border-radius: 50%; }
+.geo-square { border-radius: 4px; }
+.geo-rect { border-radius: 3px; }
+.geo-pentagon { clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
+.geo-hexagon { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
+.click-circle {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #246bff;
+    border: 1.5px solid #fff;
+}
+.rats-wrap {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin-bottom: 10px;
+}
+.orbit-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    transform: translate(-5%, -5%);
+    animation: spin 4s linear infinite;
+}
+.circling-rat {
+    position: absolute;
+    font-size: 26px;
+    transform-origin: center;
+}
+@keyframes spin {
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+.question-with-rat {
+    position: relative;
+    display: inline-block;
+    padding: 0 15px;
+}
+.small-hiding-rat {
+    position: absolute;
+    font-size: 14px;
+    top: -15px;
+    left: -30px;
+    animation: ratArcRun 1.5s linear infinite;
+}
+@keyframes ratArcRun {
+    0% { transform: translate(0, 15px) scale(0.6); opacity: 0; }
+    50% { transform: translate(90px, -15px) scale(0.6); opacity: 1; }
+    100% { transform: translate(180px, 15px) scale(0.6); opacity: 0; }
+}
+.color-bar-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: min(390px, 96vw);
+    height: 180px;
+    margin: 0 auto;
+}
+.color-segment {
+    width: 26px;
+    height: 155px;
+    border-radius: 6px;
+}
+.c-red { background: #ff3030; }
+.c-blue { background: #3080ff; }
+.c-green { background: #35c96b; }
+.c-yellow { background: #ffd83d; }
+.c-purple { background: #9c55ff; }
+.c-orange { background: #ff8a30; }
+.arrow-sequence-display {
+    display: flex;
+    gap: 16px;
+    font-size: 40px;
+    font-weight: 900;
+    margin: 15px 0;
+}
+.red-trap-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    width: min(380px, 94vw);
+}
+.red-trap-btn {
+    min-height: 65px;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 14px;
+}
+.arrow-labyrinth-11 {
+    position: relative;
+    width: min(380px, 96vw);
+    height: min(420px, 78vh);
+    background: #000;
+    border: none;
+    overflow: visible;
+    margin: 0 auto;
+}
+.maze-line {
+    position: absolute;
+    background: rgba(255,255,255,.95);
+    border-radius: 2px;
+}
+.lab-arrow-node {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 26px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    line-height: 1;
+    transition: transform 0.65s cubic-bezier(.2,.9,.2,1), opacity 0.5s ease;
+}
+.lab-arrow-node.wrong-shake {
+    animation: shake11 0.3s ease;
+}
+@keyframes shake11 {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+}
+.hold-btn-12 {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: #246bff;
+    border: 4px solid #fff;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.rhythm-target-13 {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px dashed #246bff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.rhythm-pulse-13 {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ff3b30;
+    animation: pulseAnim 1.2s infinite ease-in-out;
+}
+@keyframes pulseAnim {
+    0% { transform: scale(0.5); opacity: 0.5; }
+    50% { transform: scale(1.4); opacity: 1; }
+    100% { transform: scale(0.5); opacity: 0.5; }
+}
+.reverse-grid-14 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    width: min(300px, 90vw);
+}
+.rev-btn-14 {
+    height: 75px;
+    background: #333;
+    border-radius: 12px;
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255,255,255,0.2);
+}
+.rev-btn-14.lit {
+    background: #246bff;
+    border-color: #fff;
+}
+.blind-pixel-area-15 {
+    position: absolute;
+    inset: 0;
+}
+.blind-pixel-15 {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 14px;
+    height: 14px;
+    background: transparent;
+    cursor: pointer;
+}
+.drag-out-btn-16 {
+    width: 140px;
+    height: 60px;
+    background: #246bff;
+    border-radius: 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+    position: absolute;
+}
+.exclusion-field-17 {
+    position: relative;
+    width: min(360px, 92vw);
+    height: 260px;
+    border: 1px dashed rgba(255,255,255,0.2);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.exc-item {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+.exc-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #246bff;
+}
+.exc-square {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    background: #ff3b30;
+}
+.escaping-btn-18 {
+    width: 130px;
+    height: 60px;
+    background: #246bff;
+    border-radius: 12px;
+    font-weight: bold;
+    position: absolute;
+    transition: transform 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.intruder-grid-19 {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    width: min(320px, 90vw);
+}
+.intruder-cell {
+    aspect-ratio: 1;
+    background: #1c1c1e;
+    border-radius: 6px;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.8);
+}
+.recall-grid-20 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    width: min(340px, 90vw);
+}
+.recall-shape-btn {
+    height: 100px;
+    background: #1c1c1e;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.recall-mini-shape {
+    width: 70px;
+    height: 40px;
+    background: #246bff;
+    border-radius: 6px;
+}
+#overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+}
+#overlay.active {
+    display: flex;
+}
+.overlay-content {
+    width: min(340px, 86vw);
+    text-align: center;
+}
+.overlay-title {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: .1em;
+}
+.overlay-text {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.4;
+    opacity: .7;
+}
+.overlay-button {
+    margin-top: 24px;
+    padding: 14px 26px;
+    border: 1px solid rgba(255,255,255,.5);
+    border-radius: 8px;
+}
+#settingsScreen {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: calc(env(safe-area-inset-top) + 40px) 25px 25px;
+}
+.settings-title {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: .15em;
+}
+.setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: min(360px, 90vw);
+    margin-top: 22px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+}
+.setting-button {
+    min-width: 70px;
+    padding: 8px 14px;
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 8px;
+}
+.back-button {
+    position: absolute;
+    left: 20px;
+    top: calc(env(safe-area-inset-top) + 15px);
+    padding: 10px;
+    opacity: .6;
+}
 </style>
 </head>
 <body>
 <div id="app">
-<section id="homeScreen" class="screen active">
-<div class="logo"><span class="logo-main">MEMORY</span><span class="logo-sub">TRAP</span><div class="logo-line"></div></div>
-<div id="homeLives" class="lives home-lives"></div>
-<button id="startButton" class="start-button"><span class="start-title">INICIAR</span><span class="start-subtitle">MEMORY TRAP</span></button>
-<div class="hall"><div class="hall-title">HALL DOS SOBREVIVENTES</div><div class="hall-mask"><div id="hallList" class="hall-list"></div></div></div>
-<button id="menuButton" class="home-menu">☰</button>
-</section>
-<section id="gameScreen" class="screen">
-<div class="game-header"><div id="levelNumber" class="level-number"></div><div id="levelQuestion" class="level-question"></div></div>
-<div id="levelContent" class="level-content"></div>
-<div id="gameLives" class="lives game-lives"></div>
-</section>
-<section id="settingsScreen" class="screen">
-<button id="backButton" class="back-button">←</button>
-<div class="settings-title">CONFIGURAÇÕES</div>
-<div class="setting-row"><span>SOM</span><button id="soundButton" class="setting-button">ON</button></div>
-<div class="setting-row"><span>VIBRAÇÃO</span><button id="vibrationButton" class="setting-button">ON</button></div>
-</section>
-<div id="overlay"><div class="overlay-content"><div id="overlayTitle" class="overlay-title"></div><div id="overlayText" class="overlay-text"></div><button id="overlayButton" class="overlay-button"></button></div></div>
-</div>
-<script>
-const CONFIG={TOTAL_LEVELS:100,STARTING_LIVES:5,SOUND_ENABLED:true,VIBRATION_ENABLED:true,SURVIVORS_KEY:"memory_trap_survivors_v1"};
-const GAME={currentLevel:0,lives:CONFIG.STARTING_LIVES,totalAttempts:0,mistakes:0,levelTimers:[],state:{},finished:false};
-const DOM={homeScreen:document.getElementById("homeScreen"),gameScreen:document.getElementById("gameScreen"),settingsScreen:document.getElementById("settingsScreen"),homeLives:document.getElementById("homeLives"),gameLives:document.getElementById("gameLives"),levelNumber:document.getElementById("levelNumber"),levelQuestion:document.getElementById("levelQuestion"),levelContent:document.getElementById("levelContent"),startButton:document.getElementById("startButton"),menuButton:document.getElementById("menuButton"),backButton:document.getElementById("backButton"),soundButton:document.getElementById("soundButton"),vibrationButton:document.getElementById("vibrationButton"),hallList:document.getElementById("hallList"),overlay:document.getElementById("overlay"),overlayTitle:document.getElementById("overlayTitle"),overlayText:document.getElementById("overlayText"),overlayButton:document.getElementById("overlayButton")};
-const LEVELS={1:{type:"broken-shape"},2:{type:"grid"},3:{type:"direct-answer"},4:{type:"pi"},5:{type:"count-circles"},6:{type:"appearing-circles"},7:{type:"no-number-rats",hiddenNumber:true},8:{type:"color-memory"},9:{type:"arrow-memory"},10:{type:"camouflaged-command"},11:{type:"labyrinth-arrows"},12:{type:"hold-two-seconds"},13:{type:"circle-rhythm"},14:{type:"reverse-order"},15:{type:"blind-pixel"},16:{type:"drag-outside"},17:{type:"circle-exclusion"},18:{type:"escaping-button"},19:{type:"letter-intruder"},20:{type:"level1-recall"}};
-for(let i=21;i<=100;i++) LEVELS[i]={name:"Nível "+i,type:"unimplemented"};
-function clearLevelTimers(){GAME.levelTimers.forEach(t=>{clearTimeout(t);clearInterval(t)});GAME.levelTimers=[]}
-function addLevelTimer(t){GAME.levelTimers.push(t)}
-let audioContext=null;
-function getAudioContext(){if(!audioContext){const Ctx=window.AudioContext||window.webkitAudioContext;if(Ctx) audioContext=new Ctx()}return audioContext}
-function playTone(f,d,ty="sine",v=0.035){if(!CONFIG.SOUND_ENABLED) return;const ctx=getAudioContext();if(!ctx) return;if(ctx.state==="suspended") ctx.resume().catch(()=>{});const o=ctx.createOscillator();const g=ctx.createGain();o.type=ty;o.frequency.setValueAtTime(f,ctx.currentTime);g.gain.setValueAtTime(v,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+d);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+d)}
-function soundCorrect(){playTone(720,.08,"sine",.035);setTimeout(()=>playTone(960,.07,"sine",.025),45)}
-function soundLifeLost(){playTone(95,.25,"sawtooth",.05)}
-function vibrate(p){if(CONFIG.VIBRATION_ENABLED&&"vibrate" in navigator){try{navigator.vibrate(p)}catch(e){}}}
-function feedbackCorrect(){soundCorrect();vibrate(18)}
-function feedbackLifeLost(){soundLifeLost();vibrate([60,40,80])}
-function renderLives(c){c.innerHTML="";for(let i=0;i<CONFIG.STARTING_LIVES;i++){const h=document.createElement("div");h.className="heart";if(i>=GAME.lives) h.classList.add("empty");c.appendChild(h)}}
-function updateLives(){renderLives(DOM.homeLives);renderLives(DOM.gameLives)}
-function showScreen(s){document.querySelectorAll(".screen").forEach(e=>e.classList.remove("active"));s.classList.add("active")}
-function goHome(){clearLevelTimers();GAME.finished=false;updateLives();showScreen(DOM.homeScreen);startHallAnimation()}
-function getSurvivors(){try{const r=localStorage.getItem(CONFIG.SURVIVORS_KEY);return r?JSON.parse(r):[]}catch{return[]}}
-function renderHall(){const s=getSurvivors();DOM.hallList.innerHTML="";if(s.length===0){const e=document.createElement("div");e.className="hall-empty";e.textContent="NENHUM SOBREVIVENTE";DOM.hallList.appendChild(e);return}s.slice(-20).reverse().forEach(p=>{const n=document.createElement("div");n.className="hall-name";n.textContent=String(p.name).slice(0,20).toUpperCase();DOM.hallList.appendChild(n)})}
-let hallAnim=null,hallPos=0;
-function startHallAnimation(){if(hallAnim) cancelAnimationFrame(hallAnim);hallPos=0;function animate(){if(!DOM.homeScreen.classList.contains("active")) return;const h=DOM.hallList.offsetHeight;const v=DOM.hallList.parentElement.offsetHeight;if(h>v){hallPos+=0.18;if(hallPos>h-v+25) hallPos=0;DOM.hallList.style.transform=`translateY(-${hallPos}px)`}hallAnim=requestAnimationFrame(animate)}animate()}
-function startGame(){clearLevelTimers();GAME.currentLevel=1;GAME.lives=CONFIG.STARTING_LIVES;GAME.totalAttempts=0;GAME.mistakes=0;GAME.finished=false;updateLives();showScreen(DOM.gameScreen);loadLevel(1)}
-function loadLevel(n){clearLevelTimers();GAME.currentLevel=n;GAME.state={};const l=LEVELS[n];if(!l){finishGame();return}DOM.levelNumber.textContent=l.hiddenNumber?"":n;DOM.levelQuestion.innerHTML="";DOM.levelContent.innerHTML="";renderLevel(n,l);updateLives()}
-function failLevel(){if(GAME.finished) return;GAME.totalAttempts++;GAME.mistakes++;GAME.lives--;feedbackLifeLost();updateLives();if(GAME.lives<=0){clearLevelTimers();showOverlay("SEM VIDAS","Você perdeu as 5 vidas.","RECOMEÇAR",()=>{GAME.lives=CONFIG.STARTING_LIVES;updateLives();closeOverlay();loadLevel(1)});return}showOverlay("ERRO","Você continua no mesmo nível.","TENTAR NOVAMENTE",()=>{closeOverlay();loadLevel(GAME.currentLevel)})}
-function completeLevel(){if(GAME.finished) return;feedbackCorrect();const next=GAME.currentLevel+1;if(GAME.currentLevel===CONFIG.TOTAL_LEVELS||!LEVELS[next]){finishGame();return}setTimeout(()=>{loadLevel(next)},180)}
-function showOverlay(t,x,b,a){DOM.overlayTitle.textContent=t;DOM.overlayText.textContent=x;DOM.overlayButton.textContent=b;DOM.overlayButton.onclick=a;DOM.overlay.classList.add("active")}
-function closeOverlay(){DOM.overlay.classList.remove("active")}
-function renderLevel(n,l){switch(l.type){case "broken-shape":renderLevel1();break;case "grid":renderLevel2();break;case "direct-answer":renderLevel3();break;case "pi":renderLevel4();break;case "count-circles":renderLevel5();break;case "appearing-circles":renderLevel6();break;case "no-number-rats":renderLevel7();break;case "color-memory":renderLevel8();break;case "arrow-memory":renderLevel9();break;case "camouflaged-command":renderLevel10();break;case "labyrinth-arrows":renderLevel11();break;case "hold-two-seconds":renderLevel12();break;case "circle-rhythm":renderLevel13();break;case "reverse-order":renderLevel14();break;case "blind-pixel":renderLevel15();break;case "drag-outside":renderLevel16();break;case "circle-exclusion":renderLevel17();break;case "escaping-button":renderLevel18();break;case "letter-intruder":renderLevel19();break;case "level1-recall":renderLevel20();break;default:renderUnimplementedLevel(n,l);break}}
+    <section id="homeScreen" class="screen active">
+        <div class="logo">
+            <span class="logo-main">MEMORY</span>
+            <span class="logo-sub">TRAP</span>
+            <div class="logo-line"></div>
+        </div>
+        <div id="homeLives" class="lives home-lives"></div>
+        <button id="startButton" class="start-button">
+            <span class="start-title">INICIAR</span>
+            <span class="start-subtitle">MEMORY TRAP</span>
+        </button>
+        <div class="hall">
+            <div class="hall-title">HALL DOS SOBREVIVENTES</div>
+            <div class="hall-mask">
+                <div id="hallList" class="hall-list"></div>
+            </div>
+        </div>
+        <button id="menuButton" class="home-menu">☰</button>
+    </section>
 
-function renderLevel1(){
-DOM.levelQuestion.textContent="Complete a figura.";
-const wrap=document.createElement("div");wrap.className="broken-container";
-wrap.innerHTML=`<div class="broken-top" id="targetArea"></div><div class="broken-pieces-pool"><div class="puzzle-piece" data-correct="false" style="clip-path:polygon(0% 100%,100% 100%,100% 28%,86% 2%,77% 32%,61% 4%,50% 32%,36% 3%,25% 32%,11% 2%,0% 28%)"></div><div class="puzzle-piece" data-correct="true" style="clip-path:polygon(0% 100%,100% 100%,100% 48%,88% 0%,78% 38%,63% 2%,52% 40%,38% 0%,26% 36%,12% 0%,0% 48%)"></div><div class="puzzle-piece" data-correct="false" style="clip-path:polygon(0% 100%,100% 100%,100% 32%,88% 8%,78% 34%,63% 10%,52% 36%,38% 8%,26% 32%,12% 8%,0% 32%)"></div><div class="puzzle-piece" data-correct="false" style="clip-path:polygon(0% 100%,100% 100%,100% 30%,88% 4%,79% 30%,64% 6%,53% 32%,39% 4%,27% 30%,13% 4%,0% 30%)"></div></div>`;
-DOM.levelContent.appendChild(wrap);
-const pieces=wrap.querySelectorAll(".puzzle-piece");const target=wrap.querySelector("#targetArea");
-pieces.forEach(p=>{let sx=0,sy=0;p.addEventListener("pointerdown",e=>{p.setPointerCapture(e.pointerId);p.classList.add("dragging");sx=e.clientX;sy=e.clientY;const mv=em=>{p.style.transform=`translate(${em.clientX-sx}px,${em.clientY-sy}px)`};const up=em=>{p.releasePointerCapture(em.pointerId);p.classList.remove("dragging");p.removeEventListener("pointermove",mv);p.removeEventListener("pointerup",up);const pr=p.getBoundingClientRect();const tr=target.getBoundingClientRect();const d=Math.hypot((pr.left+pr.width/2)-(tr.left+tr.width/2),(pr.top+pr.height/2)-(tr.bottom-20));if(d<110){if(p.dataset.correct==="true"){p.style.opacity="0";target.classList.add("filled");setTimeout(()=>completeLevel(),380)}else{vibrate([40,30,40]);p.classList.add("wrong-shake");p.style.transform="translate(0,0)";setTimeout(()=>p.classList.remove("wrong-shake"),400);setTimeout(()=>failLevel(),350)}}else{p.style.transform="translate(0,0)"}};p.addEventListener("pointermove",mv);p.addEventListener("pointerup",up)})})
+    <section id="gameScreen" class="screen">
+        <div class="game-header">
+            <div id="levelNumber" class="level-number"></div>
+            <div id="levelQuestion" class="level-question"></div>
+        </div>
+        <div id="levelContent" class="level-content"></div>
+        <div id="gameLives" class="lives game-lives"></div>
+    </section>
+
+    <section id="settingsScreen" class="screen">
+        <button id="backButton" class="back-button">←</button>
+        <div class="settings-title">CONFIGURAÇÕES</div>
+        <div class="setting-row"><span>SOM</span><button id="soundButton" class="setting-button">ON</button></div>
+        <div class="setting-row"><span>VIBRAÇÃO</span><button id="vibrationButton" class="setting-button">ON</button></div>
+    </section>
+
+    <div id="overlay">
+        <div class="overlay-content">
+            <div id="overlayTitle" class="overlay-title"></div>
+            <div id="overlayText" class="overlay-text"></div>
+            <button id="overlayButton" class="overlay-button"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+const CONFIG = { TOTAL_LEVELS: 100, STARTING_LIVES: 5, SOUND_ENABLED: true, VIBRATION_ENABLED: true, SURVIVORS_KEY: "memory_trap_survivors_v1" };
+const GAME = { currentLevel: 0, lives: CONFIG.STARTING_LIVES, totalAttempts: 0, mistakes: 0, levelTimers: [], state: {}, finished: false };
+
+const DOM = {
+    homeScreen: document.getElementById("homeScreen"),
+    gameScreen: document.getElementById("gameScreen"),
+    settingsScreen: document.getElementById("settingsScreen"),
+    homeLives: document.getElementById("homeLives"),
+    gameLives: document.getElementById("gameLives"),
+    levelNumber: document.getElementById("levelNumber"),
+    levelQuestion: document.getElementById("levelQuestion"),
+    levelContent: document.getElementById("levelContent"),
+    startButton: document.getElementById("startButton"),
+    menuButton: document.getElementById("menuButton"),
+    backButton: document.getElementById("backButton"),
+    soundButton: document.getElementById("soundButton"),
+    vibrationButton: document.getElementById("vibrationButton"),
+    hallList: document.getElementById("hallList"),
+    overlay: document.getElementById("overlay"),
+    overlayTitle: document.getElementById("overlayTitle"),
+    overlayText: document.getElementById("overlayText"),
+    overlayButton: document.getElementById("overlayButton")
+};
+
+const LEVELS = {
+    1: { type: "broken-shape" }, 2: { type: "grid" }, 3: { type: "direct-answer" }, 4: { type: "pi" },
+    5: { type: "count-circles" }, 6: { type: "appearing-circles" }, 7: { type: "no-number-rats", hiddenNumber: true },
+    8: { type: "color-memory" }, 9: { type: "arrow-memory" }, 10: { type: "camouflaged-command" },
+    11: { type: "labyrinth-arrows" }, 12: { type: "hold-two-seconds" }, 13: { type: "circle-rhythm" },
+    14: { type: "reverse-order" }, 15: { type: "blind-pixel" }, 16: { type: "drag-outside" },
+    17: { type: "circle-exclusion" }, 18: { type: "escaping-button" }, 19: { type: "letter-intruder" },
+    20: { type: "level1-recall" }
+};
+for (let i = 21; i <= 100; i++) LEVELS[i] = { name: "Nível " + i, type: "unimplemented" };
+
+function clearLevelTimers() {
+    GAME.levelTimers.forEach(t => { clearTimeout(t); clearInterval(t); });
+    GAME.levelTimers = [];
 }
-function renderLevel2(){DOM.levelQuestion.textContent="Aperte no correto.";const w=document.createElement("div");w.className="grid2-large";for(let i=0;i<4;i++){const b=document.createElement("button");b.className="blue-choice";w.appendChild(b);b.addEventListener("pointerup",()=>{if(i===2) completeLevel();else failLevel()})}DOM.levelContent.appendChild(w)}
-function renderLevel3(){DOM.levelQuestion.textContent="Qual a cor do ícone do jogo?";const w=document.createElement("div");w.className="grid2-large";["#246bff","#1e5acc","#2b73ff","#1a4ebb"].forEach((t,i)=>{const b=document.createElement("button");b.className="blue-choice";b.style.background=t;w.appendChild(b);b.addEventListener("pointerup",()=>{if(i===0) completeLevel();else failLevel()})});DOM.levelContent.appendChild(w)}
-function renderLevel4(){DOM.levelQuestion.textContent="Qual o número mais próximo de Pi?";const w=document.createElement("div");w.className="options-grid";["2,14","3,14","4,14","5,14"].forEach((v,i)=>{const b=document.createElement("button");b.className="blue-choice";b.textContent=v;w.appendChild(b);b.addEventListener("pointerup",()=>{if(i===1) completeLevel();else failLevel()})});DOM.levelContent.appendChild(w)}
-function renderLevel5(){
-DOM.levelQuestion.textContent="Quantos círculos tem na tela?";
-const w=document.createElement("div");w.style.cssText="width:100%;height:100%;position:relative;";
-w.innerHTML=`<div class="shape-field-full" id="sf"></div><div class="options-grid" id="cOpts" style="position:absolute;bottom:22px;left:50%;transform:translateX(-50%)"></div>`;
-DOM.levelContent.appendChild(w);
-const f=w.querySelector("#sf");
-const shapes=[{t:'circle',w:32,h:32,l:5,tt:5},{t:'rect',w:38,h:16,l:28,tt:8},{t:'pentagon',w:30,h:30,l:55,tt:6},{t:'circle',w:18,h:18,l:78,tt:10},{t:'hexagon',w:28,h:28,l:88,tt:18},{t:'square',w:22,h:22,l:12,tt:22},{t:'circle',w:14,h:14,l:35,tt:24},{t:'circle',w:28,h:28,l:62,tt:26},{t:'hexagon',w:24,h:24,l:42,tt:32},{t:'square',w:26,h:26,l:8,tt:42},{t:'circle',w:36,h:36,l:48,tt:48},{t:'square',w:24,h:24,l:78,tt:46},{t:'rect',w:32,h:14,l:90,tt:58},{t:'circle',w:10,h:10,l:88,tt:72},{t:'pentagon',w:26,h:26,l:2,tt:68},{t:'circle',w:24,h:24,l:18,tt:72},{t:'hexagon',w:28,h:28,l:56,tt:68},{t:'square',w:30,h:30,l:32,tt:82},{t:'rect',w:36,h:16,l:58,tt:84}];
-shapes.forEach(s=>{const e=document.createElement("div");e.className=`geo-shape geo-${s.t}`;e.style.width=s.w+"px";e.style.height=s.h+"px";e.style.left=s.l+"%";e.style.top=s.tt+"%";f.appendChild(e)});
-const o=w.querySelector("#cOpts");["4","5","6","7"].forEach((a,i)=>{const b=document.createElement("button");b.className="blue-choice";b.textContent=a;o.appendChild(b);b.addEventListener("pointerup",()=>{if(i===2) completeLevel();else failLevel()})})
+function addLevelTimer(t) { GAME.levelTimers.push(t); }
+
+let audioContext = null;
+function getAudioContext() {
+    if (!audioContext) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (Ctx) audioContext = new Ctx();
+    }
+    return audioContext;
 }
-function renderLevel6(){DOM.levelQuestion.textContent="Acompanhe e toque nos círculos.";const w=document.createElement("div");w.style.cssText="position:relative;width:100%;height:320px;margin:0 auto";DOM.levelContent.appendChild(w);const coords=[["20%","30%"],["70%","25%"],["50%","50%"],["25%","70%"],["75%","65%"]];let idx=0,fail=false;function next(){if(fail) return;if(idx>=coords.length){completeLevel();return}const [l,t]=coords[idx];const c=document.createElement("div");c.className="click-circle";c.style.cssText=`position:absolute;left:${l};top:${t};transform:translate(-50%,-50%) scale(0);transition:transform 0.12s ease`;w.appendChild(c);requestAnimationFrame(()=>c.style.transform="translate(-50%,-50%) scale(1)");let clicked=false;const tm=setTimeout(()=>{if(!clicked&&!fail){fail=true;failLevel()}},850);addLevelTimer(tm);c.addEventListener("pointerup",()=>{if(clicked||fail) return;clicked=true;clearTimeout(tm);c.remove();feedbackCorrect();idx++;next()},{once:true})}next()}
-function renderLevel7(){DOM.levelQuestion.innerHTML=`<span class="question-with-rat"><span class="small-hiding-rat">🐀</span>Quantos ratos tem na tela?</span>`;const w=document.createElement("div");w.className="rats-wrap";const rad=95;const cen=document.createElement("div");cen.className="orbit-center";for(let i=0;i<5;i++){const ang=(i*72)*Math.PI/180;const r=document.createElement("div");r.className="circling-rat";r.textContent="🐀";r.style.left=Math.cos(ang)*rad+"px";r.style.top=Math.sin(ang)*rad+"px";r.style.transform=`rotate(${i*72+90}deg)`;cen.appendChild(r)}w.appendChild(cen);const ow=document.createElement("div");ow.className="options-grid";["3","4","5","6"].forEach((a,i)=>{const b=document.createElement("button");b.className="blue-choice";b.textContent=a;ow.appendChild(b);b.addEventListener("pointerup",()=>{if(i===3) completeLevel();else failLevel()})});DOM.levelContent.appendChild(w);DOM.levelContent.appendChild(ow)}
-function renderLevel8(){DOM.levelQuestion.textContent="Memorize a sequência.";const seq=["c-red","c-blue","c-green","c-yellow","c-purple","c-orange"];const shuf=["c-green","c-red","c-orange","c-purple","c-blue","c-yellow"];const w=document.createElement("div");w.className="color-bar-container";seq.forEach(c=>{const s=document.createElement("div");s.className=`color-segment ${c}`;w.appendChild(s)});DOM.levelContent.appendChild(w);GAME.state.colorSeq=seq;GAME.state.colorIdx=0;addLevelTimer(setTimeout(()=>{w.innerHTML="";DOM.levelQuestion.textContent="Repita a sequência.";shuf.forEach(c=>{const b=document.createElement("button");b.className=`color-segment ${c}`;b.dataset.color=c;w.appendChild(b);b.addEventListener("pointerup",()=>{if(b.dataset.color!==GAME.state.colorSeq[GAME.state.colorIdx]){failLevel();return}GAME.state.colorIdx++;if(GAME.state.colorIdx>=GAME.state.colorSeq.length) completeLevel();else feedbackCorrect()})})},4500))}
-function renderLevel9(){DOM.levelQuestion.textContent="Memorize a sequência.";const seq=["↑","→","↓","←"];const w=document.createElement("div");w.style.cssText="display:flex;flex-direction:column;align-items:center;gap:15px";const d=document.createElement("div");d.className="arrow-sequence-display";seq.forEach(x=>{const s=document.createElement("span");s.textContent=x;d.appendChild(s)});w.appendChild(d);DOM.levelContent.appendChild(w);GAME.state.arrowSeq=seq;GAME.state.arrowIdx=0;addLevelTimer(setTimeout(()=>{d.style.opacity="0";DOM.levelQuestion.textContent="Repita a sequência.";const g=document.createElement("div");g.className="options-grid";["↑","→","↓","←"].forEach(dir=>{const b=document.createElement("button");b.className="blue-choice";b.textContent=dir;g.appendChild(b);b.addEventListener("pointerup",()=>{if(dir!==GAME.state.arrowSeq[GAME.state.arrowIdx]){failLevel();return}GAME.state.arrowIdx++;if(GAME.state.arrowIdx>=GAME.state.arrowSeq.length) completeLevel();else feedbackCorrect()})});w.appendChild(g)},4500))}
-function renderLevel10(){DOM.levelQuestion.innerHTML=`Toque no <span id="secretRedTarget">vermelho</span>.`;const w=document.createElement("div");w.className="red-trap-grid";["#b23b3b","#a83232","#c44d4d","#9e2a2a"].forEach(t=>{const b=document.createElement("button");b.className="red-trap-btn";b.style.background=t;w.appendChild(b);b.addEventListener("pointerup",failLevel)});DOM.levelContent.appendChild(w);setTimeout(()=>{document.getElementById("secretRedTarget").addEventListener("pointerup",completeLevel,{once:true})},50)}
-function renderLevel11(){
-DOM.levelQuestion.textContent="Limpe o desenho, toque nas setas livres.";
-const w=document.createElement("div");w.className="arrow-labyrinth-11";
-const lines=[[30,10,40,3],[70,10,40,3],[28,10,4,28],[72,10,4,28],[30,38,40,4],[48,42,4,18],[38,60,24,4]];
-lines.forEach(l=>{const e=document.createElement("div");e.className="maze-line";e.style.left=l[0]+"%";e.style.top=l[1]+"%";e.style.width=l[2]+"%";e.style.height=l[3]+"%";w.appendChild(e)});
-const nodes=[{x:28,y:8,dir:"↑",free:true,dx:0,dy:-500},{x:68,y:8,dir:"↑",free:false},{x:20,y:22,dir:"←",free:false},{x:78,y:22,dir:"→",free:true,dx:500,dy:0},{x:28,y:36,dir:"↓",free:false},{x:68,y:36,dir:"↓",free:false},{x:36,y:58,dir:"←",free:true,dx:-500,dy:80},{x:64,y:58,dir:"→",free:false},{x:46,y:64,dir:"↓",free:false}];
-nodes.forEach(n=>{const b=document.createElement("button");b.className="lab-arrow-node";b.textContent=n.dir;b.style.left=n.x+"%";b.style.top=n.y+"%";w.appendChild(b);b.addEventListener("pointerup",()=>{if(b.disabled) return;if(!n.free){b.classList.add("wrong-shake");feedbackLifeLost();setTimeout(()=>b.classList.remove("wrong-shake"),300);failLevel();return}b.disabled=true;feedbackCorrect();b.style.transform=`translate(${n.dx||0}px,${n.dy||-400}px)`;b.style.opacity="0";setTimeout(()=>{b.style.display="none";const left=Array.from(w.querySelectorAll(".lab-arrow-node")).filter(x=>!x.disabled&&x.style.display!=="none").length;if(left===0) completeLevel()},650)})});
-DOM.levelContent.appendChild(w);
+
+function playTone(f, d, ty = "sine", v = 0.035) {
+    if (!CONFIG.SOUND_ENABLED) return;
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = ty;
+    o.frequency.setValueAtTime(f, ctx.currentTime);
+    g.gain.setValueAtTime(v, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + d);
+    o.connect(g);
+    g.connect(ctx.destination);
+    o.start();
+    o.stop(ctx.currentTime + d);
 }
-function renderLevel12(){DOM.levelQuestion.textContent="Segure exatamente por 2 segundos.";const w=document.createElement("div");w.style.cssText="display:flex;flex-direction:column;align-items:center;gap:20px";const b=document.createElement("button");b.className="hold-btn-12";b.textContent="SEGURE";let st=0,hd=false;b.addEventListener("pointerdown",()=>{hd=true;st=Date.now();b.style.background="#ff3b30";b.textContent="SOLTE..."});const rel=()=>{if(!hd) return;hd=false;const d=(Date.now()-st)/1000;b.style.background="#246bff";b.textContent="SEGURE";if(d>=1.8&&d<=2.2) completeLevel();else failLevel()};b.addEventListener("pointerup",rel);b.addEventListener("pointercancel",rel);w.appendChild(b);DOM.levelContent.appendChild(w)}
-function renderLevel13(){DOM.levelQuestion.textContent="Toque no momento exato do pulso.";const w=document.createElement("div");w.style.cssText="display:flex;flex-direction:column;align-items:center;gap:25px";const t=document.createElement("div");t.className="rhythm-target-13";const p=document.createElement("div");p.className="rhythm-pulse-13";t.appendChild(p);const a=document.createElement("button");a.className="blue-choice";a.style.width="180px";a.textContent="APERTAR";a.addEventListener("pointerup",()=>{const e=(Date.now()%1200);if(e>=450&&e<=750) completeLevel();else failLevel()});w.appendChild(t);w.appendChild(a);DOM.levelContent.appendChild(w)}
-function renderLevel14(){DOM.levelQuestion.textContent="Memorize e toque na ordem REVERSA.";const w=document.createElement("div");w.className="reverse-grid-14";const seq=[0,2,3,1];const btns=[];for(let i=0;i<4;i++){const b=document.createElement("button");b.className="rev-btn-14";b.textContent=i+1;btns.push(b);w.appendChild(b)}DOM.levelContent.appendChild(w);GAME.state.revSeq=[...seq].reverse();GAME.state.revIdx=0;seq.forEach((id,s)=>{addLevelTimer(setTimeout(()=>{btns[id].classList.add("lit");setTimeout(()=>btns[id].classList.remove("lit"),400)},(s+1)*700))});addLevelTimer(setTimeout(()=>{DOM.levelQuestion.textContent="Toque de trás para frente!";btns.forEach((b,i)=>{b.addEventListener("pointerup",()=>{if(i!==GAME.state.revSeq[GAME.state.revIdx]){failLevel();return}b.classList.add("lit");feedbackCorrect();GAME.state.revIdx++;if(GAME.state.revIdx>=GAME.state.revSeq.length) completeLevel()})})},3600))}
-function renderLevel15(){DOM.levelQuestion.textContent="Encontre a saída secreta.";const w=document.createElement("div");w.className="blind-pixel-area-15";const p=document.createElement("div");p.className="blind-pixel-15";w.appendChild(p);DOM.levelContent.appendChild(w);p.addEventListener("pointerup",completeLevel)}
-function renderLevel16(){DOM.levelQuestion.textContent="Arraste o botão para fora da tela.";const w=document.createElement("div");w.style.cssText="position:absolute;inset:0";const b=document.createElement("button");b.className="drag-out-btn-16";b.textContent="ARRASTE-ME";b.style.left="calc(50% - 70px)";b.style.top="calc(50% - 30px)";w.appendChild(b);DOM.levelContent.appendChild(w);b.addEventListener("pointerdown",e=>{b.setPointerCapture(e.pointerId);const sx=e.clientX,sy=e.clientY;const r=b.getBoundingClientRect();const mv=em=>{b.style.left=(r.left+(em.clientX-sx))+"px";b.style.top=(r.top+(em.clientY-sy))+"px"};const up=em=>{b.releasePointerCapture(em.pointerId);b.removeEventListener("pointermove",mv);b.removeEventListener("pointerup",up);const cur=b.getBoundingClientRect();if(cur.left<10||cur.right>window.innerWidth-10||cur.top<50||cur.bottom>window.innerHeight-10) completeLevel();else{b.style.left="calc(50% - 70px)";b.style.top="calc(50% - 30px)"}};b.addEventListener("pointermove",mv);b.addEventListener("pointerup",up)})}
-function renderLevel17(){DOM.levelQuestion.textContent="Toque apenas nos círculos.";const w=document.createElement("div");w.className="exclusion-field-17";let left=3;const items=[{t:"circle",x:30,y:40},{t:"square",x:120,y:70},{t:"circle",x:220,y:30},{t:"square",x:80,y:160},{t:"circle",x:260,y:180}];items.forEach(it=>{const e=document.createElement("div");e.className="exc-item "+(it.t==="circle"?"exc-circle":"exc-square");e.style.left=it.x+"px";e.style.top=it.y+"px";w.appendChild(e);e.addEventListener("pointerup",()=>{if(it.t==="square") failLevel();else if(!e.disabled){e.disabled=true;e.style.display="none";left--;feedbackCorrect();if(left===0) completeLevel()}})});DOM.levelContent.appendChild(w)}
-function renderLevel18(){DOM.levelQuestion.textContent="Toque no botão fujão.";const w=document.createElement("div");w.style.cssText="position:absolute;inset:0";const b=document.createElement("button");b.className="escaping-btn-18";b.textContent="PEGUE-ME";b.style.left="calc(50% - 65px)";b.style.top="calc(50% - 30px)";w.appendChild(b);DOM.levelContent.appendChild(w);let esc=0;b.addEventListener("pointerdown",e=>{e.preventDefault();esc++;if(esc>=3) completeLevel();else{flee()}});function flee(){b.style.left=Math.random()*(window.innerWidth-150)+"px";b.style.top=Math.random()*(window.innerHeight-200)+80+"px"}}
-function renderLevel19(){DOM.levelQuestion.textContent="Encontre o caractere diferente.";const w=document.createElement("div");w.className="intruder-grid-19";const ti=Math.floor(Math.random()*25);for(let i=0;i<25;i++){const c=document.createElement("button");c.className="intruder-cell";c.textContent=(i===ti?"X":"O");w.appendChild(c);c.addEventListener("pointerup",()=>{if(i===ti) completeLevel();else failLevel()})}DOM.levelContent.appendChild(w)}
-function renderLevel20(){DOM.levelQuestion.textContent="Qual era a forma do Nível 1?";const w=document.createElement("div");w.className="recall-grid-20";for(let i=0;i<4;i++){const b=document.createElement("button");b.className="recall-shape-btn";const s=document.createElement("div");s.className="recall-mini-shape";if(i===1) s.style.clipPath="polygon(0% 0%,100% 0%,100% 50%,82% 100%,65% 60%,50% 95%,35% 60%,18% 100%,0% 50%)";else if(i===0) s.style.clipPath="polygon(0% 0%,100% 0%,100% 100%,0% 100%)";else if(i===2) s.style.clipPath="polygon(50% 0%,100% 100%,0% 100%)";else s.style.clipPath="polygon(0% 20%,100% 0%,100% 80%,0% 100%)";b.appendChild(s);w.appendChild(b);b.addEventListener("pointerup",()=>{if(i===1) completeLevel();else failLevel()})}DOM.levelContent.appendChild(w)}
-function renderUnimplementedLevel(n,l){const w=document.createElement("div");w.style.cssText="text-align:center;width:100%";w.innerHTML=`<div>${l.name}</div><div style="font-size:12px;opacity:.5;margin-top:20px">MECÂNICA RESERVADA</div><button class="blue-choice" style="display:block;width:180px;margin:30px auto 0">TESTAR</button>`;DOM.levelContent.appendChild(w);w.querySelector("button").addEventListener("pointerup",completeLevel)}
-function finishGame(){clearLevelTimers();showOverlay("PARABÉNS","Você concluiu o MEMORY TRAP!","REINICIAR",()=>{closeOverlay();goHome()})}
-function updateSettingsUI(){DOM.soundButton.textContent=CONFIG.SOUND_ENABLED?"ON":"OFF";DOM.vibrationButton.textContent=CONFIG.VIBRATION_ENABLED?"ON":"OFF"}
-DOM.soundButton.addEventListener("pointerup",()=>{CONFIG.SOUND_ENABLED=!CONFIG.SOUND_ENABLED;updateSettingsUI()});
-DOM.vibrationButton.addEventListener("pointerup",()=>{CONFIG.VIBRATION_ENABLED=!CONFIG.VIBRATION_ENABLED;updateSettingsUI()});
-DOM.startButton.addEventListener("pointerup",startGame);
-DOM.menuButton.addEventListener("pointerup",()=>{showScreen(DOM.settingsScreen)});
-DOM.backButton.addEventListener("pointerup",()=>{showScreen(DOM.homeScreen);startHallAnimation()});
-document.addEventListener("contextmenu",e=>e.preventDefault());
-document.addEventListener("touchmove",e=>{if(e.cancelable) e.preventDefault()},{passive:false});
-function init(){updateLives();renderHall();updateSettingsUI();startHallAnimation()}init();
+
+function soundCorrect() {
+    playTone(720, .08, "sine", .035);
+    setTimeout(() => playTone(960, .07, "sine", .025), 45);
+}
+function soundLifeLost() { playTone(95, .25, "sawtooth", .05); }
+
+function vibrate(p) {
+    if (CONFIG.VIBRATION_ENABLED && "vibrate" in navigator) {
+        try { navigator.vibrate(p); } catch (e) {}
+    }
+}
+function feedbackCorrect() { soundCorrect(); vibrate(18); }
+function feedbackLifeLost() { soundLifeLost(); vibrate([60, 40, 80]); }
+
+function renderLives(c) {
+    c.innerHTML = "";
+    for (let i = 0; i < CONFIG.STARTING_LIVES; i++) {
+        const h = document.createElement("div");
+        h.className = "heart";
+        if (i >= GAME.lives) h.classList.add("empty");
+        c.appendChild(h);
+    }
+}
+function updateLives() { renderLives(DOM.homeLives); renderLives(DOM.gameLives); }
+
+function showScreen(s) {
+    document.querySelectorAll(".screen").forEach(e => e.classList.remove("active"));
+    s.classList.add("active");
+}
+
+function goHome() {
+    clearLevelTimers();
+    GAME.finished = false;
+    updateLives();
+    showScreen(DOM.homeScreen);
+    startHallAnimation();
+}
+
+function getSurvivors() {
+    try {
+        const r = localStorage.getItem(CONFIG.SURVIVORS_KEY);
+        return r ? JSON.parse(r) : [];
+    } catch { return []; }
+}
+
+function renderHall() {
+    const s = getSurvivors();
+    DOM.hallList.innerHTML = "";
+    if (s.length === 0) {
+        const e = document.createElement("div");
+        e.className = "hall-empty";
+        e.textContent = "NENHUM SOBREVIVENTE";
+        DOM.hallList.appendChild(e);
+        return;
+    }
+    s.slice(-20).reverse().forEach(p => {
+        const n = document.createElement("div");
+        n.className = "hall-name";
+        n.textContent = String(p.name).slice(0, 20).toUpperCase();
+        DOM.hallList.appendChild(n);
+    });
+}
+
+let hallAnim = null, hallPos = 0;
+function startHallAnimation() {
+    if (hallAnim) cancelAnimationFrame(hallAnim);
+    hallPos = 0;
+    function animate() {
+        if (!DOM.homeScreen.classList.contains("active")) return;
+        const h = DOM.hallList.offsetHeight;
+        const v = DOM.hallList.parentElement.offsetHeight;
+        if (h > v) {
+            hallPos += 0.18;
+            if (hallPos > h - v + 25) hallPos = 0;
+            DOM.hallList.style.transform = `translateY(-${hallPos}px)`;
+        }
+        hallAnim = requestAnimationFrame(animate);
+    }
+    animate();
+}
+
+function startGame() {
+    clearLevelTimers();
+    GAME.currentLevel = 1;
+    GAME.lives = CONFIG.STARTING_LIVES;
+    GAME.totalAttempts = 0;
+    GAME.mistakes = 0;
+    GAME.finished = false;
+    updateLives();
+    showScreen(DOM.gameScreen);
+    loadLevel(1);
+}
+
+function loadLevel(n) {
+    clearLevelTimers();
+    GAME.currentLevel = n;
+    GAME.state = {};
+    const l = LEVELS[n];
+    if (!l) { finishGame(); return; }
+    DOM.levelNumber.textContent = l.hiddenNumber ? "" : n;
+    DOM.levelQuestion.innerHTML = "";
+    DOM.levelContent.innerHTML = "";
+    renderLevel(n, l);
+    updateLives();
+}
+
+function failLevel() {
+    if (GAME.finished) return;
+    GAME.totalAttempts++;
+    GAME.mistakes++;
+    GAME.lives--;
+    feedbackLifeLost();
+    updateLives();
+    if (GAME.lives <= 0) {
+        clearLevelTimers();
+        showOverlay("SEM VIDAS", "Você perdeu as 5 vidas.", "RECOMEÇAR", () => {
+            GAME.lives = CONFIG.STARTING_LIVES;
+            updateLives();
+            closeOverlay();
+            loadLevel(1);
+        });
+        return;
+    }
+    showOverlay("ERRO", "Você continua no mesmo nível.", "TENTAR NOVAMENTE", () => {
+        closeOverlay();
+        loadLevel(GAME.currentLevel);
+    });
+}
+
+function completeLevel() {
+    if (GAME.finished) return;
+    feedbackCorrect();
+    const next = GAME.currentLevel + 1;
+    if (GAME.currentLevel === CONFIG.TOTAL_LEVELS || !LEVELS[next]) {
+        finishGame();
+        return;
+    }
+    setTimeout(() => { loadLevel(next); }, 180);
+}
+
+function showOverlay(t, x, b, a) {
+    DOM.overlayTitle.textContent = t;
+    DOM.overlayText.textContent = x;
+    DOM.overlayButton.textContent = b;
+    DOM.overlayButton.onclick = a;
+    DOM.overlay.classList.add("active");
+}
+function closeOverlay() { DOM.overlay.classList.remove("active"); }
+
+function renderLevel(n, l) {
+    switch (l.type) {
+        case "broken-shape": renderLevel1(); break;
+        case "grid": renderLevel2(); break;
+        case "direct-answer": renderLevel3(); break;
+        case "pi": renderLevel4(); break;
+        case "count-circles": renderLevel5(); break;
+        case "appearing-circles": renderLevel6(); break;
+        case "no-number-rats": renderLevel7(); break;
+        case "color-memory": renderLevel8(); break;
+        case "arrow-memory": renderLevel9(); break;
+        case "camouflaged-command": renderLevel10(); break;
+        case "labyrinth-arrows": renderLevel11(); break;
+        case "hold-two-seconds": renderLevel12(); break;
+        case "circle-rhythm": renderLevel13(); break;
+        case "reverse-order": renderLevel14(); break;
+        case "blind-pixel": renderLevel15(); break;
+        case "drag-outside": renderLevel16(); break;
+        case "circle-exclusion": renderLevel17(); break;
+        case "escaping-button": renderLevel18(); break;
+        case "letter-intruder": renderLevel19(); break;
+        case "level1-recall": renderLevel20(); break;
+        default: renderUnimplementedLevel(n, l); break;
+    }
+}
+
+function renderLevel1() {
+    DOM.levelQuestion.textContent = "Complete a figura.";
+    const wrap = document.createElement("div");
+    wrap.className = "broken-container";
+    wrap.innerHTML = `
+        <div class="broken-top" id="targetArea"></div>
+        <div class="broken-pieces-pool">
+            <div class="puzzle-piece" data-correct="false" style="clip-path:polygon(0% 100%,100% 100%,100% 28%,86% 2%,77% 32%,61% 4%,50% 32%,36% 3%,25% 32%,11% 2%,0% 28%)"></div>
+            <div class="puzzle-piece" data-correct="true" style="clip-path:polygon(0% 100%,100% 100%,100% 48%,88% 0%,78% 38%,63% 2%,52% 40%,38% 0%,26% 36%,12% 0%,0% 48%)"></div>
+            <div class="puzzle-piece" data-correct="false" style="clip-path:polygon(0% 100%,100% 100%,100% 32%,88% 8%,78% 34%,63% 10%,52% 36%,38% 8%,26% 32%,12% 8%,0% 32%)"></div>
+            <div class="puzzle-piece" data-correct="false" style="clip-path:polygon(0% 100%,100% 100%,100% 30%,88% 4%,79% 30%,64% 6%,53% 32%,39% 4%,27% 30%,13% 4%,0% 30%)"></div>
+        </div>
+    `;
+    DOM.levelContent.appendChild(wrap);
+    const pieces = wrap.querySelectorAll(".puzzle-piece");
+    const target = wrap.querySelector("#targetArea");
+
+    pieces.forEach(p => {
+        let sx = 0, sy = 0;
+        p.addEventListener("pointerdown", e => {
+            p.setPointerCapture(e.pointerId);
+            p.classList.add("dragging");
+            sx = e.clientX;
+            sy = e.clientY;
+            const mv = em => {
+                p.style.transform = `translate(${em.clientX - sx}px,${em.clientY - sy}px)`;
+            };
+            const up = em => {
+                p.releasePointerCapture(em.pointerId);
+                p.classList.remove("dragging");
+                p.removeEventListener("pointermove", mv);
+                p.removeEventListener("pointerup", up);
+                const pr = p.getBoundingClientRect();
+                const tr = target.getBoundingClientRect();
+                const d = Math.hypot((pr.left + pr.width / 2) - (tr.left + tr.width / 2), (pr.top + pr.height / 2) - (tr.bottom - 20));
+                if (d < 110) {
+                    if (p.dataset.correct === "true") {
+                        p.style.opacity = "0";
+                        target.classList.add("filled");
+                        setTimeout(() => completeLevel(), 380);
+                    } else {
+                        vibrate([40, 30, 40]);
+                        p.classList.add("wrong-shake");
+                        p.style.transform = "translate(0,0)";
+                        setTimeout(() => p.classList.remove("wrong-shake"), 400);
+                        setTimeout(() => failLevel(), 350);
+                    }
+                } else {
+                    p.style.transform = "translate(0,0)";
+                }
+            };
+            p.addEventListener("pointermove", mv);
+            p.addEventListener("pointerup", up);
+        });
+    });
+}
+
+function renderLevel2() {
+    DOM.levelQuestion.textContent = "Aperte no correto.";
+    const w = document.createElement("div");
+    w.className = "grid2-large";
+    for (let i = 0; i < 4; i++) {
+        const b = document.createElement("button");
+        b.className = "blue-choice";
+        w.appendChild(b);
+        b.addEventListener("pointerup", () => {
+            if (i === 2) completeLevel();
+            else failLevel();
+        });
+    }
+    DOM.levelContent.appendChild(w);
+}
+
+function renderLevel3() {
+    DOM.levelQuestion.textContent = "Qual a cor do ícone do jogo?";
+    const w = document.createElement("div");
+    w.className = "grid2-large";
+    ["#246bff", "#1e5acc", "#2b73ff", "#1a4ebb"].forEach((t, i) => {
+        const b = document.createElement("button");
+        b.className = "blue-choice";
+        b.style.background = t;
+        w.appendChild(b);
+        b.addEventListener("pointerup", () => {
+            if (i === 0) completeLevel();
+            else failLevel();
+        });
+    });
+    DOM.levelContent.appendChild(w);
+}
+
+function renderLevel4() {
+    DOM.levelQuestion.textContent = "Qual o número mais próximo de Pi?";
+    const w = document.createElement("div");
+    w.className = "options-grid";
+    ["2,14", "3,14", "4,14", "5,14"].forEach((v, i) => {
+        const b = document.createElement("button");
+        b.className = "blue-choice";
+        b.textContent = v;
+        w.appendChild(b);
+        b.addEventListener("pointerup", () => {
+            if (i === 1) completeLevel();
+            else failLevel();
+        });
+    });
+    DOM.levelContent.appendChild(w);
+}
+
+function renderLevel5() {
+    DOM.levelQuestion.textContent = "Quantos círculos tem na tela?";
+    const w = document.createElement("div");
+    w.style.cssText = "width:100%;height:100%;position:relative;";
+    w.innerHTML = `<div class="shape-field-full" id="sf"></div><div class="options-grid" id="cOpts" style="position:absolute;bottom:22px;left:50%;transform:translateX(-50%)"></div>`;
+    DOM.levelContent.appendChild(w);
+    const f = w.querySelector("#sf");
+    const shapes = [
+        {t:'circle',w:32,h:32,l:5,tt:5},{t:'rect',w:38,h:16,l:28,tt:8},{t:'pentagon',w:30,h:30,l:55,tt:6},{t:'circle',w:18,h:18,l:78,tt:10},
+        {t:'hexagon',w:28,h:28,l:88,tt:18},{t:'square',w:22,h:22,l:12,tt:22},{t:'circle',w:14,h:14,l:35,tt:24},{t:'circle',w:28,h:28,l:62,tt:26},
+        {t:'hexagon',w:24,h:24,l:42,tt:32},{t:'square',w:26,h:26,l:8,tt:42},{t:'circle',w:36,h:36,l:48,tt:48},{t:'square',w:24,h:24,l:78,tt:46},
+        {t:'rect',w:32,h:14,l:90,tt:58},{t:'circle',w:10,h:10,l:88,tt:72},{t:'pentagon',w:26,h:26,l:2,tt:68},{t:'circle',w:24,h:24,l:18,tt:72},
+        {t:'hexagon',w:28,h:28,l:56,tt:68},{t:'square',w:30,h:30,l:32,tt:82},{t:'rect',w:36,h:16,l:58,tt:84}
+    ];
+    shapes.forEach(s => {
+        const e = document.createElement("div");
+        e.className = `geo-shape geo-${s.t}`;
+        e.style.width = s.w + "px";
+        e.style.height = s.h + "px";
+        e.style.left = s.l + "%";
+        e.style.top = s.tt + "%";
+        f.appendChild(e);
+    });
+    const o = w.querySelector("#cOpts");
+    ["4", "5", "6", "7"].forEach((a, i) => {
+        const b = document.createElement("button");
+        b.className = "blue-choice";
+        b.textContent = a;
+        o.appendChild(b);
+        b.addEventListener("pointerup", () => {
+            if (i === 2) completeLevel();
+            else failLevel();
+        });
+    });
+}
+
+function renderLevel6() {
+    DOM.levelQuestion.textContent = "Acompanhe e toque nos círculos.";
+    const w = document.createElement("div");
+    w.style.cssText = "position:relative;width:100%;height:320px;margin:0 auto";
+    DOM.levelContent.appendChild(w);
+    const coords = [["20%", "30%"], ["70%", "25%"], ["50%", "50%"], ["25%", "70%"], ["75%", "65%"]];
+    let idx = 0, fail = false;
+
+    function next() {
+        if (fail) return;
+        if (idx >= coords.length) {
+            completeLevel();
+            return;
+        }
+        const [l, t] = coords[idx];
+        const c = document.createElement("div");
+        c.className = "click-circle";
+        c.style.cssText = `position:absolute;left:${l};top:${t};transform:translate(-50%,-50%) scale(0);transition:transform 0.12s ease`;
+        w.appendChild(c);
+        requestAnimationFrame(() => c.style.transform = "translate(-50%,-50%) scale(1)");
+        let clicked = false;
+        const tm = setTimeout(() => {
+            if (!clicked && !fail) {
+                fail = true;
+                failLevel();
+            }
+        }, 850);
+        addLevelTimer(tm);
+        c.addEventListener("pointerup", () => {
+            if (clicked || fail) return;
+            clicked = true;
+            clearTimeout(tm);
+            c.remove();
+            feedbackCorrect();
+            idx++;
+            next();
+        }, { once: true });
+    }
+    next();
+}
+
+function renderLevel7() {
+    DOM.levelQuestion.innerHTML = `<span class="question-with-rat"><span class="small-hiding-rat">🐀</span>Quantos ratos tem na tela?</span>`;
+    const w = document.createElement("div");
+    w.className = "rats-wrap";
+    const rad = 95;
+    const cen = document.createElement("div");
+    cen.className = "orbit-center";
+    for (let i = 0; i < 5; i++) {
+        const ang = (i * 72) * Math.PI / 180;
+        const r = document.createElement("div");
+        r.className = "circling-rat";
+        r.textContent = "🐀";
+        r.style.left = Math.cos(ang) * rad + "px";
+        r.style.top = Math.sin(ang) * rad + "px";
+        r.style.transform = `rotate(${i * 72 + 90}deg)`;
+        cen.appendChild(r);
+    }
+    w.appendChild(cen);
+    const ow = document.createElement("div");
+    ow.className = "options-grid";
+    ["3", "4", "5", "6"].forEach((a, i) => {
+        const b = document.createElement("button");
+        b.className = "blue-choice";
+        b.textContent = a;
+        ow.appendChild(b);
+        b.addEventListener("pointerup", () => {
+            if (i === 3) completeLevel();
+            else failLevel();
+        });
+    });
+    DOM.levelContent.appendChild(w);
+    DOM.levelContent.appendChild(ow);
+}
+
+function renderLevel8() {
+    DOM.levelQuestion.textContent = "Memorize a sequência.";
+    const seq = ["c-red", "c-blue", "c-green", "c-yellow", "c-purple", "c-orange"];
+    const shuf = ["c-green", "c-red", "c-orange", "c-purple", "c-blue", "c-yellow"];
+    const w = document.createElement("div");
+    w.className = "color-bar-container";
+    seq.forEach(c => {
+        const s = document.createElement("div");
+        s.className = `color-segment ${c}`;
+        w.appendChild(s);
+    });
+    DOM.levelContent.appendChild(w);
+    GAME.state.colorSeq = seq;
+    GAME.state.colorIdx = 0;
+    addLevelTimer(setTimeout(() => {
+        w.innerHTML = "";
+        DOM.levelQuestion.textContent = "Repita a sequência.";
+        shuf.forEach(c => {
+            const b = document.createElement("button");
+            b.className = `color-segment ${c}`;
+            b.dataset.color = c;
+            w.appendChild(b);
+            b.addEventListener("pointerup", () => {
+                if (b.dataset.color !== GAME.state.colorSeq[GAME.state.colorIdx]) {
+                    failLevel();
+                    return;
+                }
+                GAME.state.colorIdx++;
+                if (GAME.state.colorIdx >= GAME.state.colorSeq.length) completeLevel();
+                else feedbackCorrect();
+            });
+        });
+    }, 4500));
+}
+
+function renderLevel9() {
+    DOM.levelQuestion.textContent = "Memorize a sequência.";
+    const seq = ["↑", "→", "↓", "←"];
+    const w = document.createElement("div");
+    w.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:15px";
+    const d = document.createElement("div");
+    d.className = "arrow-sequence-display";
+    seq.forEach(x => {
+        const s = document.createElement("span");
+        s.textContent = x;
+        d.appendChild(s);
+    });
+    w.appendChild(d);
+    DOM.levelContent.appendChild(w);
+    GAME.state.arrowSeq = seq;
+    GAME.state.arrowIdx = 0;
+    addLevelTimer(setTimeout(() => {
+        d.style.opacity = "0";
+        DOM.levelQuestion.textContent = "Repita a sequência.";
+        const g = document.createElement("div");
+        g.className = "options-grid";
+        ["↑", "→", "↓", "←"].forEach(dir => {
+            const b = document.createElement("button");
+            b.className = "blue-choice";
+            b.textContent = dir;
+            g.appendChild(b);
+            b.addEventListener("pointerup", () => {
+                if (dir !== GAME.state.arrowSeq[GAME.state.arrowIdx]) {
+                    failLevel();
+                    return;
+                }
+                GAME.state.arrowIdx++;
+                if (GAME.state.arrowIdx >= GAME.state.arrowSeq.length) completeLevel();
+                else feedbackCorrect();
+            });
+        });
+        w.appendChild(g);
+    }, 4500));
+}
+
+function renderLevel10() {
+    DOM.levelQuestion.innerHTML = `Toque no <span id="secretRedTarget">vermelho</span>.`;
+    const w = document.createElement("div");
+    w.className = "red-trap-grid";
+    ["#b23b3b", "#a83232", "#c44d4d", "#9e2a2a"].forEach(t => {
+        const b = document.createElement("button");
+        b.className = "red-trap-btn";
+        b.style.background = t;
+        w.appendChild(b);
+        b.addEventListener("pointerup", failLevel);
+    });
+    DOM.levelContent.appendChild(w);
+    setTimeout(() => {
+        document.getElementById("secretRedTarget").addEventListener("pointerup", completeLevel, { once: true });
+    }, 50);
+}
+
+function renderLevel11() {
+    DOM.levelQuestion.textContent = "Limpe o desenho, toque nas setas livres.";
+    const w = document.createElement("div");
+    w.className = "arrow-labyrinth-11";
+    
+    const lines = [
+        [30, 10, 40, 3],
+        [70, 10, 40, 3],
+        [28, 10, 4, 28],
+        [72, 10, 4, 28],
+        [30, 38, 40, 4],
+        [48, 42, 4, 18],
+        [38, 60, 24, 4]
+    ];
+    lines.forEach(l => {
+        const e = document.createElement("div");
+        e.className = "maze-line";
+        e.style.left = l[0] + "%";
+        e.style.top = l[1] + "%";
+        e.style.width = l[2] + "%";
+        e.style.height = l[3] + "%";
+        w.appendChild(e);
+    });
+
+    const nodes = [
+        { x: 28, y: 8, dir: "↑", free: true, dx: 0, dy: -500 },
+        { x: 68, y: 8, dir: "↑", free: false },
+        { x: 20, y: 22, dir: "←", free: false },
+        { x: 78, y: 22, dir: "→", free: true, dx: 500, dy: 0 },
+        { x: 28, y: 36, dir: "↓", free: false },
+        { x: 68, y: 36, dir: "↓", free: false },
+        { x: 36, y: 58, dir: "←", free: true, dx: -500, dy: 80 },
+        { x: 64, y: 58, dir: "→", free: false },
+        { x: 46, y: 64, dir: "↓", free: false }
+    ];
+
+    nodes.forEach(n => {
+        const b = document.createElement("button");
+        b.className = "lab-arrow-node";
+        b.textContent = n.dir;
+        b.style.left = n.x + "%";
+        b.style.top = n.y + "%";
+        w.appendChild(b);
+
+        b.addEventListener("pointerup", () => {
+            if (b.disabled) return;
+            if (!n.free) {
+                b.classList.add("wrong-shake");
+                feedbackLifeLost();
+                setTimeout(() => b.classList.remove("wrong-shake"), 300);
+                failLevel();
+                return;
+            }
+            b.disabled = true;
+            feedbackCorrect();
+            b.style.transform = `translate(${n.dx || 0}px, ${n.dy || -400}px)`;
+            b.style.opacity = "0";
+
+            setTimeout(() => {
+                b.style.display = "none";
+                const left = Array.from(w.querySelectorAll(".lab-arrow-node")).filter(x => !x.disabled && x.style.display !== "none").length;
+                if (left === 0) completeLevel();
+            }, 650);
+        });
+    });
+
+    DOM.levelContent.appendChild(w);
+}
+
+function renderLevel12() {
+    DOM.levelQuestion.textContent = "Segure exatamente por 2 segundos.";
+    const w = document.createElement("div");
+    w.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:20px";
+    const b = document.createElement("button");
+    b.className = "hold-btn-12";
+    b.textContent = "SEGURE";
+    let st = 0, hd = false;
+    b.addEventListener("pointerdown", () => {
+        hd = true;
+        st = Date.now();
+        b.style.background = "#ff3b30";
+        b.textContent = "SOLTE...";
+    });
+    const rel = () => {
+        if (!hd) return;
+        hd = false;
+        const d = (Date.now() - st) / 1000;
+        b.style.background = "#246bff";
+        b.textContent = "SEGURE";
+        if (d >= 1.8 && d <= 2.2) completeLevel();
+        else failLevel();
+    };
+    b.addEventListener("pointerup", rel);
+    b.addEventListener("pointercancel", rel);
+    w.appendChild(b);
+    DOM.levelContent.appendChild(w);
+}
+
+function renderLevel13() {
+    DOM.levelQuestion.textContent = "Toque no momento exato do pulso.";
+    const w = document.createElement("div");
+    w.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:25px";
+    const t = document.createElement("div");
+    t.className = "rhythm-target-13";
+    const p = document.createElement("div");
+    p.className = "rhythm-pulse-13";
+    t.appendChild(p);
+    const a = document.createElement("button");
+    a.className = "blue-choice";
+    a.style.width = "180px";
+    a.textContent = "APERTAR";
+    a.addEventListener("pointerup", () => {
+        const e = (Date.now() % 1200);
+        if (e >= 450 && e <= 750) completeLevel();
+        else failLevel();
+    });
+    w.appendChild(t);
+    w.appendChild(a);
+    DOM.levelContent.appendChild(w);
+}
+
+function renderLevel14() {
+    DOM.levelQuestion.textContent = "Memorize e toque na ordem REVERSA.";
+    const w = document.createElement("div");
+    w.className = "reverse-grid-14";
+    const seq = [0, 2, 3, 1];
+    const btns = [];
+    for (let i = 0; i < 4; i++) {
+        const b = document.createElement("button");
+        b.className = "rev-btn-14";
+        b.textContent = i + 1;
+        btns.push(b);
+        w.appendChild(b);
+    }
+    DOM.levelContent.appendChild(w);
+    GAME.state.revSeq = [...seq].reverse();
+    GAME.state.revIdx = 0;
+    seq.forEach((id, s) => {
+        addLevelTimer(setTimeout(() => {
+            btns[id].classList.add("lit");
+            setTimeout(() => btns[id].classList.remove("lit"), 400);
+        }, (s + 1) * 700));
+    });
+    addLevelTimer(setTimeout(() => {
+        DOM.levelQuestion.textContent = "Toque de trás para frente!";
+        btns.forEach((b, i) => {
+            b.addEventListener("pointerup", () => {
+                if (i !== GAME.state.revSeq[GAME.state.revIdx]) {
+                    failLevel();
+                    return;
+                }
+                b.classList.add("lit");
+                feedbackCorrect();
+                GAME.state.revIdx++;
+                if (GAME.state.revIdx >= GAME.state.revSeq.length) completeLevel();
+            });
+        });
+    }, 3600));
+}
+
+function renderLevel15() {
+    DOM.levelQuestion.textContent = "Encontre a saída secreta.";
+    const w = document.createElement("div");
+    w.className = "blind-pixel-area-15";
+    const p = document.createElement("div");
+    p.className = "blind-pixel-15";
+    w.appendChild(p);
+    DOM.levelContent.appendChild(w);
+    p.addEventListener("pointerup", completeLevel);
+}
+
+function renderLevel16() {
+    DOM.levelQuestion.textContent = "Arraste o botão para fora da tela.";
+    const w = document.createElement("div");
+    w.style.cssText = "position:absolute;inset:0";
+    const b = document.createElement("button");
+    b.className = "drag-out-btn-16";
+    b.textContent = "ARRASTE-ME";
+    b.style.left = "calc(50% - 70px)";
+    b.style.top = "calc(50% - 30px)";
+    w.appendChild(b);
+    DOM.levelContent.appendChild(w);
+    b.addEventListener("pointerdown", e => {
+        b.setPointerCapture(e.pointerId);
+        const sx = e.clientX, sy = e.clientY;
+        const r = b.getBoundingClientRect();
+        const mv = em => {
+            b.style.left = (r.left + (em.clientX - sx)) + "px";
+            b.style.top = (r.top + (em.clientY - sy)) + "px";
+        };
+        const up = em => {
+            b.releasePointerCapture(em.pointerId);
+            b.removeEventListener("pointermove", mv);
+            b.removeEventListener("pointerup", up);
+            const cur = b.getBoundingClientRect();
+            if (cur.left < 10 || cur.right > window.innerWidth - 10 || cur.top < 50 || cur.bottom > window.innerHeight - 10) completeLevel();
+            else {
+                b.style.left = "calc(50% - 70px)";
+                b.style.top = "calc(50% - 30px)";
+            }
+        };
+        b.addEventListener("pointermove", mv);
+        b.addEventListener("pointerup", up);
+    });
+}
+
+function renderLevel17() {
+    DOM.levelQuestion.textContent = "Toque apenas nos círculos.";
+    const w = document.createElement("div");
+    w.className = "exclusion-field-17";
+    let left = 3;
+    const items = [
+        { t: "circle", x: 30, y: 40 },
+        { t: "square", x: 120, y: 70 },
+        { t: "circle", x: 220, y: 30 },
+        { t: "square", x: 80, y: 160 },
+        { t: "circle", x: 260, y: 180 }
+    ];
+    items.forEach(it => {
+        const e = document.createElement("div");
+        e.className = "exc-item " + (it.t === "circle" ? "exc-circle" : "exc-square");
+        e.style.left = it.x + "px";
+        e.style.top = it.y + "px";
+        w.appendChild(e);
+        e.addEventListener("pointerup", () => {
+            if (it.t === "square") failLevel();
+            else if (!e.disabled) {
+                e.disabled = true;
+                e.style.display = "none";
+                left--;
+                feedbackCorrect();
+                if (left === 0) completeLevel();
+            }
+        });
+    });
+    DOM.levelContent.appendChild(w);
+}
+
+function renderLevel18() {
+    DOM.levelQuestion.textContent = "Toque no botão fujão.";
+    const w = document.createElement("div");
+    w.style.cssText = "position:absolute;inset:0";
+    const b = document.createElement("button");
+    b.className = "escaping-btn-18";
+    b.textContent = "PEGUE-ME";
+    b.style.left = "calc(50% - 65px)";
+    b.style.top = "calc(50% - 30px)";
+    w.appendChild(b);
+    DOM.levelContent.appendChild(w);
+    let esc = 0;
+    b.addEventListener("pointerdown", e => {
+        e.preventDefault();
+        esc++;
+        if (esc >= 3) completeLevel();
+        else flee();
+    });
+    function flee() {
+        b.style.left = Math.random() * (window.innerWidth - 150) + "px";
+        b.style.top = Math.random() * (window.innerHeight - 200) + 80 + "px";
+    }
+}
+
+function renderLevel19() {
+    DOM.levelQuestion.textContent = "Encontre o caractere diferente.";
+    const w = document.createElement("div");
+    w.className = "intruder-grid-19";
+    const ti = Math.floor(Math.random() * 25);
+    for (let i = 0; i < 25; i++) {
+        const c = document.createElement("button");
+        c.className = "intruder-cell";
+        c.textContent = (i === ti ? "X" : "O");
+        w.appendChild(c);
+        c.addEventListener("pointerup", () => {
+            if (i === ti) completeLevel();
+            else failLevel();
+        });
+    }
+    DOM.levelContent.appendChild(w);
+}
+
+function renderLevel20() {
+    DOM.levelQuestion.textContent = "Qual era a forma do Nível 1?";
+    const w = document.createElement("div");
+    w.className = "recall-grid-20";
+    for (let i = 0; i < 4; i++) {
+        const b = document.createElement("button");
+        b.className = "recall-shape-btn";
+        const s = document.createElement("div");
+        s.className = "recall-mini-shape";
+        if (i === 1) s.style.clipPath = "polygon(0% 0%,100% 0%,100% 50%,82% 100%,65% 60%,50% 95%,35% 60%,18% 100%,0% 50%)";
+        else if (i === 0) s.style.clipPath = "polygon(0% 0%,100% 0%,100% 100%,0% 100%)";
+        else if (i === 2) s.style.clipPath = "polygon(50% 0%,100% 100%,0% 100%)";
+        else s.style.clipPath = "polygon(0% 20%,100% 0%,100% 80%,0% 100%)";
+        b.appendChild(s);
+        w.appendChild(b);
+        b.addEventListener("pointerup", () => {
+            if (i === 1) completeLevel();
+            else failLevel();
+        });
+    }
+    DOM.levelContent.appendChild(w);
+}
+
+function renderUnimplementedLevel(n, l) {
+    const w = document.createElement("div");
+    w.style.cssText = "text-align:center;width:100%";
+    w.innerHTML = `<div>${l.name}</div><div style="font-size:12px;opacity:.5;margin-top:20px">MECÂNICA RESERVADA</div><button class="blue-choice" style="display:block;width:180px;margin:30px auto 0">TESTAR</button>`;
+    DOM.levelContent.appendChild(w);
+    w.querySelector("button").addEventListener("pointerup", completeLevel);
+}
+
+function finishGame() {
+    clearLevelTimers();
+    showOverlay("PARABÉNS", "Você concluiu o MEMORY TRAP!", "REINICIAR", () => {
+        closeOverlay();
+        goHome();
+    });
+}
+
+function updateSettingsUI() {
+    DOM.soundButton.textContent = CONFIG.SOUND_ENABLED ? "ON" : "OFF";
+    DOM.vibrationButton.textContent = CONFIG.VIBRATION_ENABLED ? "ON" : "OFF";
+}
+
+DOM.soundButton.addEventListener("pointerup", () => {
+    CONFIG.SOUND_ENABLED = !CONFIG.SOUND_ENABLED;
+    updateSettingsUI();
+});
+DOM.vibrationButton.addEventListener("pointerup", () => {
+    CONFIG.VIBRATION_ENABLED = !CONFIG.VIBRATION_ENABLED;
+    updateSettingsUI();
+});
+DOM.startButton.addEventListener("pointerup", startGame);
+DOM.menuButton.addEventListener("pointerup", () => { showScreen(DOM.settingsScreen); });
+DOM.backButton.addEventListener("pointerup", () => {
+    showScreen(DOM.homeScreen);
+    startHallAnimation();
+});
+
+document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("touchmove", e => { if (e.cancelable) e.preventDefault(); }, { passive: false });
+
+function init() {
+    updateLives();
+    renderHall();
+    updateSettingsUI();
+    startHallAnimation();
+}
+init();
 </script>
 </body>
 </html>
