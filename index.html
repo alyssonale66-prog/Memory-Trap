@@ -110,17 +110,9 @@ button {
     border-radius: 50%;
     background: #ff3b30;
 }
-.heart::before {
-    top: -11px;
-    left: 0;
-}
-.heart::after {
-    top: 0;
-    left: 11px;
-}
-.heart.empty, .heart.empty::before, .heart.empty::after {
-    background: #333;
-}
+.heart::before { top: -11px; left: 0; }
+.heart::after { top: 0; left: 11px; }
+.heart.empty, .heart.empty::before, .heart.empty::after { background: #333; }
 .start-button {
     position: relative;
     width: min(320px, 82vw);
@@ -277,9 +269,7 @@ button {
     transition: all 0.3s ease;
     box-shadow: 0 0 0 1px rgba(255,255,255,.15) inset;
 }
-.broken-top.filled {
-    clip-path: none;
-}
+.broken-top.filled { clip-path: none; }
 .broken-pieces-pool {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -303,9 +293,7 @@ button {
     scale: 1.08;
     box-shadow: 0 8px 24px rgba(0,0,0,.6);
 }
-.puzzle-piece.wrong-shake {
-    animation: shakeWrong 0.4s ease;
-}
+.puzzle-piece.wrong-shake { animation: shakeWrong 0.4s ease; }
 @keyframes shakeWrong {
     0%, 100% { transform: translateX(0); }
     20% { transform: translateX(-8px); }
@@ -325,10 +313,7 @@ button {
     inset: 0 0 95px 0;
     pointer-events: none;
 }
-.geo-shape {
-    position: absolute;
-    background: #fff;
-}
+.geo-shape { position: absolute; background: #fff; }
 .geo-circle { border-radius: 50%; }
 .geo-square { border-radius: 4px; }
 .geo-rect { border-radius: 3px; }
@@ -362,14 +347,8 @@ button {
     font-size: 26px;
     transform-origin: center;
 }
-@keyframes spin {
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
-.question-with-rat {
-    position: relative;
-    display: inline-block;
-    padding: 0 15px;
-}
+@keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+.question-with-rat { position: relative; display: inline-block; padding: 0 15px; }
 .small-hiding-rat {
     position: absolute;
     font-size: 14px;
@@ -390,11 +369,7 @@ button {
     height: 180px;
     margin: 0 auto;
 }
-.color-segment {
-    width: 26px;
-    height: 155px;
-    border-radius: 6px;
-}
+.color-segment { width: 26px; height: 155px; border-radius: 6px; }
 .c-red { background: #ff3030; }
 .c-blue { background: #3080ff; }
 .c-green { background: #35c96b; }
@@ -510,10 +485,7 @@ button {
     background: #246bff;
     border-color: #fff;
 }
-.blind-pixel-area-15 {
-    position: absolute;
-    inset: 0;
-}
+.blind-pixel-area-15 { position: absolute; inset: 0; }
 .blind-pixel-15 {
     position: absolute;
     top: 15px;
@@ -601,7 +573,7 @@ button {
 .recall-shape-btn {
     height: 100px;
     background: #1c1c1e;
-    border: 2px solid rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,.2);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -622,24 +594,10 @@ button {
     justify-content: center;
     background: #000;
 }
-#overlay.active {
-    display: flex;
-}
-.overlay-content {
-    width: min(340px, 86vw);
-    text-align: center;
-}
-.overlay-title {
-    font-size: 28px;
-    font-weight: 900;
-    letter-spacing: .1em;
-}
-.overlay-text {
-    margin-top: 12px;
-    font-size: 14px;
-    line-height: 1.4;
-    opacity: .7;
-}
+#overlay.active { display: flex; }
+.overlay-content { width: min(340px, 86vw); text-align: center; }
+.overlay-title { font-size: 28px; font-weight: 900; letter-spacing: .1em; }
+.overlay-text { margin-top: 12px; font-size: 14px; line-height: 1.4; opacity: .7; }
 .overlay-button {
     margin-top: 24px;
     padding: 14px 26px;
@@ -652,11 +610,7 @@ button {
     justify-content: flex-start;
     padding: calc(env(safe-area-inset-top) + 40px) 25px 25px;
 }
-.settings-title {
-    font-size: 24px;
-    font-weight: 900;
-    letter-spacing: .15em;
-}
+.settings-title { font-size: 24px; font-weight: 900; letter-spacing: .15em; }
 .setting-row {
     display: flex;
     align-items: center;
@@ -729,8 +683,34 @@ button {
 </div>
 
 <script>
-const CONFIG = { TOTAL_LEVELS: 100, STARTING_LIVES: 5, SOUND_ENABLED: true, VIBRATION_ENABLED: true, SURVIVORS_KEY: "memory_trap_survivors_v1" };
-const GAME = { currentLevel: 0, lives: CONFIG.STARTING_LIVES, totalAttempts: 0, mistakes: 0, levelTimers: [], state: {}, finished: false };
+"use strict";
+
+/* ============================================================
+   CONFIGURAÇÃO
+   ============================================================ */
+
+const CONFIG = {
+    TOTAL_LEVELS: 100,
+    STARTING_LIVES: 5,
+    SOUND_ENABLED: true,
+    VIBRATION_ENABLED: true,
+    SURVIVORS_KEY: "memory_trap_survivors_v1"
+};
+
+const GAME = {
+    currentLevel: 0,
+    lives: CONFIG.STARTING_LIVES,
+    totalAttempts: 0,
+    mistakes: 0,
+    levelTimers: [],
+    state: {},
+    finished: false
+};
+
+
+/* ============================================================
+   DOM
+   ============================================================ */
 
 const DOM = {
     homeScreen: document.getElementById("homeScreen"),
@@ -753,375 +733,1075 @@ const DOM = {
     overlayButton: document.getElementById("overlayButton")
 };
 
+
+/* ============================================================
+   NÍVEIS
+   ============================================================ */
+
 const LEVELS = {
-    1: { type: "broken-shape" }, 2: { type: "grid" }, 3: { type: "direct-answer" }, 4: { type: "pi" },
-    5: { type: "count-circles" }, 6: { type: "appearing-circles" }, 7: { type: "no-number-rats", hiddenNumber: true },
-    8: { type: "color-memory" }, 9: { type: "arrow-memory" }, 10: { type: "camouflaged-command" },
-    11: { type: "labyrinth-arrows" }, 12: { type: "hold-two-seconds" }, 13: { type: "circle-rhythm" },
-    14: { type: "reverse-order" }, 15: { type: "blind-pixel" }, 16: { type: "drag-outside" },
-    17: { type: "circle-exclusion" }, 18: { type: "escaping-button" }, 19: { type: "letter-intruder" },
+    1: { type: "broken-shape" },
+    2: { type: "grid" },
+    3: { type: "direct-answer" },
+    4: { type: "pi" },
+    5: { type: "count-circles" },
+    6: { type: "appearing-circles" },
+    7: { type: "no-number-rats", hiddenNumber: true },
+    8: { type: "color-memory" },
+    9: { type: "arrow-memory" },
+    10: { type: "camouflaged-command" },
+    11: { type: "labyrinth-arrows" },
+    12: { type: "hold-two-seconds" },
+    13: { type: "circle-rhythm" },
+    14: { type: "reverse-order" },
+    15: { type: "blind-pixel" },
+    16: { type: "drag-outside" },
+    17: { type: "circle-exclusion" },
+    18: { type: "escaping-button" },
+    19: { type: "letter-intruder" },
     20: { type: "level1-recall" }
 };
-for (let i = 21; i <= 100; i++) LEVELS[i] = { name: "Nível " + i, type: "unimplemented" };
+
+for (let i = 21; i <= 100; i++) {
+    LEVELS[i] = {
+        name: "Nível " + i,
+        type: "unimplemented"
+    };
+}
+
+
+/* ============================================================
+   TIMERS
+   ============================================================ */
 
 function clearLevelTimers() {
-    GAME.levelTimers.forEach(t => { clearTimeout(t); clearInterval(t); });
+    GAME.levelTimers.forEach(t => {
+        clearTimeout(t);
+        clearInterval(t);
+    });
+
     GAME.levelTimers = [];
 }
-function addLevelTimer(t) { GAME.levelTimers.push(t); }
+
+function addLevelTimer(t) {
+    if (t != null) {
+        GAME.levelTimers.push(t);
+    }
+
+    return t;
+}
+
+function levelTimeout(callback, delay, level = GAME.currentLevel) {
+    const timer = setTimeout(() => {
+
+        if (GAME.finished) return;
+        if (GAME.currentLevel !== level) return;
+
+        callback();
+
+    }, delay);
+
+    addLevelTimer(timer);
+
+    return timer;
+}
+
+
+/* ============================================================
+   ÁUDIO
+   ============================================================ */
 
 let audioContext = null;
+
 function getAudioContext() {
     if (!audioContext) {
         const Ctx = window.AudioContext || window.webkitAudioContext;
-        if (Ctx) audioContext = new Ctx();
+
+        if (Ctx) {
+            try {
+                audioContext = new Ctx();
+            } catch (e) {
+                audioContext = null;
+            }
+        }
     }
+
     return audioContext;
 }
 
 function playTone(f, d, ty = "sine", v = 0.035) {
+
     if (!CONFIG.SOUND_ENABLED) return;
+
     const ctx = getAudioContext();
+
     if (!ctx) return;
-    if (ctx.state === "suspended") ctx.resume().catch(() => {});
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.type = ty;
-    o.frequency.setValueAtTime(f, ctx.currentTime);
-    g.gain.setValueAtTime(v, ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + d);
-    o.connect(g);
-    g.connect(ctx.destination);
-    o.start();
-    o.stop(ctx.currentTime + d);
+
+    if (ctx.state === "suspended") {
+        ctx.resume().catch(() => {});
+    }
+
+    try {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+
+        o.type = ty;
+        o.frequency.setValueAtTime(f, ctx.currentTime);
+
+        g.gain.setValueAtTime(v, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(
+            0.001,
+            ctx.currentTime + d
+        );
+
+        o.connect(g);
+        g.connect(ctx.destination);
+
+        o.start();
+        o.stop(ctx.currentTime + d);
+    } catch (e) {}
 }
 
 function soundCorrect() {
-    playTone(720, .08, "sine", .035);
-    setTimeout(() => playTone(960, .07, "sine", .025), 45);
+    playTone(720, 0.08, "sine", 0.035);
+
+    /*
+     * Também entra no sistema de timers para que um
+     * nível reiniciado não deixe feedback pendurado.
+     */
+    levelTimeout(() => {
+        playTone(960, 0.07, "sine", 0.025);
+    }, 45);
 }
-function soundLifeLost() { playTone(95, .25, "sawtooth", .05); }
+
+function soundLifeLost() {
+    playTone(95, 0.25, "sawtooth", 0.05);
+}
 
 function vibrate(p) {
-    if (CONFIG.VIBRATION_ENABLED && "vibrate" in navigator) {
-        try { navigator.vibrate(p); } catch (e) {}
+    if (
+        CONFIG.VIBRATION_ENABLED &&
+        "vibrate" in navigator
+    ) {
+        try {
+            navigator.vibrate(p);
+        } catch (e) {}
     }
 }
-function feedbackCorrect() { soundCorrect(); vibrate(18); }
-function feedbackLifeLost() { soundLifeLost(); vibrate([60, 40, 80]); }
+
+function feedbackCorrect() {
+    soundCorrect();
+    vibrate(18);
+}
+
+function feedbackLifeLost() {
+    soundLifeLost();
+    vibrate([60, 40, 80]);
+}
+
+
+/* ============================================================
+   VIDAS
+   ============================================================ */
 
 function renderLives(c) {
+
     c.innerHTML = "";
-    for (let i = 0; i < CONFIG.STARTING_LIVES; i++) {
+
+    for (
+        let i = 0;
+        i < CONFIG.STARTING_LIVES;
+        i++
+    ) {
         const h = document.createElement("div");
+
         h.className = "heart";
-        if (i >= GAME.lives) h.classList.add("empty");
+
+        if (i >= GAME.lives) {
+            h.classList.add("empty");
+        }
+
         c.appendChild(h);
     }
 }
-function updateLives() { renderLives(DOM.homeLives); renderLives(DOM.gameLives); }
+
+function updateLives() {
+    renderLives(DOM.homeLives);
+    renderLives(DOM.gameLives);
+}
+
+
+/* ============================================================
+   TELAS
+   ============================================================ */
 
 function showScreen(s) {
-    document.querySelectorAll(".screen").forEach(e => e.classList.remove("active"));
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(e => e.classList.remove("active"));
+
     s.classList.add("active");
 }
 
 function goHome() {
+
     clearLevelTimers();
+
     GAME.finished = false;
+    GAME.state = {};
+
+    closeOverlay();
     updateLives();
+
     showScreen(DOM.homeScreen);
     startHallAnimation();
 }
 
+
+/* ============================================================
+   HALL
+   ============================================================ */
+
 function getSurvivors() {
+
     try {
-        const r = localStorage.getItem(CONFIG.SURVIVORS_KEY);
+        const r = localStorage.getItem(
+            CONFIG.SURVIVORS_KEY
+        );
+
         return r ? JSON.parse(r) : [];
-    } catch { return []; }
+
+    } catch {
+        return [];
+    }
 }
 
 function renderHall() {
+
     const s = getSurvivors();
+
     DOM.hallList.innerHTML = "";
+
     if (s.length === 0) {
+
         const e = document.createElement("div");
+
         e.className = "hall-empty";
         e.textContent = "NENHUM SOBREVIVENTE";
+
         DOM.hallList.appendChild(e);
+
         return;
     }
-    s.slice(-20).reverse().forEach(p => {
-        const n = document.createElement("div");
-        n.className = "hall-name";
-        n.textContent = String(p.name).slice(0, 20).toUpperCase();
-        DOM.hallList.appendChild(n);
-    });
+
+    s
+        .slice(-20)
+        .reverse()
+        .forEach(p => {
+
+            const n = document.createElement("div");
+
+            n.className = "hall-name";
+            n.textContent = String(
+                p.name ?? ""
+            )
+                .slice(0, 20)
+                .toUpperCase();
+
+            DOM.hallList.appendChild(n);
+        });
 }
 
-let hallAnim = null, hallPos = 0;
+let hallAnim = null;
+let hallPos = 0;
+
 function startHallAnimation() {
-    if (hallAnim) cancelAnimationFrame(hallAnim);
+
+    if (hallAnim) {
+        cancelAnimationFrame(hallAnim);
+        hallAnim = null;
+    }
+
     hallPos = 0;
+
     function animate() {
-        if (!DOM.homeScreen.classList.contains("active")) return;
+
+        if (
+            !DOM.homeScreen.classList.contains("active")
+        ) {
+            hallAnim = null;
+            return;
+        }
+
         const h = DOM.hallList.offsetHeight;
         const v = DOM.hallList.parentElement.offsetHeight;
+
         if (h > v) {
+
             hallPos += 0.18;
-            if (hallPos > h - v + 25) hallPos = 0;
-            DOM.hallList.style.transform = `translateY(-${hallPos}px)`;
+
+            if (
+                hallPos >
+                h - v + 25
+            ) {
+                hallPos = 0;
+            }
+
+            DOM.hallList.style.transform =
+                `translateY(-${hallPos}px)`;
         }
-        hallAnim = requestAnimationFrame(animate);
+
+        hallAnim =
+            requestAnimationFrame(animate);
     }
+
     animate();
 }
 
+
+/* ============================================================
+   JOGO
+   ============================================================ */
+
 function startGame() {
+
     clearLevelTimers();
+
+    closeOverlay();
+
     GAME.currentLevel = 1;
     GAME.lives = CONFIG.STARTING_LIVES;
     GAME.totalAttempts = 0;
     GAME.mistakes = 0;
     GAME.finished = false;
+    GAME.state = {};
+
     updateLives();
+
     showScreen(DOM.gameScreen);
+
     loadLevel(1);
 }
 
 function loadLevel(n) {
+
     clearLevelTimers();
+
     GAME.currentLevel = n;
     GAME.state = {};
+
     const l = LEVELS[n];
-    if (!l) { finishGame(); return; }
-    DOM.levelNumber.textContent = l.hiddenNumber ? "" : n;
+
+    if (!l) {
+        finishGame();
+        return;
+    }
+
+    DOM.levelNumber.textContent =
+        l.hiddenNumber ? "" : n;
+
     DOM.levelQuestion.innerHTML = "";
     DOM.levelContent.innerHTML = "";
+
     renderLevel(n, l);
+
     updateLives();
 }
 
 function failLevel() {
+
     if (GAME.finished) return;
+
+    /*
+     * Evita duas perdas de vida disparadas no mesmo frame/
+     * mesmo evento.
+     */
+    if (GAME.state.failLock) return;
+
+    GAME.state.failLock = true;
+
     GAME.totalAttempts++;
     GAME.mistakes++;
     GAME.lives--;
+
     feedbackLifeLost();
     updateLives();
+
     if (GAME.lives <= 0) {
+
         clearLevelTimers();
-        showOverlay("SEM VIDAS", "Você perdeu as 5 vidas. O jogo será reiniciado.", "RECOMEÇAR", () => {
-            GAME.lives = CONFIG.STARTING_LIVES;
-            updateLives();
-            closeOverlay();
-            loadLevel(1);
-        });
+
+        showOverlay(
+            "SEM VIDAS",
+            "Você perdeu as 5 vidas. O jogo será reiniciado.",
+            "RECOMEÇAR",
+            () => {
+
+                GAME.lives =
+                    CONFIG.STARTING_LIVES;
+
+                GAME.finished = false;
+                GAME.state = {};
+
+                updateLives();
+                closeOverlay();
+
+                loadLevel(1);
+            }
+        );
+
         return;
     }
+
     clearLevelTimers();
-    loadLevel(GAME.currentLevel);
+
+    /*
+     * Pequena pausa visual antes de reconstruir o nível.
+     * O timer é protegido contra nível antigo.
+     */
+    levelTimeout(() => {
+        loadLevel(GAME.currentLevel);
+    }, 80, GAME.currentLevel);
 }
 
 function completeLevel() {
+
     if (GAME.finished) return;
+    if (GAME.state.completeLock) return;
+
+    GAME.state.completeLock = true;
+
     feedbackCorrect();
-    const next = GAME.currentLevel + 1;
-    if (GAME.currentLevel === CONFIG.TOTAL_LEVELS || !LEVELS[next]) {
+
+    const next =
+        GAME.currentLevel + 1;
+
+    if (
+        GAME.currentLevel === CONFIG.TOTAL_LEVELS ||
+        !LEVELS[next]
+    ) {
         finishGame();
         return;
     }
-    setTimeout(() => { loadLevel(next); }, 180);
+
+    const current =
+        GAME.currentLevel;
+
+    levelTimeout(() => {
+
+        if (GAME.currentLevel !== current) return;
+
+        loadLevel(next);
+
+    }, 180, current);
 }
 
+
+/* ============================================================
+   OVERLAY
+   ============================================================ */
+
 function showOverlay(t, x, b, a) {
+
     DOM.overlayTitle.textContent = t;
     DOM.overlayText.textContent = x;
     DOM.overlayButton.textContent = b;
     DOM.overlayButton.onclick = a;
+
     DOM.overlay.classList.add("active");
 }
-function closeOverlay() { DOM.overlay.classList.remove("active"); }
+
+function closeOverlay() {
+    DOM.overlay.classList.remove("active");
+}
+
+
+/* ============================================================
+   RENDERIZADOR
+   ============================================================ */
 
 function renderLevel(n, l) {
+
     switch (l.type) {
-        case "broken-shape": renderLevel1(); break;
-        case "grid": renderLevel2(); break;
-        case "direct-answer": renderLevel3(); break;
-        case "pi": renderLevel4(); break;
-        case "count-circles": renderLevel5(); break;
-        case "appearing-circles": renderLevel6(); break;
-        case "no-number-rats": renderLevel7(); break;
-        case "color-memory": renderLevel8(); break;
-        case "arrow-memory": renderLevel9(); break;
-        case "camouflaged-command": renderLevel10(); break;
-        case "labyrinth-arrows": renderLevel11(); break;
-        case "hold-two-seconds": renderLevel12(); break;
-        case "circle-rhythm": renderLevel13(); break;
-        case "reverse-order": renderLevel14(); break;
-        case "blind-pixel": renderLevel15(); break;
-        case "drag-outside": renderLevel16(); break;
-        case "circle-exclusion": renderLevel17(); break;
-        case "escaping-button": renderLevel18(); break;
-        case "letter-intruder": renderLevel19(); break;
-        case "level1-recall": renderLevel20(); break;
-        default: renderUnimplementedLevel(n, l); break;
+
+        case "broken-shape":
+            renderLevel1();
+            break;
+
+        case "grid":
+            renderLevel2();
+            break;
+
+        case "direct-answer":
+            renderLevel3();
+            break;
+
+        case "pi":
+            renderLevel4();
+            break;
+
+        case "count-circles":
+            renderLevel5();
+            break;
+
+        case "appearing-circles":
+            renderLevel6();
+            break;
+
+        case "no-number-rats":
+            renderLevel7();
+            break;
+
+        case "color-memory":
+            renderLevel8();
+            break;
+
+        case "arrow-memory":
+            renderLevel9();
+            break;
+
+        case "camouflaged-command":
+            renderLevel10();
+            break;
+
+        case "labyrinth-arrows":
+            renderLevel11();
+            break;
+
+        case "hold-two-seconds":
+            renderLevel12();
+            break;
+
+        case "circle-rhythm":
+            renderLevel13();
+            break;
+
+        case "reverse-order":
+            renderLevel14();
+            break;
+
+        case "blind-pixel":
+            renderLevel15();
+            break;
+
+        case "drag-outside":
+            renderLevel16();
+            break;
+
+        case "circle-exclusion":
+            renderLevel17();
+            break;
+
+        case "escaping-button":
+            renderLevel18();
+            break;
+
+        case "letter-intruder":
+            renderLevel19();
+            break;
+
+        case "level1-recall":
+            renderLevel20();
+            break;
+
+        default:
+            renderUnimplementedLevel(n, l);
+            break;
     }
 }
+
+
+/* ============================================================
+   NÍVEL 1
+   ============================================================ */
 
 function renderLevel1() {
-    DOM.levelQuestion.textContent = "Complete a figura.";
-    const wrap = document.createElement("div");
-    wrap.className = "broken-container";
+
+    DOM.levelQuestion.textContent =
+        "Complete a figura.";
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.className =
+        "broken-container";
+
     wrap.innerHTML = `
         <div class="broken-top" id="targetArea"></div>
+
         <div class="broken-pieces-pool">
-            <div class="puzzle-piece" data-correct="false" style="clip-path:polygon(0% 100%,100% 100%,100% 28%,86% 2%,77% 32%,61% 4%,50% 32%,36% 3%,25% 32%,11% 2%,0% 28%)"></div>
-            <div class="puzzle-piece" data-correct="true" style="clip-path:polygon(0% 100%,100% 100%,100% 48%,88% 0%,78% 38%,63% 2%,52% 40%,38% 0%,26% 36%,12% 0%,0% 48%)"></div>
-            <div class="puzzle-piece" data-correct="false" style="clip-path:polygon(0% 100%,100% 100%,100% 32%,88% 8%,78% 34%,63% 10%,52% 36%,38% 8%,26% 32%,12% 8%,0% 32%)"></div>
-            <div class="puzzle-piece" data-correct="false" style="clip-path:polygon(0% 100%,100% 100%,100% 30%,88% 4%,79% 30%,64% 6%,53% 32%,39% 4%,27% 30%,13% 4%,0% 30%)"></div>
+
+            <div
+                class="puzzle-piece"
+                data-correct="false"
+                style="clip-path:polygon(
+                    0% 100%,100% 100%,100% 28%,
+                    86% 2%,77% 32%,61% 4%,
+                    50% 32%,36% 3%,25% 32%,
+                    11% 2%,0% 28%
+                )"
+            ></div>
+
+            <div
+                class="puzzle-piece"
+                data-correct="true"
+                style="clip-path:polygon(
+                    0% 100%,100% 100%,100% 48%,
+                    88% 0%,78% 38%,63% 2%,
+                    52% 40%,38% 0%,26% 36%,
+                    12% 0%,0% 48%
+                )"
+            ></div>
+
+            <div
+                class="puzzle-piece"
+                data-correct="false"
+                style="clip-path:polygon(
+                    0% 100%,100% 100%,100% 32%,
+                    88% 8%,78% 34%,63% 10%,
+                    52% 36%,38% 8%,26% 32%,
+                    12% 8%,0% 32%
+                )"
+            ></div>
+
+            <div
+                class="puzzle-piece"
+                data-correct="false"
+                style="clip-path:polygon(
+                    0% 100%,100% 100%,100% 30%,
+                    88% 4%,79% 30%,64% 6%,
+                    53% 32%,39% 4%,27% 30%,
+                    13% 4%,0% 30%
+                )"
+            ></div>
+
         </div>
     `;
+
     DOM.levelContent.appendChild(wrap);
-    const pieces = wrap.querySelectorAll(".puzzle-piece");
-    const target = wrap.querySelector("#targetArea");
+
+    const pieces =
+        wrap.querySelectorAll(".puzzle-piece");
+
+    const target =
+        wrap.querySelector("#targetArea");
 
     pieces.forEach(p => {
-        let sx = 0, sy = 0;
-        p.addEventListener("pointerdown", e => {
-            p.setPointerCapture(e.pointerId);
-            p.classList.add("dragging");
-            sx = e.clientX;
-            sy = e.clientY;
-            const mv = em => {
-                p.style.transform = `translate(${em.clientX - sx}px,${em.clientY - sy}px)`;
-            };
-            const up = em => {
-                p.releasePointerCapture(em.pointerId);
-                p.classList.remove("dragging");
-                p.removeEventListener("pointermove", mv);
-                p.removeEventListener("pointerup", up);
-                const pr = p.getBoundingClientRect();
-                const tr = target.getBoundingClientRect();
-                const d = Math.hypot((pr.left + pr.width / 2) - (tr.left + tr.width / 2), (pr.top + pr.height / 2) - (tr.bottom - 20));
-                if (d < 110) {
-                    if (p.dataset.correct === "true") {
-                        p.style.opacity = "0";
-                        target.classList.add("filled");
-                        setTimeout(() => completeLevel(), 380);
+
+        let sx = 0;
+        let sy = 0;
+
+        p.addEventListener(
+            "pointerdown",
+            e => {
+
+                if (GAME.currentLevel !== 1) return;
+
+                p.setPointerCapture(e.pointerId);
+
+                p.classList.add("dragging");
+
+                sx = e.clientX;
+                sy = e.clientY;
+
+                const mv = em => {
+
+                    if (
+                        GAME.currentLevel !== 1
+                    ) return;
+
+                    p.style.transform =
+                        `translate(
+                            ${em.clientX - sx}px,
+                            ${em.clientY - sy}px
+                        )`;
+                };
+
+                const up = em => {
+
+                    p.releasePointerCapture(
+                        em.pointerId
+                    );
+
+                    p.classList.remove(
+                        "dragging"
+                    );
+
+                    p.removeEventListener(
+                        "pointermove",
+                        mv
+                    );
+
+                    p.removeEventListener(
+                        "pointerup",
+                        up
+                    );
+
+                    const pr =
+                        p.getBoundingClientRect();
+
+                    const tr =
+                        target.getBoundingClientRect();
+
+                    const d = Math.hypot(
+                        (pr.left + pr.width / 2) -
+                        (tr.left + tr.width / 2),
+
+                        (pr.top + pr.height / 2) -
+                        (tr.bottom - 20)
+                    );
+
+                    if (d < 110) {
+
+                        if (
+                            p.dataset.correct === "true"
+                        ) {
+
+                            p.style.opacity = "0";
+
+                            target.classList.add(
+                                "filled"
+                            );
+
+                            levelTimeout(
+                                completeLevel,
+                                380,
+                                1
+                            );
+
+                        } else {
+
+                            p.classList.add(
+                                "wrong-shake"
+                            );
+
+                            p.style.transform =
+                                "translate(0,0)";
+
+                            levelTimeout(
+                                () => {
+                                    p.classList.remove(
+                                        "wrong-shake"
+                                    );
+                                },
+                                400,
+                                1
+                            );
+
+                            levelTimeout(
+                                failLevel,
+                                350,
+                                1
+                            );
+                        }
+
                     } else {
-                        vibrate([40, 30, 40]);
-                        p.classList.add("wrong-shake");
-                        p.style.transform = "translate(0,0)";
-                        setTimeout(() => p.classList.remove("wrong-shake"), 400);
-                        setTimeout(() => failLevel(), 350);
+
+                        p.style.transform =
+                            "translate(0,0)";
                     }
-                } else {
-                    p.style.transform = "translate(0,0)";
-                }
-            };
-            p.addEventListener("pointermove", mv);
-            p.addEventListener("pointerup", up);
-        });
+                };
+
+                p.addEventListener(
+                    "pointermove",
+                    mv
+                );
+
+                p.addEventListener(
+                    "pointerup",
+                    up
+                );
+            }
+        );
     });
 }
+
+
+/* ============================================================
+   NÍVEL 2
+   ============================================================ */
 
 function renderLevel2() {
-    DOM.levelQuestion.textContent = "Aperte no correto.";
-    const w = document.createElement("div");
-    w.className = "grid2-large";
+
+    DOM.levelQuestion.textContent =
+        "Aperte no correto.";
+
+    const w =
+        document.createElement("div");
+
+    w.className =
+        "grid2-large";
+
     for (let i = 0; i < 4; i++) {
-        const b = document.createElement("button");
-        b.className = "blue-choice";
+
+        const b =
+            document.createElement("button");
+
+        b.className =
+            "blue-choice";
+
         w.appendChild(b);
-        b.addEventListener("pointerup", () => {
-            if (i === 2) completeLevel();
-            else failLevel();
-        });
+
+        b.addEventListener(
+            "pointerup",
+            () => {
+
+                if (GAME.currentLevel !== 2) return;
+
+                if (i === 2)
+                    completeLevel();
+                else
+                    failLevel();
+            }
+        );
     }
+
     DOM.levelContent.appendChild(w);
 }
+
+
+/* ============================================================
+   NÍVEL 3
+   ============================================================ */
 
 function renderLevel3() {
-    DOM.levelQuestion.textContent = "Qual a cor do ícone do jogo?";
-    const w = document.createElement("div");
-    w.className = "grid2-large";
-    ["#246bff", "#1e5acc", "#2b73ff", "#1a4ebb"].forEach((t, i) => {
-        const b = document.createElement("button");
-        b.className = "blue-choice";
+
+    DOM.levelQuestion.textContent =
+        "Qual a cor do ícone do jogo?";
+
+    const w =
+        document.createElement("div");
+
+    w.className =
+        "grid2-large";
+
+    [
+        "#246bff",
+        "#1e5acc",
+        "#2b73ff",
+        "#1a4ebb"
+    ].forEach((t, i) => {
+
+        const b =
+            document.createElement("button");
+
+        b.className =
+            "blue-choice";
+
         b.style.background = t;
+
         w.appendChild(b);
-        b.addEventListener("pointerup", () => {
-            if (i === 0) completeLevel();
-            else failLevel();
-        });
+
+        b.addEventListener(
+            "pointerup",
+            () => {
+
+                if (GAME.currentLevel !== 3) return;
+
+                if (i === 0)
+                    completeLevel();
+                else
+                    failLevel();
+            }
+        );
     });
+
     DOM.levelContent.appendChild(w);
 }
+
+
+/* ============================================================
+   NÍVEL 4
+   ============================================================ */
 
 function renderLevel4() {
-    DOM.levelQuestion.textContent = "Qual o número mais próximo de Pi?";
-    const w = document.createElement("div");
-    w.className = "options-grid";
-    ["2,14", "3,14", "4,14", "5,14"].forEach((v, i) => {
-        const b = document.createElement("button");
-        b.className = "blue-choice";
+
+    DOM.levelQuestion.textContent =
+        "Qual o número mais próximo de Pi?";
+
+    const w =
+        document.createElement("div");
+
+    w.className =
+        "options-grid";
+
+    [
+        "2,14",
+        "3,14",
+        "4,14",
+        "5,14"
+    ].forEach((v, i) => {
+
+        const b =
+            document.createElement("button");
+
+        b.className =
+            "blue-choice";
+
         b.textContent = v;
+
         w.appendChild(b);
-        b.addEventListener("pointerup", () => {
-            if (i === 1) completeLevel();
-            else failLevel();
-        });
+
+        b.addEventListener(
+            "pointerup",
+            () => {
+
+                if (GAME.currentLevel !== 4) return;
+
+                if (i === 1)
+                    completeLevel();
+                else
+                    failLevel();
+            }
+        );
     });
+
     DOM.levelContent.appendChild(w);
 }
+
+
+/* ============================================================
+   NÍVEL 5
+   ============================================================ */
 
 function renderLevel5() {
-    DOM.levelQuestion.textContent = "Quantos círculos tem na tela?";
-    const w = document.createElement("div");
-    w.style.cssText = "width:100%;height:100%;position:relative;";
-    w.innerHTML = `<div class="shape-field-full" id="sf"></div><div class="options-grid" id="cOpts" style="position:absolute;bottom:22px;left:50%;transform:translateX(-50%)"></div>`;
+
+    DOM.levelQuestion.textContent =
+        "Quantos círculos tem na tela?";
+
+    const w =
+        document.createElement("div");
+
+    w.style.cssText =
+        "width:100%;height:100%;position:relative;";
+
+    w.innerHTML = `
+        <div
+            class="shape-field-full"
+            id="sf"
+        ></div>
+
+        <div
+            class="options-grid"
+            id="cOpts"
+            style="
+                position:absolute;
+                bottom:22px;
+                left:50%;
+                transform:translateX(-50%)
+            "
+        ></div>
+    `;
+
     DOM.levelContent.appendChild(w);
-    const f = w.querySelector("#sf");
+
+    const f =
+        w.querySelector("#sf");
+
     const shapes = [
-        {t:'circle',w:32,h:32,l:5,tt:5},{t:'rect',w:38,h:16,l:28,tt:8},{t:'pentagon',w:30,h:30,l:55,tt:6},{t:'circle',w:18,h:18,l:78,tt:10},
-        {t:'hexagon',w:28,h:28,l:88,tt:18},{t:'square',w:22,h:22,l:12,tt:22},{t:'circle',w:14,h:14,l:35,tt:24},{t:'circle',w:28,h:28,l:62,tt:26},
-        {t:'hexagon',w:24,h:24,l:42,tt:32},{t:'square',w:26,h:26,l:8,tt:42},{t:'circle',w:36,h:36,l:48,tt:48},{t:'square',w:24,h:24,l:78,tt:46},
-        {t:'rect',w:32,h:14,l:90,tt:58},{t:'circle',w:10,h:10,l:88,tt:72},{t:'pentagon',w:26,h:26,l:2,tt:68},{t:'circle',w:24,h:24,l:18,tt:72},
-        {t:'hexagon',w:28,h:28,l:56,tt:68},{t:'square',w:30,h:30,l:32,tt:82},{t:'rect',w:36,h:16,l:58,tt:84}
+
+        {t:"circle",w:32,h:32,l:5,tt:5},
+        {t:"rect",w:38,h:16,l:28,tt:8},
+        {t:"pentagon",w:30,h:30,l:55,tt:6},
+        {t:"circle",w:18,h:18,l:78,tt:10},
+        {t:"hexagon",w:28,h:28,l:88,tt:18},
+        {t:"square",w:22,h:22,l:12,tt:22},
+        {t:"circle",w:14,h:14,l:35,tt:24},
+        {t:"circle",w:28,h:28,l:62,tt:26},
+        {t:"hexagon",w:24,h:24,l:42,tt:32},
+        {t:"square",w:26,h:26,l:8,tt:42},
+        {t:"circle",w:36,h:36,l:48,tt:48},
+        {t:"square",w:24,h:24,l:78,tt:46},
+        {t:"rect",w:32,h:14,l:90,tt:58},
+        {t:"circle",w:10,h:10,l:88,tt:72},
+        {t:"pentagon",w:26,h:26,l:2,tt:68},
+        {t:"circle",w:24,h:24,l:18,tt:72},
+        {t:"hexagon",w:28,h:28,l:56,tt:68},
+        {t:"square",w:30,h:30,l:32,tt:82},
+        {t:"rect",w:36,h:16,l:58,tt:84}
     ];
+
     shapes.forEach(s => {
-        const e = document.createElement("div");
-        e.className = `geo-shape geo-${s.t}`;
-        e.style.width = s.w + "px";
-        e.style.height = s.h + "px";
-        e.style.left = s.l + "%";
-        e.style.top = s.tt + "%";
+
+        const e =
+            document.createElement("div");
+
+        e.className =
+            `geo-shape geo-${s.t}`;
+
+        e.style.width =
+            s.w + "px";
+
+        e.style.height =
+            s.h + "px";
+
+        e.style.left =
+            s.l + "%";
+
+        e.style.top =
+            s.tt + "%";
+
         f.appendChild(e);
     });
-    const o = w.querySelector("#cOpts");
-    ["4", "5", "6", "7"].forEach((a, i) => {
-        const b = document.createElement("button");
-        b.className = "blue-choice";
+
+    const o =
+        w.querySelector("#cOpts");
+
+    [
+        "4",
+        "5",
+        "6",
+        "7"
+    ].forEach((a, i) => {
+
+        const b =
+            document.createElement("button");
+
+        b.className =
+            "blue-choice";
+
         b.textContent = a;
+
         o.appendChild(b);
-        b.addEventListener("pointerup", () => {
-            if (i === 2) completeLevel();
-            else failLevel();
-        });
+
+        b.addEventListener(
+            "pointerup",
+            () => {
+
+                if (GAME.currentLevel !== 5) return;
+
+                if (i === 2)
+                    completeLevel();
+                else
+                    failLevel();
+            }
+        );
     });
 }
 
-/* NÍVEL 6 CORRIGIDO E ROBUSTO */
+
+/* ============================================================
+   NÍVEL 6
+   ============================================================ */
+
 function renderLevel6() {
-    DOM.levelQuestion.textContent = "Acompanhe e toque nos círculos.";
-    const wrap = document.createElement("div");
-    wrap.style.cssText = "position:relative; width:100%; height: 320px; margin: 0 auto;";
+
+    DOM.levelQuestion.textContent =
+        "Acompanhe e toque nos círculos.";
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.style.cssText =
+        "position:relative;width:100%;height:320px;margin:0 auto;";
+
     DOM.levelContent.appendChild(wrap);
 
     const coords = [
-        ["20%", "30%"], ["70%", "25%"],
-        ["50%", "50%"], ["25%", "70%"],
+        ["20%", "30%"],
+        ["70%", "25%"],
+        ["50%", "50%"],
+        ["25%", "70%"],
         ["75%", "65%"]
     ];
 
@@ -1129,556 +1809,2254 @@ function renderLevel6() {
     let failed = false;
 
     function showNextCircle() {
-        if (failed || GAME.currentLevel !== 6) return;
-        if (currentIndex >= coords.length) {
+
+        if (
+            failed ||
+            GAME.currentLevel !== 6
+        ) return;
+
+        if (
+            currentIndex >=
+            coords.length
+        ) {
             completeLevel();
             return;
         }
 
-        const [l, t] = coords[currentIndex];
-        const c = document.createElement("div");
-        c.className = "click-circle";
-        c.style.cssText = `position:absolute; left:${l}; top:${t}; transform: translate(-50%, -50%) scale(0); transition: transform 0.12s ease;`;
+        const [l, t] =
+            coords[currentIndex];
+
+        const c =
+            document.createElement("div");
+
+        c.className =
+            "click-circle";
+
+        c.style.cssText = `
+            position:absolute;
+            left:${l};
+            top:${t};
+            transform:translate(-50%,-50%) scale(0);
+            transition:transform .12s ease;
+        `;
+
         wrap.appendChild(c);
 
         requestAnimationFrame(() => {
-            if (failed || GAME.currentLevel !== 6) return;
-            c.style.transform = "translate(-50%, -50%) scale(1)";
+
+            if (
+                failed ||
+                GAME.currentLevel !== 6
+            ) return;
+
+            c.style.transform =
+                "translate(-50%,-50%) scale(1)";
         });
 
         let wasClicked = false;
 
-        const hideTimer = setTimeout(() => {
-            if (!wasClicked && !failed && GAME.currentLevel === 6) {
-                failed = true;
-                c.style.transform = "translate(-50%, -50%) scale(0)";
-                failLevel();
-            }
-        }, 1200);
-        addLevelTimer(hideTimer);
+        const hideTimer =
+            levelTimeout(() => {
 
-        c.addEventListener("pointerup", () => {
-            if (wasClicked || failed || GAME.currentLevel !== 6) return;
-            wasClicked = true;
-            clearTimeout(hideTimer);
-            c.style.transform = "translate(-50%, -50%) scale(0)";
-            feedbackCorrect();
-            currentIndex++;
-            setTimeout(() => {
-                if (GAME.currentLevel !== 6) return;
-                c.remove();
-                showNextCircle();
-            }, 90);
-        }, { once: true });
+                if (
+                    !wasClicked &&
+                    !failed &&
+                    GAME.currentLevel === 6
+                ) {
+
+                    failed = true;
+
+                    c.style.transform =
+                        "translate(-50%,-50%) scale(0)";
+
+                    failLevel();
+                }
+
+            }, 1200, 6);
+
+        c.addEventListener(
+            "pointerup",
+            () => {
+
+                if (
+                    wasClicked ||
+                    failed ||
+                    GAME.currentLevel !== 6
+                ) return;
+
+                wasClicked = true;
+
+                clearTimeout(hideTimer);
+
+                c.style.transform =
+                    "translate(-50%,-50%) scale(0)";
+
+                feedbackCorrect();
+
+                currentIndex++;
+
+                levelTimeout(() => {
+
+                    if (
+                        GAME.currentLevel !== 6
+                    ) return;
+
+                    c.remove();
+
+                    showNextCircle();
+
+                }, 90, 6);
+            },
+            { once: true }
+        );
     }
 
-    const startDelay = setTimeout(() => {
-        showNextCircle();
-    }, 400);
-    addLevelTimer(startDelay);
+    levelTimeout(
+        showNextCircle,
+        400,
+        6
+    );
 }
 
+
+/* ============================================================
+   NÍVEL 7
+   ============================================================ */
+
 function renderLevel7() {
-    DOM.levelQuestion.innerHTML = `<span class="question-with-rat"><span class="small-hiding-rat">🐀</span>Quantos ratos tem na tela?</span>`;
-    const w = document.createElement("div");
-    w.className = "rats-wrap";
+
+    DOM.levelQuestion.innerHTML = `
+        <span class="question-with-rat">
+            <span class="small-hiding-rat">🐀</span>
+            Quantos ratos tem na tela?
+        </span>
+    `;
+
+    const w =
+        document.createElement("div");
+
+    w.className =
+        "rats-wrap";
+
     const rad = 95;
-    const cen = document.createElement("div");
-    cen.className = "orbit-center";
+
+    const cen =
+        document.createElement("div");
+
+    cen.className =
+        "orbit-center";
+
     for (let i = 0; i < 5; i++) {
-        const ang = (i * 72) * Math.PI / 180;
-        const r = document.createElement("div");
-        r.className = "circling-rat";
-        r.textContent = "🐀";
-        r.style.left = Math.cos(ang) * rad + "px";
-        r.style.top = Math.sin(ang) * rad + "px";
-        r.style.transform = `rotate(${i * 72 + 90}deg)`;
+
+        const ang =
+            (i * 72) *
+            Math.PI /
+            180;
+
+        const r =
+            document.createElement("div");
+
+        r.className =
+            "circling-rat";
+
+        r.textContent =
+            "🐀";
+
+        r.style.left =
+            Math.cos(ang) *
+            rad +
+            "px";
+
+        r.style.top =
+            Math.sin(ang) *
+            rad +
+            "px";
+
+        r.style.transform =
+            `rotate(${i * 72 + 90}deg)`;
+
         cen.appendChild(r);
     }
+
     w.appendChild(cen);
-    const ow = document.createElement("div");
-    ow.className = "options-grid";
-    ["3", "4", "5", "6"].forEach((a, i) => {
-        const b = document.createElement("button");
-        b.className = "blue-choice";
+
+    const ow =
+        document.createElement("div");
+
+    ow.className =
+        "options-grid";
+
+    [
+        "3",
+        "4",
+        "5",
+        "6"
+    ].forEach((a, i) => {
+
+        const b =
+            document.createElement("button");
+
+        b.className =
+            "blue-choice";
+
         b.textContent = a;
+
         ow.appendChild(b);
-        b.addEventListener("pointerup", () => {
-            if (i === 3) completeLevel();
-            else failLevel();
-        });
+
+        b.addEventListener(
+            "pointerup",
+            () => {
+
+                if (GAME.currentLevel !== 7) return;
+
+                if (i === 3)
+                    completeLevel();
+                else
+                    failLevel();
+            }
+        );
     });
+
     DOM.levelContent.appendChild(w);
     DOM.levelContent.appendChild(ow);
 }
 
+
+/* ============================================================
+   NÍVEL 8
+   ============================================================ */
+
 function renderLevel8() {
-    DOM.levelQuestion.textContent = "Memorize a sequência.";
-    const seq = ["c-red", "c-blue", "c-green", "c-yellow", "c-purple", "c-orange"];
-    const shuf = ["c-green", "c-red", "c-orange", "c-purple", "c-blue", "c-yellow"];
-    const w = document.createElement("div");
-    w.className = "color-bar-container";
+
+    DOM.levelQuestion.textContent =
+        "Memorize a sequência.";
+
+    const seq = [
+        "c-red",
+        "c-blue",
+        "c-green",
+        "c-yellow",
+        "c-purple",
+        "c-orange"
+    ];
+
+    const shuf = [
+        "c-green",
+        "c-red",
+        "c-orange",
+        "c-purple",
+        "c-blue",
+        "c-yellow"
+    ];
+
+    const w =
+        document.createElement("div");
+
+    w.className =
+        "color-bar-container";
+
     seq.forEach(c => {
-        const s = document.createElement("div");
-        s.className = `color-segment ${c}`;
+
+        const s =
+            document.createElement("div");
+
+        s.className =
+            `color-segment ${c}`;
+
         w.appendChild(s);
     });
+
     DOM.levelContent.appendChild(w);
+
     GAME.state.colorSeq = seq;
     GAME.state.colorIdx = 0;
-    addLevelTimer(setTimeout(() => {
+
+    levelTimeout(() => {
+
+        if (GAME.currentLevel !== 8) return;
+
         w.innerHTML = "";
-        DOM.levelQuestion.textContent = "Repita a sequência.";
+
+        DOM.levelQuestion.textContent =
+            "Repita a sequência.";
+
         shuf.forEach(c => {
-            const b = document.createElement("button");
-            b.className = `color-segment ${c}`;
+
+            const b =
+                document.createElement("button");
+
+            b.className =
+                `color-segment ${c}`;
+
             b.dataset.color = c;
+
             w.appendChild(b);
-            b.addEventListener("pointerup", () => {
-                if (b.dataset.color !== GAME.state.colorSeq[GAME.state.colorIdx]) {
-                    failLevel();
-                    return;
+
+            b.addEventListener(
+                "pointerup",
+                () => {
+
+                    if (
+                        GAME.currentLevel !== 8
+                    ) return;
+
+                    if (
+                        b.dataset.color !==
+                        GAME.state.colorSeq[
+                            GAME.state.colorIdx
+                        ]
+                    ) {
+                        failLevel();
+                        return;
+                    }
+
+                    GAME.state.colorIdx++;
+
+                    if (
+                        GAME.state.colorIdx >=
+                        GAME.state.colorSeq.length
+                    ) {
+                        completeLevel();
+                    } else {
+                        feedbackCorrect();
+                    }
                 }
-                GAME.state.colorIdx++;
-                if (GAME.state.colorIdx >= GAME.state.colorSeq.length) completeLevel();
-                else feedbackCorrect();
-            });
+            );
         });
-    }, 4500));
+
+    }, 4500, 8);
 }
+
+
+/* ============================================================
+   NÍVEL 9
+   ============================================================ */
 
 function renderLevel9() {
-    DOM.levelQuestion.textContent = "Memorize a sequência.";
-    const seq = ["↑", "→", "↓", "←"];
-    const w = document.createElement("div");
-    w.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:15px";
-    const d = document.createElement("div");
-    d.className = "arrow-sequence-display";
+
+    DOM.levelQuestion.textContent =
+        "Memorize a sequência.";
+
+    const seq = [
+        "↑",
+        "→",
+        "↓",
+        "←"
+    ];
+
+    const w =
+        document.createElement("div");
+
+    w.style.cssText =
+        "display:flex;flex-direction:column;align-items:center;gap:15px";
+
+    const d =
+        document.createElement("div");
+
+    d.className =
+        "arrow-sequence-display";
+
     seq.forEach(x => {
-        const s = document.createElement("span");
+
+        const s =
+            document.createElement("span");
+
         s.textContent = x;
+
         d.appendChild(s);
     });
+
     w.appendChild(d);
+
     DOM.levelContent.appendChild(w);
+
     GAME.state.arrowSeq = seq;
     GAME.state.arrowIdx = 0;
-    addLevelTimer(setTimeout(() => {
+
+    levelTimeout(() => {
+
+        if (GAME.currentLevel !== 9) return;
+
         d.style.opacity = "0";
-        DOM.levelQuestion.textContent = "Repita a sequência.";
-        const g = document.createElement("div");
-        g.className = "options-grid";
-        ["↑", "→", "↓", "←"].forEach(dir => {
-            const b = document.createElement("button");
-            b.className = "blue-choice";
+
+        DOM.levelQuestion.textContent =
+            "Repita a sequência.";
+
+        const g =
+            document.createElement("div");
+
+        g.className =
+            "options-grid";
+
+        [
+            "↑",
+            "→",
+            "↓",
+            "←"
+        ].forEach(dir => {
+
+            const b =
+                document.createElement("button");
+
+            b.className =
+                "blue-choice";
+
             b.textContent = dir;
+
             g.appendChild(b);
-            b.addEventListener("pointerup", () => {
-                if (dir !== GAME.state.arrowSeq[GAME.state.arrowIdx]) {
-                    failLevel();
-                    return;
+
+            b.addEventListener(
+                "pointerup",
+                () => {
+
+                    if (
+                        GAME.currentLevel !== 9
+                    ) return;
+
+                    if (
+                        dir !==
+                        GAME.state.arrowSeq[
+                            GAME.state.arrowIdx
+                        ]
+                    ) {
+                        failLevel();
+                        return;
+                    }
+
+                    GAME.state.arrowIdx++;
+
+                    if (
+                        GAME.state.arrowIdx >=
+                        GAME.state.arrowSeq.length
+                    ) {
+                        completeLevel();
+                    } else {
+                        feedbackCorrect();
+                    }
                 }
-                GAME.state.arrowIdx++;
-                if (GAME.state.arrowIdx >= GAME.state.arrowSeq.length) completeLevel();
-                else feedbackCorrect();
-            });
+            );
         });
+
         w.appendChild(g);
-    }, 4500));
+
+    }, 4500, 9);
 }
+
+
+/* ============================================================
+   NÍVEL 10
+   ============================================================ */
 
 function renderLevel10() {
-    DOM.levelQuestion.innerHTML = `Toque no <span id="secretRedTarget">vermelho</span>.`;
-    const w = document.createElement("div");
-    w.className = "red-trap-grid";
-    ["#b23b3b", "#a83232", "#c44d4d", "#9e2a2a"].forEach(t => {
-        const b = document.createElement("button");
-        b.className = "red-trap-btn";
+
+    DOM.levelQuestion.innerHTML =
+        `Toque no <span id="secretRedTarget">vermelho</span>.`;
+
+    const w =
+        document.createElement("div");
+
+    w.className =
+        "red-trap-grid";
+
+    [
+        "#b23b3b",
+        "#a83232",
+        "#c44d4d",
+        "#9e2a2a"
+    ].forEach(t => {
+
+        const b =
+            document.createElement("button");
+
+        b.className =
+            "red-trap-btn";
+
         b.style.background = t;
+
         w.appendChild(b);
-        b.addEventListener("pointerup", failLevel);
+
+        b.addEventListener(
+            "pointerup",
+            () => {
+
+                if (GAME.currentLevel !== 10) return;
+
+                failLevel();
+            }
+        );
     });
+
     DOM.levelContent.appendChild(w);
-    setTimeout(() => {
-        document.getElementById("secretRedTarget").addEventListener("pointerup", completeLevel, { once: true });
-    }, 50);
-}
 
-/* NÍVEL 11 — NOVA VERSÃO */
-function renderLevel11(){
-  DOM.levelQuestion.textContent="Limpe o labirinto, toque nas setas livres.";
-  DOM.levelContent.innerHTML="";
-  const wrap=document.createElement("div");
-  wrap.style.cssText="width:min(360px,92vw);height:min(520px,72vh);background:#000;border-radius:12px;position:relative;margin:0 auto;overflow:hidden;border:1px solid rgba(255,255,255,.08);";
-  wrap.innerHTML=`
-  <svg id="mazeSvg" viewBox="0 0 100 110" style="width:100%;height:100%;display:block;">
-    <g id="dots"></g>
-    <g id="paths"></g>
-    <g id="arrows"></g>
-  </svg>`;
-  DOM.levelContent.appendChild(wrap);
-  
-  const svg=wrap.querySelector("#mazeSvg");
-  const gDots=svg.querySelector("#dots");
-  const gPaths=svg.querySelector("#paths");
-  const gArrows=svg.querySelector("#arrows");
+    levelTimeout(() => {
 
-  // pontinhos bem fraquinhos no fundo preto
-  for(let y=5;y<=105;y+=10){
-    for(let x=5;x<=95;x+=10){
-      const c=document.createElementNS("http://www.w3.org/2000/svg","circle");
-      c.setAttribute("cx",x); c.setAttribute("cy",y); c.setAttribute("r","0.7");
-      c.setAttribute("fill","rgba(255,255,255,.18)");
-      gDots.appendChild(c);
-    }
-  }
+        const target =
+            document.getElementById(
+                "secretRedTarget"
+            );
 
-  const paths=[
-    {id:1, d:"M10 2 L10 65 L46 65", dir:"→", ax:48, ay:65, free:false},
-    {id:2, d:"M32 28 L32 48 L40 48 L40 28 L46 28", dir:"↑", ax:46, ay:26, free:false},
-    {id:3, d:"M58 28 L58 62 L78 62", dir:"→", ax:80, ay:62, free:true}, // livre - sai pra direita
-    {id:4, d:"M52 4 L84 4 L84 90 L42 90 L42 82", dir:"→", ax:44, ay:82, free:false, parent:3},
-    {id:5, d:"M10 88 L10 98 L32 98 L32 88 L44 88", dir:"→", ax:46, ay:88, free:false, parent:4},
-    {id:6, d:"M52 98 L70 98 L70 88", dir:"", ax:70, ay:88, free:false, parent:5},
-    {id:7, d:"M10 76 L34 76", dir:"→", ax:36, ay:76, free:true}, // livre
-  ];
+        if (
+            target &&
+            GAME.currentLevel === 10
+        ) {
 
-  function draw(){
-    gPaths.innerHTML=""; gArrows.innerHTML="";
-    paths.forEach(p=>{
-      if(p.removed) return;
-      const path=document.createElementNS("http://www.w3.org/2000/svg","path");
-      path.setAttribute("d",p.d);
-      path.setAttribute("fill","none");
-      path.setAttribute("stroke",p.free?"#4caf50":"#e8dcc3"); // BEGE
-      path.setAttribute("stroke-width","1.5");
-      path.setAttribute("stroke-linecap","round");
-      path.setAttribute("stroke-linejoin","round");
-      path.setAttribute("id","p-"+p.id);
-      path.style.transition="all 0.3s ease";
-      gPaths.appendChild(path);
-
-      const g=document.createElementNS("http://www.w3.org/2000/svg","g");
-      g.setAttribute("transform",`translate(${p.ax},${p.ay})`);
-      g.style.cursor="pointer";
-      g.style.transition="transform 0.65s cubic-bezier(.2,.8,.2,1), opacity 0.4s";
-      g.setAttribute("id","g-"+p.id);
-
-      const txt=document.createElementNS("http://www.w3.org/2000/svg","text");
-      txt.textContent=p.dir;
-      txt.setAttribute("text-anchor","middle");
-      txt.setAttribute("dominant-baseline","middle");
-      txt.setAttribute("font-size","7");
-      txt.setAttribute("font-weight","900");
-      txt.setAttribute("fill",p.free?"#4caf50":"#e8dcc3"); // BEGE
-      g.appendChild(txt);
-
-      g.addEventListener("pointerup",()=>{
-        if(!p.free){
-          g.animate([{transform:`translate(${p.ax}px,${p.ay}px)`},{transform:`translate(${p.ax-2}px,${p.ay}px)`},{transform:`translate(${p.ax+2}px,${p.ay}px)`},{transform:`translate(${p.ax}px,${p.ay}px)`}],{duration:280});
-          feedbackLifeLost();
-          failLevel();
-          return;
+            target.addEventListener(
+                "pointerup",
+                completeLevel,
+                { once: true }
+            );
         }
-        feedbackCorrect();
-        let tx=60;
-        if(p.id===7) g.style.transform=`translate(${p.ax}px,${p.ay-60}px)`;
-        else g.style.transform=`translate(${p.ax+tx}px,${p.ay}px)`;
-        g.style.opacity="0";
-        document.getElementById("p-"+p.id).style.opacity="0";
-        p.removed=true;
-        paths.forEach(o=>{if(o.parent===p.id) o.free=true;});
-        setTimeout(()=>{
-          if(paths.filter(x=>!x.removed).length===0) completeLevel();
-          else draw();
-        },600);
-      });
-      gArrows.appendChild(g);
-    });
-  }
-  draw();
+
+    }, 50, 10);
 }
 
-function renderLevel12() {
-    DOM.levelQuestion.textContent = "Segure exatamente por 2 segundos.";
-    const w = document.createElement("div");
-    w.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:20px";
-    const b = document.createElement("button");
-    b.className = "hold-btn-12";
-    b.textContent = "SEGURE";
-    let st = 0, hd = false;
-    b.addEventListener("pointerdown", () => {
-        hd = true;
-        st = Date.now();
-        b.style.background = "#ff3b30";
-        b.textContent = "SOLTE...";
-    });
-    const rel = () => {
-        if (!hd) return;
-        hd = false;
-        const d = (Date.now() - st) / 1000;
-        b.style.background = "#246bff";
-        b.textContent = "SEGURE";
-        if (d >= 1.8 && d <= 2.2) completeLevel();
-        else failLevel();
+
+/* ============================================================
+   NÍVEL 11
+   LABIRINTO DE SETAS
+   ============================================================ */
+
+function renderLevel11() {
+
+    DOM.levelQuestion.textContent =
+        "Limpe o labirinto, seguindo as setas.";
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.style.cssText = `
+        position:relative;
+        width:min(360px,92vw);
+        height:min(520px,72vh);
+        margin:0 auto;
+        overflow:hidden;
+        background:#f5ead6;
+        border-radius:8px;
+        touch-action:none;
+    `;
+
+    wrap.innerHTML = `
+        <svg
+            id="mazeSvg11"
+            viewBox="0 0 100 110"
+            preserveAspectRatio="xMidYMid meet"
+            style="
+                width:100%;
+                height:100%;
+                display:block;
+                overflow:visible;
+                touch-action:none;
+            "
+        >
+            <g id="mazeDots11"></g>
+            <g id="mazePaths11"></g>
+            <g id="mazeArrows11"></g>
+        </svg>
+    `;
+
+    DOM.levelContent.appendChild(wrap);
+
+    const svg =
+        wrap.querySelector("#mazeSvg11");
+
+    const dotsLayer =
+        wrap.querySelector("#mazeDots11");
+
+    const pathsLayer =
+        wrap.querySelector("#mazePaths11");
+
+    const arrowsLayer =
+        wrap.querySelector("#mazeArrows11");
+
+
+    /* --------------------------------------------------------
+       CORES
+       -------------------------------------------------------- */
+
+    const COLORS = {
+        grid: "#d8bfa0",
+        line: "#765637",
+        arrow: "#765637"
     };
-    b.addEventListener("pointerup", rel);
-    b.addEventListener("pointercancel", rel);
-    w.appendChild(b);
-    DOM.levelContent.appendChild(w);
-}
 
-function renderLevel13() {
-    DOM.levelQuestion.textContent = "Toque no momento exato do pulso.";
-    const w = document.createElement("div");
-    w.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:25px";
-    const t = document.createElement("div");
-    t.className = "rhythm-target-13";
-    const p = document.createElement("div");
-    p.className = "rhythm-pulse-13";
-    t.appendChild(p);
-    const a = document.createElement("button");
-    a.className = "blue-choice";
-    a.style.width = "180px";
-    a.textContent = "APERTAR";
-    a.addEventListener("pointerup", () => {
-        const e = (Date.now() % 1200);
-        if (e >= 450 && e <= 750) completeLevel();
-        else failLevel();
-    });
-    w.appendChild(t);
-    w.appendChild(a);
-    DOM.levelContent.appendChild(w);
-}
 
-function renderLevel14() {
-    DOM.levelQuestion.textContent = "Memorize e toque na ordem REVERSA.";
-    const w = document.createElement("div");
-    w.className = "reverse-grid-14";
-    const seq = [0, 2, 3, 1];
-    const btns = [];
-    for (let i = 0; i < 4; i++) {
-        const b = document.createElement("button");
-        b.className = "rev-btn-14";
-        b.textContent = i + 1;
-        btns.push(b);
-        w.appendChild(b);
+    /* --------------------------------------------------------
+       FUNÇÃO SVG
+       -------------------------------------------------------- */
+
+    function svgElement(name) {
+        return document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            name
+        );
     }
-    DOM.levelContent.appendChild(w);
-    GAME.state.revSeq = [...seq].reverse();
-    GAME.state.revIdx = 0;
-    seq.forEach((id, s) => {
-        addLevelTimer(setTimeout(() => {
-            btns[id].classList.add("lit");
-            setTimeout(() => btns[id].classList.remove("lit"), 400);
-        }, (s + 1) * 700));
-    });
-    addLevelTimer(setTimeout(() => {
-        DOM.levelQuestion.textContent = "Toque de trás para frente!";
-        btns.forEach((b, i) => {
-            b.addEventListener("pointerup", () => {
-                if (i !== GAME.state.revSeq[GAME.state.revIdx]) {
-                    failLevel();
+
+
+    /* --------------------------------------------------------
+       GRID
+       -------------------------------------------------------- */
+
+    for (
+        let y = 5;
+        y <= 105;
+        y += 10
+    ) {
+
+        for (
+            let x = 5;
+            x <= 95;
+            x += 10
+        ) {
+
+            const dot =
+                svgElement("circle");
+
+            dot.setAttribute(
+                "cx",
+                x
+            );
+
+            dot.setAttribute(
+                "cy",
+                y
+            );
+
+            dot.setAttribute(
+                "r",
+                "0.55"
+            );
+
+            dot.setAttribute(
+                "fill",
+                COLORS.grid
+            );
+
+            dot.setAttribute(
+                "opacity",
+                "0.72"
+            );
+
+            dotsLayer.appendChild(dot);
+        }
+    }
+
+
+    /* --------------------------------------------------------
+       CAMINHOS
+
+       Dois caminhos começam livres:
+
+       3 → 4 → 5 → 6
+
+       7 → 1 → 2
+
+       O caminho 6 é a conclusão automática do primeiro ramo.
+       -------------------------------------------------------- */
+
+    const paths = [
+
+        {
+            id: 3,
+            d: "M58 28 L58 62 L78 62",
+            dir: "→",
+            ax: 80,
+            ay: 62,
+            free: true,
+            parent: null
+        },
+
+        {
+            id: 4,
+            d: "M52 4 L84 4 L84 90 L42 90 L42 82",
+            dir: "→",
+            ax: 44,
+            ay: 82,
+            free: false,
+            parent: 3
+        },
+
+        {
+            id: 5,
+            d: "M10 88 L10 98 L32 98 L32 88 L44 88",
+            dir: "→",
+            ax: 46,
+            ay: 88,
+            free: false,
+            parent: 4
+        },
+
+        {
+            id: 6,
+            d: "M52 98 L70 98 L70 88",
+            dir: "",
+            ax: 70,
+            ay: 88,
+            free: false,
+            parent: 5,
+            auto: true
+        },
+
+        {
+            id: 7,
+            d: "M10 76 L34 76",
+            dir: "→",
+            ax: 36,
+            ay: 76,
+            free: true,
+            parent: null
+        },
+
+        {
+            id: 1,
+            d: "M10 2 L10 65 L46 65",
+            dir: "→",
+            ax: 48,
+            ay: 65,
+            free: false,
+            parent: 7
+        },
+
+        {
+            id: 2,
+            d: "M32 28 L32 48 L40 48 L40 28 L46 28",
+            dir: "↑",
+            ax: 46,
+            ay: 26,
+            free: false,
+            parent: 1
+        }
+    ];
+
+
+    let busy = false;
+    let finished = false;
+
+
+    /* --------------------------------------------------------
+       BUSCA CAMINHO
+       -------------------------------------------------------- */
+
+    function getPath(id) {
+        return paths.find(
+            p => p.id === id
+        );
+    }
+
+
+    /* --------------------------------------------------------
+       FINALIZAÇÃO
+       -------------------------------------------------------- */
+
+    function checkComplete() {
+
+        if (finished) return;
+
+        const remaining =
+            paths.filter(
+                p => !p.removed
+            );
+
+        if (remaining.length === 0) {
+
+            finished = true;
+
+            levelTimeout(
+                () => {
+                    completeLevel();
+                },
+                220,
+                11
+            );
+        }
+    }
+
+
+    /* --------------------------------------------------------
+       DESENHO
+       -------------------------------------------------------- */
+
+    function drawMaze() {
+
+        pathsLayer.innerHTML = "";
+        arrowsLayer.innerHTML = "";
+
+        paths.forEach(p => {
+
+            if (p.removed) return;
+
+
+            /* -----------------------------------------------
+               LINHA
+               ----------------------------------------------- */
+
+            const path =
+                svgElement("path");
+
+            path.setAttribute(
+                "d",
+                p.d
+            );
+
+            path.setAttribute(
+                "fill",
+                "none"
+            );
+
+            path.setAttribute(
+                "stroke",
+                COLORS.line
+            );
+
+            path.setAttribute(
+                "stroke-width",
+                "1.65"
+            );
+
+            path.setAttribute(
+                "stroke-linecap",
+                "round"
+            );
+
+            path.setAttribute(
+                "stroke-linejoin",
+                "round"
+            );
+
+            path.setAttribute(
+                "vector-effect",
+                "non-scaling-stroke"
+            );
+
+            path.dataset.id = p.id;
+
+            let length = 200;
+
+            try {
+                const realLength =
+                    path.getTotalLength();
+
+                if (
+                    Number.isFinite(realLength) &&
+                    realLength > 0
+                ) {
+                    length = realLength;
+                }
+            } catch (e) {}
+
+            p.length = length;
+
+            path.style.strokeDasharray =
+                `${length}`;
+
+            path.style.strokeDashoffset =
+                "0";
+
+            path.style.opacity =
+                "1";
+
+            pathsLayer.appendChild(path);
+
+
+            /* -----------------------------------------------
+               SEM SETA = CAMINHO AUTOMÁTICO
+               ----------------------------------------------- */
+
+            if (!p.dir) return;
+
+
+            /* -----------------------------------------------
+               GRUPO DA SETA
+               ----------------------------------------------- */
+
+            const arrowGroup =
+                svgElement("g");
+
+            arrowGroup.setAttribute(
+                "transform",
+                `translate(${p.ax} ${p.ay})`
+            );
+
+            arrowGroup.setAttribute(
+                "data-arrow-id",
+                p.id
+            );
+
+            arrowGroup.style.cursor =
+                p.free
+                    ? "pointer"
+                    : "default";
+
+            arrowGroup.style.touchAction =
+                "none";
+
+
+            /* -----------------------------------------------
+               ÁREA DE TOQUE
+               ----------------------------------------------- */
+
+            const hitArea =
+                svgElement("circle");
+
+            hitArea.setAttribute(
+                "cx",
+                "0"
+            );
+
+            hitArea.setAttribute(
+                "cy",
+                "0"
+            );
+
+            hitArea.setAttribute(
+                "r",
+                "7"
+            );
+
+            hitArea.setAttribute(
+                "fill",
+                "transparent"
+            );
+
+            hitArea.style.pointerEvents =
+                "all";
+
+            arrowGroup.appendChild(hitArea);
+
+
+            /* -----------------------------------------------
+               SETA
+               ----------------------------------------------- */
+
+            const arrow =
+                svgElement("text");
+
+            arrow.textContent =
+                p.dir;
+
+            arrow.setAttribute(
+                "x",
+                "0"
+            );
+
+            arrow.setAttribute(
+                "y",
+                "0"
+            );
+
+            arrow.setAttribute(
+                "text-anchor",
+                "middle"
+            );
+
+            arrow.setAttribute(
+                "dominant-baseline",
+                "middle"
+            );
+
+            arrow.setAttribute(
+                "font-size",
+                "7"
+            );
+
+            arrow.setAttribute(
+                "font-weight",
+                "900"
+            );
+
+            arrow.setAttribute(
+                "font-family",
+                "Arial,Helvetica,sans-serif"
+            );
+
+            arrow.setAttribute(
+                "fill",
+                COLORS.arrow
+            );
+
+            arrow.style.pointerEvents =
+                "none";
+
+            arrowGroup.appendChild(
+                arrow
+            );
+
+
+            /* -----------------------------------------------
+               TOUCH
+               ----------------------------------------------- */
+
+            arrowGroup.addEventListener(
+                "pointerup",
+                e => {
+
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (
+                        GAME.currentLevel !== 11 ||
+                        busy ||
+                        finished
+                    ) {
+                        return;
+                    }
+
+                    handleArrow(p);
+                }
+            );
+
+            arrowsLayer.appendChild(
+                arrowGroup
+            );
+        });
+    }
+
+
+    /* --------------------------------------------------------
+       SETA ERRADA
+       -------------------------------------------------------- */
+
+    function handleWrongArrow(p) {
+
+        if (
+            busy ||
+            finished
+        ) return;
+
+        busy = true;
+
+        const group =
+            arrowsLayer.querySelector(
+                `[data-arrow-id="${p.id}"]`
+            );
+
+        if (group) {
+
+            group.animate(
+                [
+                    {
+                        transform:
+                            `translate(${p.ax}px ${p.ay}px)`
+                    },
+                    {
+                        transform:
+                            `translate(${p.ax - 2}px ${p.ay}px)`
+                    },
+                    {
+                        transform:
+                            `translate(${p.ax + 2}px ${p.ay}px)`
+                    },
+                    {
+                        transform:
+                            `translate(${p.ax - 1}px ${p.ay}px)`
+                    },
+                    {
+                        transform:
+                            `translate(${p.ax}px ${p.ay}px)`
+                    }
+                ],
+                {
+                    duration: 260,
+                    easing: "ease-out"
+                }
+            );
+        }
+
+        levelTimeout(
+            () => {
+
+                busy = false;
+
+                if (
+                    GAME.currentLevel !== 11
+                ) return;
+
+                failLevel();
+
+            },
+            280,
+            11
+        );
+    }
+
+
+    /* --------------------------------------------------------
+       REMOVE CAMINHO
+       -------------------------------------------------------- */
+
+    function removePath(p) {
+
+        if (
+            busy ||
+            finished ||
+            p.removed
+        ) return;
+
+        busy = true;
+
+        const pathElement =
+            pathsLayer.querySelector(
+                `[data-id="${p.id}"]`
+            );
+
+        const arrowElement =
+            arrowsLayer.querySelector(
+                `[data-arrow-id="${p.id}"]`
+            );
+
+
+        /* -----------------------------------------------
+           FEEDBACK
+           ----------------------------------------------- */
+
+        feedbackCorrect();
+
+
+        /* -----------------------------------------------
+           LINHA FLUINDO PARA FORA
+           ----------------------------------------------- */
+
+        if (pathElement) {
+
+            const length =
+                p.length || 200;
+
+            pathElement.style.transition =
+                `
+                stroke-dashoffset .62s
+                cubic-bezier(.65,0,.35,1),
+                opacity .18s ease
+                `;
+
+            /*
+             * Força o navegador a aplicar o estado inicial.
+             */
+            void pathElement.getBoundingClientRect();
+
+            pathElement.style.strokeDashoffset =
+                String(length);
+
+            levelTimeout(
+                () => {
+
+                    if (
+                        GAME.currentLevel !== 11
+                    ) return;
+
+                    pathElement.style.opacity =
+                        "0";
+
+                },
+                430,
+                11
+            );
+        }
+
+
+        /* -----------------------------------------------
+           SETA ACOMPANHA O FLUXO
+           ----------------------------------------------- */
+
+        if (arrowElement) {
+
+            let dx = 0;
+            let dy = 0;
+
+            if (p.dir === "→")
+                dx = 12;
+
+            else if (p.dir === "←")
+                dx = -12;
+
+            else if (p.dir === "↑")
+                dy = -12;
+
+            else if (p.dir === "↓")
+                dy = 12;
+
+            arrowElement.style.transition =
+                `
+                transform .58s
+                cubic-bezier(.2,.8,.2,1),
+                opacity .45s ease
+                `;
+
+            arrowElement.style.transform =
+                `translate(
+                    ${p.ax + dx}px,
+                    ${p.ay + dy}px
+                )`;
+
+            arrowElement.style.opacity =
+                "0";
+        }
+
+
+        /* -----------------------------------------------
+           CONSOLIDA REMOÇÃO
+           ----------------------------------------------- */
+
+        levelTimeout(
+            () => {
+
+                if (
+                    GAME.currentLevel !== 11
+                ) return;
+
+                p.removed = true;
+
+
+                /* -------------------------------------------
+                   LIBERA FILHOS
+                   ------------------------------------------- */
+
+                paths.forEach(child => {
+
+                    if (
+                        child.parent === p.id
+                    ) {
+                        child.free = true;
+                    }
+                });
+
+
+                busy = false;
+
+
+                /* -------------------------------------------
+                   TUDO TERMINOU
+                   ------------------------------------------- */
+
+                if (
+                    paths.every(
+                        x => x.removed
+                    )
+                ) {
+
+                    checkComplete();
+
                     return;
                 }
-                b.classList.add("lit");
-                feedbackCorrect();
-                GAME.state.revIdx++;
-                if (GAME.state.revIdx >= GAME.state.revSeq.length) completeLevel();
-            });
-        });
-    }, 3600));
+
+
+                /* -------------------------------------------
+                   REDESENHA
+                   ------------------------------------------- */
+
+                drawMaze();
+
+
+                /* -------------------------------------------
+                   CAMINHO AUTOMÁTICO
+                   ------------------------------------------- */
+
+                const autoPath =
+                    paths.find(
+                        x =>
+                            !x.removed &&
+                            x.free &&
+                            x.auto
+                    );
+
+                if (autoPath) {
+
+                    levelTimeout(
+                        () => {
+
+                            if (
+                                GAME.currentLevel !== 11 ||
+                                busy ||
+                                finished
+                            ) {
+                                return;
+                            }
+
+                            removePath(
+                                autoPath
+                            );
+
+                        },
+                        180,
+                        11
+                    );
+                }
+
+                checkComplete();
+
+            },
+            650,
+            11
+        );
+    }
+
+
+    /* --------------------------------------------------------
+       CONTROLE
+       -------------------------------------------------------- */
+
+    function handleArrow(p) {
+
+        if (!p.free) {
+            handleWrongArrow(p);
+            return;
+        }
+
+        removePath(p);
+    }
+
+
+    /* --------------------------------------------------------
+       PRIMEIRO DESENHO
+       -------------------------------------------------------- */
+
+    drawMaze();
 }
+
+
+/* ============================================================
+   NÍVEL 12
+   ============================================================ */
+
+function renderLevel12() {
+
+    DOM.levelQuestion.textContent =
+        "Segure exatamente por 2 segundos.";
+
+    const w =
+        document.createElement("div");
+
+    w.style.cssText =
+        "display:flex;flex-direction:column;align-items:center;gap:20px";
+
+    const b =
+        document.createElement("button");
+
+    b.className =
+        "hold-btn-12";
+
+    b.textContent =
+        "SEGURE";
+
+    let st = 0;
+    let hd = false;
+
+    b.addEventListener(
+        "pointerdown",
+        () => {
+
+            if (GAME.currentLevel !== 12) return;
+
+            hd = true;
+            st = Date.now();
+
+            b.style.background =
+                "#ff3b30";
+
+            b.textContent =
+                "SOLTE...";
+        }
+    );
+
+    const rel = () => {
+
+        if (
+            !hd ||
+            GAME.currentLevel !== 12
+        ) return;
+
+        hd = false;
+
+        const d =
+            (Date.now() - st) / 1000;
+
+        b.style.background =
+            "#246bff";
+
+        b.textContent =
+            "SEGURE";
+
+        if (
+            d >= 1.8 &&
+            d <= 2.2
+        ) {
+            completeLevel();
+        } else {
+            failLevel();
+        }
+    };
+
+    b.addEventListener(
+        "pointerup",
+        rel
+    );
+
+    b.addEventListener(
+        "pointercancel",
+        rel
+    );
+
+    w.appendChild(b);
+
+    DOM.levelContent.appendChild(w);
+}
+
+
+/* ============================================================
+   NÍVEL 13
+   ============================================================ */
+
+function renderLevel13() {
+
+    DOM.levelQuestion.textContent =
+        "Toque no momento exato do pulso.";
+
+    const w =
+        document.createElement("div");
+
+    w.style.cssText =
+        "display:flex;flex-direction:column;align-items:center;gap:25px";
+
+    const t =
+        document.createElement("div");
+
+    t.className =
+        "rhythm-target-13";
+
+    const p =
+        document.createElement("div");
+
+    p.className =
+        "rhythm-pulse-13";
+
+    t.appendChild(p);
+
+    const a =
+        document.createElement("button");
+
+    a.className =
+        "blue-choice";
+
+    a.style.width =
+        "180px";
+
+    a.textContent =
+        "APERTAR";
+
+    a.addEventListener(
+        "pointerup",
+        () => {
+
+            if (GAME.currentLevel !== 13) return;
+
+            const e =
+                Date.now() % 1200;
+
+            if (
+                e >= 450 &&
+                e <= 750
+            ) {
+                completeLevel();
+            } else {
+                failLevel();
+            }
+        }
+    );
+
+    w.appendChild(t);
+    w.appendChild(a);
+
+    DOM.levelContent.appendChild(w);
+}
+
+
+/* ============================================================
+   NÍVEL 14
+   ============================================================ */
+
+function renderLevel14() {
+
+    DOM.levelQuestion.textContent =
+        "Memorize e toque na ordem REVERSA.";
+
+    const w =
+        document.createElement("div");
+
+    w.className =
+        "reverse-grid-14";
+
+    const seq = [
+        0,
+        2,
+        3,
+        1
+    ];
+
+    const btns = [];
+
+    for (let i = 0; i < 4; i++) {
+
+        const b =
+            document.createElement("button");
+
+        b.className =
+            "rev-btn-14";
+
+        b.textContent =
+            i + 1;
+
+        btns.push(b);
+
+        w.appendChild(b);
+    }
+
+    DOM.levelContent.appendChild(w);
+
+    GAME.state.revSeq =
+        [...seq].reverse();
+
+    GAME.state.revIdx =
+        0;
+
+    seq.forEach((id, s) => {
+
+        levelTimeout(
+            () => {
+
+                if (GAME.currentLevel !== 14) return;
+
+                btns[id].classList.add(
+                    "lit"
+                );
+
+                levelTimeout(
+                    () => {
+
+                        if (
+                            GAME.currentLevel !== 14
+                        ) return;
+
+                        btns[id].classList.remove(
+                            "lit"
+                        );
+
+                    },
+                    400,
+                    14
+                );
+
+            },
+            (s + 1) * 700,
+            14
+        );
+    });
+
+    levelTimeout(
+        () => {
+
+            if (GAME.currentLevel !== 14) return;
+
+            DOM.levelQuestion.textContent =
+                "Toque de trás para frente!";
+
+            btns.forEach((b, i) => {
+
+                b.addEventListener(
+                    "pointerup",
+                    () => {
+
+                        if (
+                            GAME.currentLevel !== 14
+                        ) return;
+
+                        if (
+                            i !==
+                            GAME.state.revSeq[
+                                GAME.state.revIdx
+                            ]
+                        ) {
+
+                            failLevel();
+
+                            return;
+                        }
+
+                        b.classList.add(
+                            "lit"
+                        );
+
+                        feedbackCorrect();
+
+                        GAME.state.revIdx++;
+
+                        if (
+                            GAME.state.revIdx >=
+                            GAME.state.revSeq.length
+                        ) {
+                            completeLevel();
+                        }
+                    }
+                );
+            });
+
+        },
+        3600,
+        14
+    );
+}
+
+
+/* ============================================================
+   NÍVEL 15
+   ============================================================ */
 
 function renderLevel15() {
-    DOM.levelQuestion.textContent = "Encontre a saída secreta.";
-    const w = document.createElement("div");
-    w.className = "blind-pixel-area-15";
-    const p = document.createElement("div");
-    p.className = "blind-pixel-15";
+
+    DOM.levelQuestion.textContent =
+        "Encontre a saída secreta.";
+
+    const w =
+        document.createElement("div");
+
+    w.className =
+        "blind-pixel-area-15";
+
+    const p =
+        document.createElement("div");
+
+    p.className =
+        "blind-pixel-15";
+
     w.appendChild(p);
+
     DOM.levelContent.appendChild(w);
-    p.addEventListener("pointerup", completeLevel);
+
+    p.addEventListener(
+        "pointerup",
+        () => {
+
+            if (GAME.currentLevel !== 15) return;
+
+            completeLevel();
+        }
+    );
 }
+
+
+/* ============================================================
+   NÍVEL 16
+   ============================================================ */
 
 function renderLevel16() {
-    DOM.levelQuestion.textContent = "Arraste o botão para fora da tela.";
-    const w = document.createElement("div");
-    w.style.cssText = "position:absolute;inset:0";
-    const b = document.createElement("button");
-    b.className = "drag-out-btn-16";
-    b.textContent = "ARRASTE-ME";
-    b.style.left = "calc(50% - 70px)";
-    b.style.top = "calc(50% - 30px)";
+
+    DOM.levelQuestion.textContent =
+        "Arraste o botão para fora da tela.";
+
+    const w =
+        document.createElement("div");
+
+    w.style.cssText =
+        "position:absolute;inset:0";
+
+    const b =
+        document.createElement("button");
+
+    b.className =
+        "drag-out-btn-16";
+
+    b.textContent =
+        "ARRASTE-ME";
+
+    b.style.left =
+        "calc(50% - 70px)";
+
+    b.style.top =
+        "calc(50% - 30px)";
+
     w.appendChild(b);
+
     DOM.levelContent.appendChild(w);
-    b.addEventListener("pointerdown", e => {
-        b.setPointerCapture(e.pointerId);
-        const sx = e.clientX, sy = e.clientY;
-        const r = b.getBoundingClientRect();
-        const mv = em => {
-            b.style.left = (r.left + (em.clientX - sx)) + "px";
-            b.style.top = (r.top + (em.clientY - sy)) + "px";
-        };
-        const up = em => {
-            b.releasePointerCapture(em.pointerId);
-            b.removeEventListener("pointermove", mv);
-            b.removeEventListener("pointerup", up);
-            const cur = b.getBoundingClientRect();
-            if (cur.left < 10 || cur.right > window.innerWidth - 10 || cur.top < 50 || cur.bottom > window.innerHeight - 10) completeLevel();
-            else {
-                b.style.left = "calc(50% - 70px)";
-                b.style.top = "calc(50% - 30px)";
-            }
-        };
-        b.addEventListener("pointermove", mv);
-        b.addEventListener("pointerup", up);
-    });
+
+    b.addEventListener(
+        "pointerdown",
+        e => {
+
+            if (GAME.currentLevel !== 16) return;
+
+            b.setPointerCapture(
+                e.pointerId
+            );
+
+            const sx =
+                e.clientX;
+
+            const sy =
+                e.clientY;
+
+            const r =
+                b.getBoundingClientRect();
+
+            const mv = em => {
+
+                if (GAME.currentLevel !== 16) return;
+
+                b.style.left =
+                    (
+                        r.left +
+                        (em.clientX - sx)
+                    ) + "px";
+
+                b.style.top =
+                    (
+                        r.top +
+                        (em.clientY - sy)
+                    ) + "px";
+            };
+
+            const up = em => {
+
+                b.releasePointerCapture(
+                    em.pointerId
+                );
+
+                b.removeEventListener(
+                    "pointermove",
+                    mv
+                );
+
+                b.removeEventListener(
+                    "pointerup",
+                    up
+                );
+
+                if (GAME.currentLevel !== 16) return;
+
+                const cur =
+                    b.getBoundingClientRect();
+
+                if (
+                    cur.left < 10 ||
+                    cur.right >
+                        window.innerWidth - 10 ||
+                    cur.top < 50 ||
+                    cur.bottom >
+                        window.innerHeight - 10
+                ) {
+
+                    completeLevel();
+
+                } else {
+
+                    b.style.left =
+                        "calc(50% - 70px)";
+
+                    b.style.top =
+                        "calc(50% - 30px)";
+                }
+            };
+
+            b.addEventListener(
+                "pointermove",
+                mv
+            );
+
+            b.addEventListener(
+                "pointerup",
+                up
+            );
+        }
+    );
 }
+
+
+/* ============================================================
+   NÍVEL 17
+   ============================================================ */
 
 function renderLevel17() {
-    DOM.levelQuestion.textContent = "Toque apenas nos círculos.";
-    const w = document.createElement("div");
-    w.className = "exclusion-field-17";
+
+    DOM.levelQuestion.textContent =
+        "Toque apenas nos círculos.";
+
+    const w =
+        document.createElement("div");
+
+    w.className =
+        "exclusion-field-17";
+
+    /*
+     * O nível possui exatamente 3 círculos.
+     */
     let left = 3;
+
     const items = [
-        { t: "circle", x: 30, y: 40 },
-        { t: "square", x: 120, y: 70 },
-        { t: "circle", x: 220, y: 30 },
-        { t: "square", x: 80, y: 160 },
-        { t: "circle", x: 260, y: 180 }
+        { t:"circle", x:30,  y:40 },
+        { t:"square", x:120, y:70 },
+        { t:"circle", x:220, y:30 },
+        { t:"square", x:80,  y:160 },
+        { t:"circle", x:260, y:180 }
     ];
+
     items.forEach(it => {
-        const e = document.createElement("div");
-        e.className = "exc-item " + (it.t === "circle" ? "exc-circle" : "exc-square");
-        e.style.left = it.x + "px";
-        e.style.top = it.y + "px";
+
+        const e =
+            document.createElement("div");
+
+        e.className =
+            "exc-item " +
+            (
+                it.t === "circle"
+                    ? "exc-circle"
+                    : "exc-square"
+            );
+
+        e.style.left =
+            it.x + "px";
+
+        e.style.top =
+            it.y + "px";
+
         w.appendChild(e);
-        e.addEventListener("pointerup", () => {
-            if (it.t === "square") failLevel();
-            else if (!e.disabled) {
-                e.disabled = true;
-                e.style.display = "none";
-                left--;
-                feedbackCorrect();
-                if (left === 0) completeLevel();
+
+        e.addEventListener(
+            "pointerup",
+            () => {
+
+                if (GAME.currentLevel !== 17) return;
+
+                if (
+                    it.t === "square"
+                ) {
+
+                    failLevel();
+
+                } else if (
+                    e.dataset.clicked !== "true"
+                ) {
+
+                    e.dataset.clicked =
+                        "true";
+
+                    e.style.display =
+                        "none";
+
+                    left--;
+
+                    feedbackCorrect();
+
+                    if (left === 0) {
+                        completeLevel();
+                    }
+                }
             }
-        });
+        );
     });
+
     DOM.levelContent.appendChild(w);
 }
+
+
+/* ============================================================
+   NÍVEL 18
+   ============================================================ */
 
 function renderLevel18() {
-    DOM.levelQuestion.textContent = "Toque no botão fujão.";
-    const w = document.createElement("div");
-    w.style.cssText = "position:absolute;inset:0";
-    const b = document.createElement("button");
-    b.className = "escaping-btn-18";
-    b.textContent = "PEGUE-ME";
-    b.style.left = "calc(50% - 65px)";
-    b.style.top = "calc(50% - 30px)";
+
+    DOM.levelQuestion.textContent =
+        "Toque no botão fujão.";
+
+    const w =
+        document.createElement("div");
+
+    w.style.cssText =
+        "position:absolute;inset:0";
+
+    const b =
+        document.createElement("button");
+
+    b.className =
+        "escaping-btn-18";
+
+    b.textContent =
+        "PEGUE-ME";
+
+    b.style.left =
+        "calc(50% - 65px)";
+
+    b.style.top =
+        "calc(50% - 30px)";
+
     w.appendChild(b);
+
     DOM.levelContent.appendChild(w);
+
     let esc = 0;
-    b.addEventListener("pointerdown", e => {
-        e.preventDefault();
-        esc++;
-        if (esc >= 3) completeLevel();
-        else flee();
-    });
+
+    b.addEventListener(
+        "pointerdown",
+        e => {
+
+            e.preventDefault();
+
+            if (GAME.currentLevel !== 18) return;
+
+            esc++;
+
+            if (esc >= 3) {
+                completeLevel();
+            } else {
+                flee();
+            }
+        }
+    );
+
     function flee() {
-        b.style.left = Math.random() * (window.innerWidth - 150) + "px";
-        b.style.top = Math.random() * (window.innerHeight - 200) + 80 + "px";
+
+        const maxX =
+            Math.max(
+                0,
+                window.innerWidth - 150
+            );
+
+        const maxY =
+            Math.max(
+                80,
+                window.innerHeight - 200
+            );
+
+        b.style.left =
+            Math.random() *
+            maxX +
+            "px";
+
+        b.style.top =
+            (
+                Math.random() *
+                (maxY - 80) +
+                80
+            ) + "px";
     }
 }
+
+
+/* ============================================================
+   NÍVEL 19
+   ============================================================ */
 
 function renderLevel19() {
-    DOM.levelQuestion.textContent = "Encontre o caractere diferente.";
-    const w = document.createElement("div");
-    w.className = "intruder-grid-19";
-    const ti = Math.floor(Math.random() * 25);
+
+    DOM.levelQuestion.textContent =
+        "Encontre o caractere diferente.";
+
+    const w =
+        document.createElement("div");
+
+    w.className =
+        "intruder-grid-19";
+
+    const ti =
+        Math.floor(
+            Math.random() * 25
+        );
+
     for (let i = 0; i < 25; i++) {
-        const c = document.createElement("button");
-        c.className = "intruder-cell";
-        c.textContent = (i === ti ? "X" : "O");
+
+        const c =
+            document.createElement("button");
+
+        c.className =
+            "intruder-cell";
+
+        c.textContent =
+            i === ti
+                ? "X"
+                : "O";
+
         w.appendChild(c);
-        c.addEventListener("pointerup", () => {
-            if (i === ti) completeLevel();
-            else failLevel();
-        });
+
+        c.addEventListener(
+            "pointerup",
+            () => {
+
+                if (GAME.currentLevel !== 19) return;
+
+                if (i === ti)
+                    completeLevel();
+                else
+                    failLevel();
+            }
+        );
     }
+
     DOM.levelContent.appendChild(w);
 }
+
+
+/* ============================================================
+   NÍVEL 20
+   ============================================================ */
 
 function renderLevel20() {
-    DOM.levelQuestion.textContent = "Qual era a forma do Nível 1?";
-    const w = document.createElement("div");
-    w.className = "recall-grid-20";
+
+    DOM.levelQuestion.textContent =
+        "Qual era a forma do Nível 1?";
+
+    const w =
+        document.createElement("div");
+
+    w.className =
+        "recall-grid-20";
+
     for (let i = 0; i < 4; i++) {
-        const b = document.createElement("button");
-        b.className = "recall-shape-btn";
-        const s = document.createElement("div");
-        s.className = "recall-mini-shape";
-        if (i === 1) s.style.clipPath = "polygon(0% 0%,100% 0%,100% 50%,82% 100%,65% 60%,50% 95%,35% 60%,18% 100%,0% 50%)";
-        else if (i === 0) s.style.clipPath = "polygon(0% 0%,100% 0%,100% 100%,0% 100%)";
-        else if (i === 2) s.style.clipPath = "polygon(50% 0%,100% 100%,0% 100%)";
-        else s.style.clipPath = "polygon(0% 20%,100% 0%,100% 80%,0% 100%)";
+
+        const b =
+            document.createElement("button");
+
+        b.className =
+            "recall-shape-btn";
+
+        const s =
+            document.createElement("div");
+
+        s.className =
+            "recall-mini-shape";
+
+        if (i === 1) {
+
+            s.style.clipPath =
+                "polygon(" +
+                "0% 0%,100% 0%,100% 50%," +
+                "82% 100%,65% 60%,50% 95%," +
+                "35% 60%,18% 100%,0% 50%" +
+                ")";
+
+        } else if (i === 0) {
+
+            s.style.clipPath =
+                "polygon(" +
+                "0% 0%,100% 0%,100% 100%,0% 100%" +
+                ")";
+
+        } else if (i === 2) {
+
+            s.style.clipPath =
+                "polygon(" +
+                "50% 0%,100% 100%,0% 100%" +
+                ")";
+
+        } else {
+
+            s.style.clipPath =
+                "polygon(" +
+                "0% 20%,100% 0%,100% 80%,0% 100%" +
+                ")";
+        }
+
         b.appendChild(s);
         w.appendChild(b);
-        b.addEventListener("pointerup", () => {
-            if (i === 1) completeLevel();
-            else failLevel();
-        });
+
+        b.addEventListener(
+            "pointerup",
+            () => {
+
+                if (GAME.currentLevel !== 20) return;
+
+                if (i === 1)
+                    completeLevel();
+                else
+                    failLevel();
+            }
+        );
     }
+
     DOM.levelContent.appendChild(w);
 }
+
+
+/* ============================================================
+   NÍVEIS NÃO IMPLEMENTADOS
+   ============================================================ */
 
 function renderUnimplementedLevel(n, l) {
-    const w = document.createElement("div");
-    w.style.cssText = "text-align:center;width:100%";
-    w.innerHTML = `<div>${l.name}</div><div style="font-size:12px;opacity:.5;margin-top:20px">MECÂNICA RESERVADA</div><button class="blue-choice" style="display:block;width:180px;margin:30px auto 0">TESTAR</button>`;
+
+    const w =
+        document.createElement("div");
+
+    w.style.cssText =
+        "text-align:center;width:100%";
+
+    w.innerHTML = `
+        <div>${l.name}</div>
+
+        <div
+            style="
+                font-size:12px;
+                opacity:.5;
+                margin-top:20px
+            "
+        >
+            MECÂNICA RESERVADA
+        </div>
+
+        <button
+            class="blue-choice"
+            style="
+                display:block;
+                width:180px;
+                margin:30px auto 0
+            "
+        >
+            TESTAR
+        </button>
+    `;
+
     DOM.levelContent.appendChild(w);
-    w.querySelector("button").addEventListener("pointerup", completeLevel);
+
+    w.querySelector("button")
+        .addEventListener(
+            "pointerup",
+            () => {
+
+                if (
+                    GAME.currentLevel !== n
+                ) return;
+
+                completeLevel();
+            }
+        );
 }
+
+
+/* ============================================================
+   FINAL DO JOGO
+   ============================================================ */
 
 function finishGame() {
+
     clearLevelTimers();
-    showOverlay("PARABÉNS", "Você concluiu o MEMORY TRAP!", "REINICIAR", () => {
-        closeOverlay();
-        goHome();
-    });
+
+    GAME.finished = true;
+
+    showOverlay(
+        "PARABÉNS",
+        "Você concluiu o MEMORY TRAP!",
+        "REINICIAR",
+        () => {
+
+            GAME.finished = false;
+
+            closeOverlay();
+
+            goHome();
+        }
+    );
 }
+
+
+/* ============================================================
+   CONFIGURAÇÕES
+   ============================================================ */
 
 function updateSettingsUI() {
-    DOM.soundButton.textContent = CONFIG.SOUND_ENABLED ? "ON" : "OFF";
-    DOM.vibrationButton.textContent = CONFIG.VIBRATION_ENABLED ? "ON" : "OFF";
+
+    DOM.soundButton.textContent =
+        CONFIG.SOUND_ENABLED
+            ? "ON"
+            : "OFF";
+
+    DOM.vibrationButton.textContent =
+        CONFIG.VIBRATION_ENABLED
+            ? "ON"
+            : "OFF";
 }
 
-DOM.soundButton.addEventListener("pointerup", () => {
-    CONFIG.SOUND_ENABLED = !CONFIG.SOUND_ENABLED;
-    updateSettingsUI();
-});
-DOM.vibrationButton.addEventListener("pointerup", () => {
-    CONFIG.VIBRATION_ENABLED = !CONFIG.VIBRATION_ENABLED;
-    updateSettingsUI();
-});
-DOM.startButton.addEventListener("pointerup", startGame);
-DOM.menuButton.addEventListener("pointerup", () => { showScreen(DOM.settingsScreen); });
-DOM.backButton.addEventListener("pointerup", () => {
-    showScreen(DOM.homeScreen);
-    startHallAnimation();
-});
+DOM.soundButton.addEventListener(
+    "pointerup",
+    () => {
 
-document.addEventListener("contextmenu", e => e.preventDefault());
-document.addEventListener("touchmove", e => { if (e.cancelable) e.preventDefault(); }, { passive: false });
+        CONFIG.SOUND_ENABLED =
+            !CONFIG.SOUND_ENABLED;
+
+        updateSettingsUI();
+    }
+);
+
+DOM.vibrationButton.addEventListener(
+    "pointerup",
+    () => {
+
+        CONFIG.VIBRATION_ENABLED =
+            !CONFIG.VIBRATION_ENABLED;
+
+        updateSettingsUI();
+    }
+);
+
+DOM.startButton.addEventListener(
+    "pointerup",
+    startGame
+);
+
+DOM.menuButton.addEventListener(
+    "pointerup",
+    () => {
+
+        clearLevelTimers();
+
+        showScreen(
+            DOM.settingsScreen
+        );
+    }
+);
+
+DOM.backButton.addEventListener(
+    "pointerup",
+    () => {
+
+        clearLevelTimers();
+
+        showScreen(
+            DOM.homeScreen
+        );
+
+        startHallAnimation();
+    }
+);
+
+
+/* ============================================================
+   PROTEÇÕES DE TOQUE
+   ============================================================ */
+
+document.addEventListener(
+    "contextmenu",
+    e => e.preventDefault()
+);
+
+document.addEventListener(
+    "touchmove",
+    e => {
+
+        if (e.cancelable) {
+            e.preventDefault();
+        }
+
+    },
+    { passive: false }
+);
+
+
+/* ============================================================
+   INIT
+   ============================================================ */
 
 function init() {
+
     updateLives();
     renderHall();
     updateSettingsUI();
     startHallAnimation();
 }
+
 init();
 </script>
 </body>
-</html>
+    </html>
