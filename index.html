@@ -60,10 +60,10 @@ button {
 .logo-sub { display: block; margin-top: 6px; font-size: clamp(14px, 3.8vw, 22px); font-weight: 700; letter-spacing: .45em; padding-left: .45em; }
 .logo-line { width: min(200px, 50vw); height: 1px; margin: 10px auto 0; background: rgba(255,255,255,.45); }
 
-/* VIDAS (VERMELHO VIBRANTE #ff3b30) */
-.lives { display: flex; justify-content: center; align-items: center; gap: 12px; }
+/* VIDAS (VERMELHO VIBRANTE #ff3b30 COM ESPAÇAMENTO ADEQUADO) */
+.lives { display: flex; justify-content: center; align-items: center; gap: 26px; }
 .home-lives { margin: auto 0; }
-.heart { position: relative; width: 22px; height: 22px; transform: rotate(-45deg); border-radius: 3px; background: #ff3b30; }
+.heart { position: relative; width: 22px; height: 22px; transform: rotate(-45deg); border-radius: 3px; background: #ff3b30; margin: 0 4px; }
 .heart::before, .heart::after { content: ""; position: absolute; width: 22px; height: 22px; border-radius: 50%; background: #ff3b30; }
 .heart::before { top: -11px; left: 0; }
 .heart::after { top: 0; left: 11px; }
@@ -164,11 +164,21 @@ button {
 .red-trap-btn { min-height: 65px; border: 1px solid rgba(255,255,255,.25); border-radius: 14px; }
 #secretRedTarget { cursor: pointer; }
 
-/* ESTILOS DOS NÍVEIS 11 A 20 */
-.arrow-grid-11 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: min(320px, 90vw); }
-.arrow-item-11 { min-height: 60px; background: #246bff; border-radius: 10px; font-size: 24px; display: flex; align-items: center; justify-content: center; }
-.arrow-item-11.blocked { background: #444; opacity: 0.7; }
+/* NÍVEL 11 (Labirinto de Setas Brancas em Fundo Preto) */
+.labyrinth-container-11 {
+    position: relative; width: min(340px, 92vw); height: 340px;
+    background: #000; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px;
+    display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+    gap: 12px; padding: 15px;
+}
+.lab-arrow-btn {
+    background: #111; border: 1px solid rgba(255,255,255,0.3); border-radius: 10px;
+    font-size: 32px; color: #fff; display: flex; align-items: center; justify-content: center;
+    transition: transform 0.4s ease, opacity 0.4s ease; cursor: pointer;
+}
+.lab-arrow-btn:active { transform: scale(0.95); }
 
+/* ESTILOS DOS NÍVEIS 12 a 20 */
 .hold-btn-12 { width: 140px; height: 140px; border-radius: 50%; background: #246bff; border: 4px solid #fff; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
 
 .rhythm-target-13 { position: relative; width: 120px; height: 120px; border-radius: 50%; border: 3px dashed #246bff; display: flex; align-items: center; justify-content: center; }
@@ -275,7 +285,7 @@ const LEVELS = {
     1: { type: "broken-shape" }, 2: { type: "grid" }, 3: { type: "direct-answer" }, 4: { type: "pi" },
     5: { type: "count-circles" }, 6: { type: "appearing-circles" }, 7: { type: "no-number-rats", hiddenNumber: true },
     8: { type: "color-memory" }, 9: { type: "arrow-memory" }, 10: { type: "camouflaged-command" },
-    11: { type: "clean-arrows" }, 12: { type: "hold-two-seconds" }, 13: { type: "circle-rhythm" },
+    11: { type: "labyrinth-arrows" }, 12: { type: "hold-two-seconds" }, 13: { type: "circle-rhythm" },
     14: { type: "reverse-order" }, 15: { type: "blind-pixel" }, 16: { type: "drag-outside" },
     17: { type: "circle-exclusion" }, 18: { type: "escaping-button" }, 19: { type: "letter-intruder" },
     20: { type: "level1-recall", special: true }
@@ -395,7 +405,7 @@ function renderLevel(number, level) {
         case "count-circles": renderLevel5(); break; case "appearing-circles": renderLevel6(); break;
         case "no-number-rats": renderLevel7(); break; case "color-memory": renderLevel8(); break;
         case "arrow-memory": renderLevel9(); break; case "camouflaged-command": renderLevel10(); break;
-        case "clean-arrows": renderLevel11(); break; case "hold-two-seconds": renderLevel12(); break;
+        case "labyrinth-arrows": renderLevel11(); break; case "hold-two-seconds": renderLevel12(); break;
         case "circle-rhythm": renderLevel13(); break; case "reverse-order": renderLevel14(); break;
         case "blind-pixel": renderLevel15(); break; case "drag-outside": renderLevel16(); break;
         case "circle-exclusion": renderLevel17(); break; case "escaping-button": renderLevel18(); break;
@@ -656,44 +666,50 @@ function renderLevel10() {
     }, 50);
 }
 
-/* NÍVEL 11: Limpe a tela (toque nas setas certas; bloqueadas tiram vida mas ficam) */
+/* NÍVEL 11: Labirinto de setas (Fundo preto, setas brancas, ao apertar sai da tela, bloqueadas perdem vida) */
 function renderLevel11() {
-    DOM.levelQuestion.textContent = "Limpe a tela (toque apenas nas setas ativas).";
-    const wrap = document.createElement("div"); wrap.className = "arrow-grid-11";
-    let remainingCorrect = 4;
+    DOM.levelQuestion.textContent = "Limpe o labirinto de setas.";
+    const wrap = document.createElement("div"); wrap.className = "labyrinth-container-11";
     
-    const items = [
-        { type: "correct", text: "↑" },
-        { type: "blocked", text: "✖" },
-        { type: "correct", text: "→" },
-        { type: "blocked", text: "✖" },
-        { type: "correct", text: "↓" },
-        { type: "blocked", text: "✖" },
-        { type: "blocked", text: "✖" },
-        { type: "correct", text: "←" },
-        { type: "blocked", text: "✖" }
+    // Configuração de setas: 9 itens no grid 3x3.
+    // Algumas são válidas (caminho livre para sair), outras são bloqueadas.
+    const arrowsData = [
+        { id: 0, text: "←", blocked: false, slide: "-120px, 0" },
+        { id: 1, text: "↑", blocked: true, slide: "0, 0" },
+        { id: 2, text: "→", blocked: false, slide: "120px, 0" },
+        { id: 3, text: "↓", blocked: true, slide: "0, 0" },
+        { id: 4, text: "→", blocked: false, slide: "120px, 0" },
+        { id: 5, text: "↑", blocked: true, slide: "0, 0" },
+        { id: 6, text: "←", blocked: false, slide: "-120px, 0" },
+        { id: 7, text: "↓", blocked: true, slide: "0, 0" },
+        { id: 8, text: "→", blocked: false, slide: "120px, 0" }
     ];
 
-    items.forEach(item => {
+    let remainingValid = arrowsData.filter(a => !a.blocked).length;
+
+    arrowsData.forEach(item => {
         const btn = document.createElement("button");
-        btn.className = "arrow-item-11 " + (item.type === "blocked" ? "blocked" : "");
+        btn.className = "lab-arrow-btn";
         btn.textContent = item.text;
         wrap.appendChild(btn);
 
         btn.addEventListener("pointerup", () => {
-            if (item.type === "blocked") {
+            if (btn.disabled) return;
+            if (item.blocked) {
                 failLevel();
-            } else if (!btn.disabled) {
+            } else {
                 btn.disabled = true;
-                btn.style.opacity = "0.2";
-                remainingCorrect--;
                 feedbackCorrect();
-                if (remainingCorrect === 0) {
-                    completeLevel();
+                btn.style.transform = `translate(${item.slide})`;
+                btn.style.opacity = "0";
+                remainingValid--;
+                if (remainingValid === 0) {
+                    setTimeout(completeLevel, 400);
                 }
             }
         });
     });
+
     DOM.levelContent.appendChild(wrap);
 }
 
@@ -704,7 +720,7 @@ function renderLevel12() {
     wrap.style.cssText = "display:flex; flex-direction:column; align-items:center; gap:20px;";
     
     const btn = document.createElement("button"); btn.className = "hold-btn-12"; btn.textContent = "SEGURE";
-    let startTime = 0; let timerRef = null; let held = false;
+    let startTime = 0; let held = false;
 
     btn.addEventListener("pointerdown", () => {
         held = true; startTime = Date.now();
@@ -743,9 +759,7 @@ function renderLevel13() {
     const actionBtn = document.createElement("button"); actionBtn.className = "blue-choice"; actionBtn.style.width = "180px"; actionBtn.textContent = "APERTAR";
     
     actionBtn.addEventListener("pointerup", () => {
-        // Verifica escala atual do pulso por tempo relativo
         const elapsed = (Date.now() % 1200);
-        // Janela de acerto propeça perto do pico (entre 500ms e 700ms)
         if (elapsed >= 450 && elapsed <= 750) {
             completeLevel();
         } else {
@@ -761,7 +775,7 @@ function renderLevel13() {
 function renderLevel14() {
     DOM.levelQuestion.textContent = "Memorize e toque na ordem REVERSA.";
     const wrap = document.createElement("div"); wrap.className = "reverse-grid-14";
-    const sequence = [0, 2, 3, 1]; // índices
+    const sequence = [0, 2, 3, 1];
     const buttons = [];
 
     for (let i = 0; i < 4; i++) {
@@ -770,10 +784,9 @@ function renderLevel14() {
     }
     DOM.levelContent.appendChild(wrap);
 
-    GAME.state.revSeq = [...sequence].reverse(); // ordem reversa esperada
+    GAME.state.revSeq = [...sequence].reverse();
     GAME.state.revIdx = 0;
 
-    // Exibe sequência acendendo
     sequence.forEach((idx, step) => {
         addLevelTimer(setTimeout(() => {
             buttons[idx].classList.add("lit");
@@ -928,18 +941,16 @@ function renderLevel19() {
     DOM.levelContent.appendChild(wrap);
 }
 
-/* NÍVEL 20: ESPECIAL — Qual era a forma geométrica quebrada do Nível 1? */
+/* NÍVEL 20: ESPECIAL — Recall do Nível 1 */
 function renderLevel20() {
     DOM.levelQuestion.textContent = "Qual era a forma geométrica quebrada do Nível 1?";
     const wrap = document.createElement("div"); wrap.className = "recall-grid-20";
     
-    // 4 opções de formas geométricas
     for (let i = 0; i < 4; i++) {
         const btn = document.createElement("button"); btn.className = "recall-shape-btn";
         const shape = document.createElement("div"); shape.className = "recall-mini-shape";
-        // Variações de clip-path
         if (i === 1) {
-            shape.style.clipPath = "polygon(0% 0%, 100% 0%, 100% 50%, 82% 100%, 65% 60%, 50% 95%, 35% 60%, 18% 100%, 0% 50%)"; // Correta do Nível 1
+            shape.style.clipPath = "polygon(0% 0%, 100% 0%, 100% 50%, 82% 100%, 65% 60%, 50% 95%, 35% 60%, 18% 100%, 0% 50%)";
         } else if (i === 0) {
             shape.style.clipPath = "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)";
         } else if (i === 2) {
