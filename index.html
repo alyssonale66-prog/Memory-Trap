@@ -60,10 +60,10 @@ button {
 .logo-sub { display: block; margin-top: 6px; font-size: clamp(14px, 3.8vw, 22px); font-weight: 700; letter-spacing: .45em; padding-left: .45em; }
 .logo-line { width: min(200px, 50vw); height: 1px; margin: 10px auto 0; background: rgba(255,255,255,.45); }
 
-/* VIDAS (VERMELHO VIBRANTE #ff3b30 COM ESPAÇAMENTO ADEQUADO) */
-.lives { display: flex; justify-content: center; align-items: center; gap: 26px; }
+/* VIDAS (VERMELHO VIBRANTE #ff3b30 COM ESPAÇAMENTO CLARO ENTRE ELAS EM TODAS AS TELAS) */
+.lives { display: flex; justify-content: center; align-items: center; gap: 16px; }
 .home-lives { margin: auto 0; }
-.heart { position: relative; width: 22px; height: 22px; transform: rotate(-45deg); border-radius: 3px; background: #ff3b30; margin: 0 4px; }
+.heart { position: relative; width: 22px; height: 22px; transform: rotate(-45deg); border-radius: 3px; background: #ff3b30; margin: 0 6px; }
 .heart::before, .heart::after { content: ""; position: absolute; width: 22px; height: 22px; border-radius: 50%; background: #ff3b30; }
 .heart::before { top: -11px; left: 0; }
 .heart::after { top: 0; left: 11px; }
@@ -164,19 +164,19 @@ button {
 .red-trap-btn { min-height: 65px; border: 1px solid rgba(255,255,255,.25); border-radius: 14px; }
 #secretRedTarget { cursor: pointer; }
 
-/* NÍVEL 11 (Labirinto de Setas Brancas em Fundo Preto) */
-.labyrinth-container-11 {
-    position: relative; width: min(340px, 92vw); height: 340px;
+/* NÍVEL 11: Labirinto Complexo de Setas Brancas em Fundo Preto */
+.arrow-labyrinth-11 {
+    position: relative; width: min(340px, 92vw); height: 320px;
     background: #000; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px;
-    display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
-    gap: 12px; padding: 15px;
+    overflow: hidden; margin: 0 auto;
 }
-.lab-arrow-btn {
-    background: #111; border: 1px solid rgba(255,255,255,0.3); border-radius: 10px;
-    font-size: 32px; color: #fff; display: flex; align-items: center; justify-content: center;
-    transition: transform 0.4s ease, opacity 0.4s ease; cursor: pointer;
+.lab-arrow-node {
+    position: absolute; width: 44px; height: 44px;
+    background: #111; border: 1px solid rgba(255,255,255,0.4); border-radius: 8px;
+    color: #fff; font-size: 22px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: transform 0.35s ease, opacity 0.35s ease;
 }
-.lab-arrow-btn:active { transform: scale(0.95); }
+.lab-arrow-node:active { transform: scale(0.92); }
 
 /* ESTILOS DOS NÍVEIS 12 a 20 */
 .hold-btn-12 { width: 140px; height: 140px; border-radius: 50%; background: #246bff; border: 4px solid #fff; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
@@ -666,45 +666,65 @@ function renderLevel10() {
     }, 50);
 }
 
-/* NÍVEL 11: Labirinto de setas (Fundo preto, setas brancas, ao apertar sai da tela, bloqueadas perdem vida) */
+/* NÍVEL 11: Labirinto Complexo de Setas Brancas em Fundo Preto (Fiel à Referência) */
 function renderLevel11() {
     DOM.levelQuestion.textContent = "Limpe o labirinto de setas.";
-    const wrap = document.createElement("div"); wrap.className = "labyrinth-container-11";
+    const wrap = document.createElement("div"); wrap.className = "arrow-labyrinth-11";
     
-    // Configuração de setas: 9 itens no grid 3x3.
-    // Algumas são válidas (caminho livre para sair), outras são bloqueadas.
-    const arrowsData = [
-        { id: 0, text: "←", blocked: false, slide: "-120px, 0" },
-        { id: 1, text: "↑", blocked: true, slide: "0, 0" },
-        { id: 2, text: "→", blocked: false, slide: "120px, 0" },
-        { id: 3, text: "↓", blocked: true, slide: "0, 0" },
-        { id: 4, text: "→", blocked: false, slide: "120px, 0" },
-        { id: 5, text: "↑", blocked: true, slide: "0, 0" },
-        { id: 6, text: "←", blocked: false, slide: "-120px, 0" },
-        { id: 7, text: "↓", blocked: true, slide: "0, 0" },
-        { id: 8, text: "→", blocked: false, slide: "120px, 0" }
+    // Conjunto de nós de setas distribuídos no labirinto complexo (posições X, Y em px, direção e se está bloqueado por outra seta na mesma linha de saída)
+    const nodes = [
+        { id: 1, text: "←", x: 20, y: 20, dir: "left", blocked: true },
+        { id: 2, text: "↑", x: 140, y: 20, dir: "up", blocked: false },
+        { id: 3, text: "→", x: 260, y: 20, dir: "right", blocked: true },
+        { id: 4, text: "↓", x: 80, y: 110, dir: "down", blocked: false },
+        { id: 5, text: "→", x: 190, y: 110, dir: "right", blocked: false },
+        { id: 6, text: "↑", x: 60, y: 210, dir: "up", blocked: true },
+        { id: 7, text: "←", x: 160, y: 210, dir: "left", blocked: false },
+        { id: 8, text: "↓", x: 260, y: 210, dir: "down", blocked: false }
     ];
 
-    let remainingValid = arrowsData.filter(a => !a.blocked).length;
+    let remainingFree = nodes.filter(n => !n.blocked).length;
+    // Se o jogador limpar as livres, desbloqueia as outras em cascata
+    let activeNodes = [...nodes];
 
-    arrowsData.forEach(item => {
+    activeNodes.forEach(node => {
         const btn = document.createElement("button");
-        btn.className = "lab-arrow-btn";
-        btn.textContent = item.text;
+        btn.className = "lab-arrow-node";
+        btn.textContent = node.text;
+        btn.style.left = node.x + "px";
+        btn.style.top = node.y + "px";
         wrap.appendChild(btn);
 
         btn.addEventListener("pointerup", () => {
             if (btn.disabled) return;
-            if (item.blocked) {
+            
+            if (node.blocked) {
                 failLevel();
             } else {
                 btn.disabled = true;
                 feedbackCorrect();
-                btn.style.transform = `translate(${item.slide})`;
+                let slideX = 0, slideY = 0;
+                if (node.dir === "left") slideX = -350;
+                if (node.dir === "right") slideX = 350;
+                if (node.dir === "up") slideY = -350;
+                if (node.dir === "down") slideY = 350;
+
+                btn.style.transform = `translate(${slideX}px, ${slideY}px)`;
                 btn.style.opacity = "0";
-                remainingValid--;
-                if (remainingValid === 0) {
-                    setTimeout(completeLevel, 400);
+
+                node.cleared = true;
+                // Desbloqueia nós dependentes
+                activeNodes.forEach(n => {
+                    if (n.blocked) {
+                        // Se era bloqueado por este, agora fica livre
+                        n.blocked = false;
+                        remainingFree++;
+                    }
+                });
+
+                remainingFree--;
+                if (remainingFree <= 0) {
+                    setTimeout(completeLevel, 450);
                 }
             }
         });
