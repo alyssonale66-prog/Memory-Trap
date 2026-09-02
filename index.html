@@ -422,25 +422,28 @@ button {
 .arrow-labyrinth-11 {
     position: relative;
     width: min(380px, 96vw);
-    height: min(420px, 78vh);
+    height: min(380px, 75vh);
     background: #000;
-    border: none;
-    overflow: visible;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 8px;
+    overflow: hidden;
     margin: 0 auto;
 }
 .maze-line {
     position: absolute;
-    background: rgba(255,255,255,.95);
+    background: rgba(255,255,255,.9);
     border-radius: 2px;
+    transition: opacity 0.4s ease;
 }
 .lab-arrow-node {
     position: absolute;
-    width: 34px;
-    height: 34px;
-    background: transparent;
-    border: none;
+    width: 36px;
+    height: 36px;
+    background: #111;
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 6px;
     color: #fff;
-    font-size: 26px;
+    font-size: 20px;
     font-weight: 900;
     display: flex;
     align-items: center;
@@ -448,7 +451,10 @@ button {
     cursor: pointer;
     z-index: 10;
     line-height: 1;
-    transition: transform 0.65s cubic-bezier(.2,.9,.2,1), opacity 0.5s ease;
+    transition: transform 0.5s cubic-bezier(.2,.9,.2,1), opacity 0.4s ease, background 0.2s;
+}
+.lab-arrow-node:active {
+    background: #246bff;
 }
 .lab-arrow-node.wrong-shake {
     animation: shake11 0.3s ease;
@@ -1284,19 +1290,18 @@ function renderLevel10() {
     }, 50);
 }
 
+/* NÍVEL 11 - LABIRINTO DE SETAS (Estilo Tap Away / Deslizar) */
 function renderLevel11() {
-    DOM.levelQuestion.textContent = "Limpe o desenho, toque nas setas livres.";
+    DOM.levelQuestion.textContent = "Limpe o labirinto de setas.";
     const w = document.createElement("div");
     w.className = "arrow-labyrinth-11";
-    
+
     const lines = [
-        [30, 10, 40, 3],
-        [70, 10, 40, 3],
-        [28, 10, 4, 28],
-        [72, 10, 4, 28],
-        [30, 38, 40, 4],
-        [48, 42, 4, 18],
-        [38, 60, 24, 4]
+        [20, 15, 60, 3],
+        [20, 15, 3, 50],
+        [77, 15, 3, 50],
+        [20, 62, 60, 3],
+        [48, 30, 3, 35]
     ];
     lines.forEach(l => {
         const e = document.createElement("div");
@@ -1309,15 +1314,12 @@ function renderLevel11() {
     });
 
     const nodes = [
-        { x: 28, y: 8, dir: "↑", free: true, dx: 0, dy: -500 },
-        { x: 68, y: 8, dir: "↑", free: false },
-        { x: 20, y: 22, dir: "←", free: false },
-        { x: 78, y: 22, dir: "→", free: true, dx: 500, dy: 0 },
-        { x: 28, y: 36, dir: "↓", free: false },
-        { x: 68, y: 36, dir: "↓", free: false },
-        { x: 36, y: 58, dir: "←", free: true, dx: -500, dy: 80 },
-        { x: 64, y: 58, dir: "→", free: false },
-        { x: 46, y: 64, dir: "↓", free: false }
+        { x: 16, y: 11, dir: "↑", free: true, dx: 0, dy: -350 },
+        { x: 45, y: 11, dir: "↑", free: false, dx: 0, dy: -350 },
+        { x: 73, y: 11, dir: "→", free: true, dx: 350, dy: 0 },
+        { x: 16, y: 58, dir: "←", free: true, dx: -350, dy: 0 },
+        { x: 45, y: 58, dir: "↓", free: false, dx: 0, dy: 350 },
+        { x: 73, y: 58, dir: "→", free: true, dx: 350, dy: 0 }
     ];
 
     nodes.forEach(n => {
@@ -1339,14 +1341,17 @@ function renderLevel11() {
             }
             b.disabled = true;
             feedbackCorrect();
-            b.style.transform = `translate(${n.dx || 0}px, ${n.dy || -400}px)`;
+            b.style.transform = `translate(${n.dx}px, ${n.dy}px)`;
             b.style.opacity = "0";
 
             setTimeout(() => {
                 b.style.display = "none";
                 const left = Array.from(w.querySelectorAll(".lab-arrow-node")).filter(x => !x.disabled && x.style.display !== "none").length;
-                if (left === 0) completeLevel();
-            }, 650);
+                if (left === 0) {
+                    w.querySelectorAll(".maze-line").forEach(l => l.style.opacity = "0");
+                    setTimeout(completeLevel, 500);
+                }
+            }, 500);
         });
     });
 
