@@ -48,7 +48,7 @@ button {
     align-items: center; justify-content: center;
 }
 
-/* TELA INICIAL — ESPAÇAMENTO EXATO SOLICITADO */
+/* TELA INICIAL */
 #homeScreen {
     justify-content: space-between;
     align-items: center;
@@ -60,7 +60,7 @@ button {
 .logo-sub { display: block; margin-top: 6px; font-size: clamp(14px, 3.8vw, 22px); font-weight: 700; letter-spacing: .45em; padding-left: .45em; }
 .logo-line { width: min(200px, 50vw); height: 1px; margin: 10px auto 0; background: rgba(255,255,255,.45); }
 
-/* VIDAS (VERMELHO VIBRANTE #ff3b30 NO MEIO DA TELA) */
+/* VIDAS (VERMELHO VIBRANTE #ff3b30) */
 .lives { display: flex; justify-content: center; align-items: center; gap: 12px; }
 .home-lives { margin: auto 0; }
 .heart { position: relative; width: 22px; height: 22px; transform: rotate(-45deg); border-radius: 3px; background: #ff3b30; }
@@ -78,7 +78,6 @@ button {
 .start-title { display: block; font-size: 22px; font-weight: 900; letter-spacing: .15em; }
 .start-subtitle { display: block; margin-top: 3px; font-size: 10px; letter-spacing: .25em; opacity: .55; }
 
-/* HALL DOS SOBREVIVENTES NA PARTE INFERIOR */
 .hall {
     position: relative; width: min(370px, 90vw); height: 110px; overflow: hidden;
     border-top: 1px solid rgba(255,255,255,.12); border-bottom: 1px solid rgba(255,255,255,.12);
@@ -99,7 +98,6 @@ button {
 .level-content { position: relative; width: 100%; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 20px 70px; gap: 15px; }
 .game-lives { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 15px); z-index: 30; }
 
-/* OPÇÕES PADRÃO (Botões Azuis) */
 .options-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; width: min(380px, 94vw); margin: 0 auto; }
 .blue-choice {
     min-height: 65px; background: #246bff; border: 1px solid rgba(255,255,255,.25);
@@ -108,7 +106,7 @@ button {
 }
 .blue-choice:active { transform: scale(.96); background: #1a53cc; }
 
-/* NÍVEL 1 (Peça Quebrada: Topo aponta para baixo, peças da base apontam para CIMA para encaixar perfeitamente) */
+/* NÍVEL 1 */
 .broken-container { display: flex; flex-direction: column; align-items: center; gap: 30px; width: 100%; margin-top: -15px; }
 .broken-top { width: 240px; height: 110px; background: #246bff; border-radius: 8px; clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 82% 100%, 65% 60%, 50% 95%, 35% 60%, 18% 100%, 0% 50%); }
 .broken-pieces-pool { display: flex; gap: 12px; justify-content: center; width: 100%; }
@@ -116,9 +114,8 @@ button {
     width: 60px; height: 60px; background: #246bff; border-radius: 6px;
     touch-action: none; cursor: grab; transition: transform 0.2s ease;
 }
-/* Peças com pontas viradas para CIMA para encaixar no molde superior */
 .puzzle-piece.p1 { clip-path: polygon(0% 100%, 100% 100%, 100% 50%, 80% 10%, 65% 45%, 50% 15%, 35% 45%, 20% 10%, 0% 50%); }
-.puzzle-piece.p2 { clip-path: polygon(0% 100%, 100% 100%, 100% 50%, 82% 0%, 65% 40%, 50% 5%, 35% 40%, 18% 0%, 0% 50%); } /* Encaixe correto */
+.puzzle-piece.p2 { clip-path: polygon(0% 100%, 100% 100%, 100% 50%, 82% 0%, 65% 40%, 50% 5%, 35% 40%, 18% 0%, 0% 50%); }
 .puzzle-piece.p3 { clip-path: polygon(0% 100%, 100% 100%, 100% 50%, 84% 5%, 65% 35%, 50% 10%, 35% 35%, 16% 5%, 0% 50%); }
 .puzzle-piece.p4 { clip-path: polygon(0% 100%, 100% 100%, 100% 50%, 78% 15%, 65% 50%, 50% 20%, 35% 50%, 22% 15%, 0% 50%); }
 .puzzle-piece.dragging { transition: none; z-index: 50; }
@@ -126,7 +123,7 @@ button {
 /* NÍVEL 2 */
 .grid2-large { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, 75px); gap: 14px; width: min(380px, 94vw); }
 
-/* NÍVEL 5 (Formas espalhadas por toda a tela) */
+/* NÍVEL 5 */
 .shape-field-full { position: absolute; inset: 60px 10px 90px 10px; pointer-events: none; }
 .geo-shape { position: absolute; background: #fff; }
 .geo-circle { border-radius: 50%; }
@@ -151,7 +148,7 @@ button {
     100% { transform: translate(180px, 15px) scale(0.6); opacity: 0; }
 }
 
-/* NÍVEL 8 (Barras de Cores Espalhadas, Finas e Altas Ocupando Bem a Tela) */
+/* NÍVEL 8 */
 .color-bar-container { display: flex; justify-content: space-evenly; align-items: center; width: min(390px, 96vw); height: 180px; margin: 0 auto; }
 .color-segment { width: 26px; height: 155px; border-radius: 6px; }
 .color-segment:active { transform: scale(.95); }
@@ -166,6 +163,40 @@ button {
 .red-trap-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; width: min(380px, 94vw); }
 .red-trap-btn { min-height: 65px; border: 1px solid rgba(255,255,255,.25); border-radius: 14px; }
 #secretRedTarget { cursor: pointer; }
+
+/* ESTILOS DOS NÍVEIS 11 A 20 */
+.arrow-grid-11 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: min(320px, 90vw); }
+.arrow-item-11 { min-height: 60px; background: #246bff; border-radius: 10px; font-size: 24px; display: flex; align-items: center; justify-content: center; }
+.arrow-item-11.blocked { background: #444; opacity: 0.7; }
+
+.hold-btn-12 { width: 140px; height: 140px; border-radius: 50%; background: #246bff; border: 4px solid #fff; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+
+.rhythm-target-13 { position: relative; width: 120px; height: 120px; border-radius: 50%; border: 3px dashed #246bff; display: flex; align-items: center; justify-content: center; }
+.rhythm-pulse-13 { width: 40px; height: 40px; border-radius: 50%; background: #ff3b30; animation: pulseAnim 1.2s infinite ease-in-out; }
+@keyframes pulseAnim { 0% { transform: scale(0.5); opacity: 0.5; } 50% { transform: scale(1.4); opacity: 1; } 100% { transform: scale(0.5); opacity: 0.5; } }
+
+.reverse-grid-14 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: min(300px, 90vw); }
+.rev-btn-14 { height: 75px; background: #333; border-radius: 12px; font-size: 22px; font-weight: bold; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.2); }
+.rev-btn-14.lit { background: #246bff; border-color: #fff; }
+
+.blind-pixel-area-15 { position: absolute; inset: 0; }
+.blind-pixel-15 { position: absolute; top: 15px; right: 15px; width: 14px; height: 14px; background: transparent; cursor: pointer; }
+
+.drag-out-btn-16 { width: 140px; height: 60px; background: #246bff; border-radius: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; touch-action: none; position: absolute; }
+
+.exclusion-field-17 { position: relative; width: min(360px, 92vw); height: 260px; border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; overflow: hidden; }
+.exc-item { position: absolute; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
+.exc-circle { width: 40px; height: 40px; border-radius: 50%; background: #246bff; }
+.exc-square { width: 40px; height: 40px; border-radius: 6px; background: #ff3b30; }
+
+.escaping-btn-18 { width: 130px; height: 60px; background: #246bff; border-radius: 12px; font-weight: bold; position: absolute; transition: transform 0.15s ease; display: flex; align-items: center; justify-content: center; }
+
+.intruder-grid-19 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; width: min(320px, 90vw); }
+.intruder-cell { aspect-ratio: 1; background: #1c1c1e; border-radius: 6px; font-size: 20px; font-weight: bold; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.8); }
+
+.recall-grid-20 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: min(340px, 90vw); }
+.recall-shape-btn { height: 100px; background: #1c1c1e; border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+.recall-mini-shape { width: 70px; height: 40px; background: #246bff; border-radius: 6px; }
 
 /* OVERLAYS E SETTINGS */
 #overlay { position: absolute; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; background: #000; }
@@ -243,9 +274,13 @@ const DOM = {
 const LEVELS = {
     1: { type: "broken-shape" }, 2: { type: "grid" }, 3: { type: "direct-answer" }, 4: { type: "pi" },
     5: { type: "count-circles" }, 6: { type: "appearing-circles" }, 7: { type: "no-number-rats", hiddenNumber: true },
-    8: { type: "color-memory" }, 9: { type: "arrow-memory" }, 10: { type: "camouflaged-command" }
+    8: { type: "color-memory" }, 9: { type: "arrow-memory" }, 10: { type: "camouflaged-command" },
+    11: { type: "clean-arrows" }, 12: { type: "hold-two-seconds" }, 13: { type: "circle-rhythm" },
+    14: { type: "reverse-order" }, 15: { type: "blind-pixel" }, 16: { type: "drag-outside" },
+    17: { type: "circle-exclusion" }, 18: { type: "escaping-button" }, 19: { type: "letter-intruder" },
+    20: { type: "level1-recall", special: true }
 };
-for (let i = 11; i <= 100; i++) LEVELS[i] = { name: "Nível " + i, type: "unimplemented" };
+for (let i = 21; i <= 100; i++) LEVELS[i] = { name: "Nível " + i, type: "unimplemented" };
 
 function clearLevelTimers() { GAME.levelTimers.forEach(t => { clearTimeout(t); clearInterval(t); }); GAME.levelTimers = []; }
 function addLevelTimer(t) { GAME.levelTimers.push(t); }
@@ -360,11 +395,16 @@ function renderLevel(number, level) {
         case "count-circles": renderLevel5(); break; case "appearing-circles": renderLevel6(); break;
         case "no-number-rats": renderLevel7(); break; case "color-memory": renderLevel8(); break;
         case "arrow-memory": renderLevel9(); break; case "camouflaged-command": renderLevel10(); break;
+        case "clean-arrows": renderLevel11(); break; case "hold-two-seconds": renderLevel12(); break;
+        case "circle-rhythm": renderLevel13(); break; case "reverse-order": renderLevel14(); break;
+        case "blind-pixel": renderLevel15(); break; case "drag-outside": renderLevel16(); break;
+        case "circle-exclusion": renderLevel17(); break; case "escaping-button": renderLevel18(); break;
+        case "letter-intruder": renderLevel19(); break; case "level1-recall": renderLevel20(); break;
         default: renderUnimplementedLevel(number, level); break;
     }
 }
 
-/* NÍVEL 1 (Peça Quebrada: Topo aponta para baixo, peças da base apontam para CIMA com encaixe corrigido) */
+/* NÍVEL 1 */
 function renderLevel1() {
     DOM.levelQuestion.textContent = "Complete a figura.";
     const wrap = document.createElement("div"); wrap.className = "broken-container";
@@ -446,7 +486,7 @@ function renderLevel4() {
     DOM.levelContent.appendChild(wrap);
 }
 
-/* NÍVEL 5 (Formas espalhadas por toda a tela) */
+/* NÍVEL 5 */
 function renderLevel5() {
     DOM.levelQuestion.textContent = "Quantos círculos tem na tela?";
     const wrap = document.createElement("div");
@@ -616,7 +656,309 @@ function renderLevel10() {
     }, 50);
 }
 
-/* NÍVEIS 11 A 100 */
+/* NÍVEL 11: Limpe a tela (toque nas setas certas; bloqueadas tiram vida mas ficam) */
+function renderLevel11() {
+    DOM.levelQuestion.textContent = "Limpe a tela (toque apenas nas setas ativas).";
+    const wrap = document.createElement("div"); wrap.className = "arrow-grid-11";
+    let remainingCorrect = 4;
+    
+    const items = [
+        { type: "correct", text: "↑" },
+        { type: "blocked", text: "✖" },
+        { type: "correct", text: "→" },
+        { type: "blocked", text: "✖" },
+        { type: "correct", text: "↓" },
+        { type: "blocked", text: "✖" },
+        { type: "blocked", text: "✖" },
+        { type: "correct", text: "←" },
+        { type: "blocked", text: "✖" }
+    ];
+
+    items.forEach(item => {
+        const btn = document.createElement("button");
+        btn.className = "arrow-item-11 " + (item.type === "blocked" ? "blocked" : "");
+        btn.textContent = item.text;
+        wrap.appendChild(btn);
+
+        btn.addEventListener("pointerup", () => {
+            if (item.type === "blocked") {
+                failLevel();
+            } else if (!btn.disabled) {
+                btn.disabled = true;
+                btn.style.opacity = "0.2";
+                remainingCorrect--;
+                feedbackCorrect();
+                if (remainingCorrect === 0) {
+                    completeLevel();
+                }
+            }
+        });
+    });
+    DOM.levelContent.appendChild(wrap);
+}
+
+/* NÍVEL 12: Segure o toque exatamente por 2 segundos */
+function renderLevel12() {
+    DOM.levelQuestion.textContent = "Segure exatamente por 2 segundos.";
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "display:flex; flex-direction:column; align-items:center; gap:20px;";
+    
+    const btn = document.createElement("button"); btn.className = "hold-btn-12"; btn.textContent = "SEGURE";
+    let startTime = 0; let timerRef = null; let held = false;
+
+    btn.addEventListener("pointerdown", () => {
+        held = true; startTime = Date.now();
+        btn.style.background = "#ff3b30"; btn.textContent = "SOLTE...";
+        feedbackCorrect();
+    });
+
+    const handleRelease = () => {
+        if (!held) return;
+        held = false;
+        const duration = (Date.now() - startTime) / 1000;
+        btn.style.background = "#246bff"; btn.textContent = "SEGURE";
+        if (duration >= 1.8 && duration <= 2.2) {
+            completeLevel();
+        } else {
+            failLevel();
+        }
+    };
+
+    btn.addEventListener("pointerup", handleRelease);
+    btn.addEventListener("pointercancel", handleRelease);
+
+    wrap.appendChild(btn);
+    DOM.levelContent.appendChild(wrap);
+}
+
+/* NÍVEL 13: Ritmo do círculo */
+function renderLevel13() {
+    DOM.levelQuestion.textContent = "Toque no momento exato do pulso.";
+    const wrap = document.createElement("div"); wrap.style.cssText = "display:flex; flex-direction:column; align-items:center; gap:25px;";
+    
+    const target = document.createElement("div"); target.className = "rhythm-target-13";
+    const pulse = document.createElement("div"); pulse.className = "rhythm-pulse-13";
+    target.appendChild(pulse);
+
+    const actionBtn = document.createElement("button"); actionBtn.className = "blue-choice"; actionBtn.style.width = "180px"; actionBtn.textContent = "APERTAR";
+    
+    actionBtn.addEventListener("pointerup", () => {
+        // Verifica escala atual do pulso por tempo relativo
+        const elapsed = (Date.now() % 1200);
+        // Janela de acerto propeça perto do pico (entre 500ms e 700ms)
+        if (elapsed >= 450 && elapsed <= 750) {
+            completeLevel();
+        } else {
+            failLevel();
+        }
+    });
+
+    wrap.appendChild(target); wrap.appendChild(actionBtn);
+    DOM.levelContent.appendChild(wrap);
+}
+
+/* NÍVEL 14: Ordem reversa */
+function renderLevel14() {
+    DOM.levelQuestion.textContent = "Memorize e toque na ordem REVERSA.";
+    const wrap = document.createElement("div"); wrap.className = "reverse-grid-14";
+    const sequence = [0, 2, 3, 1]; // índices
+    const buttons = [];
+
+    for (let i = 0; i < 4; i++) {
+        const b = document.createElement("button"); b.className = "rev-btn-14"; b.textContent = i + 1;
+        buttons.push(b); wrap.appendChild(b);
+    }
+    DOM.levelContent.appendChild(wrap);
+
+    GAME.state.revSeq = [...sequence].reverse(); // ordem reversa esperada
+    GAME.state.revIdx = 0;
+
+    // Exibe sequência acendendo
+    sequence.forEach((idx, step) => {
+        addLevelTimer(setTimeout(() => {
+            buttons[idx].classList.add("lit");
+            feedbackCorrect();
+            setTimeout(() => { buttons[idx].classList.remove("lit"); }, 400);
+        }, (step + 1) * 700));
+    });
+
+    addLevelTimer(setTimeout(() => {
+        DOM.levelQuestion.textContent = "Toque de trás para frente!";
+        buttons.forEach((b, idx) => {
+            b.addEventListener("pointerup", () => {
+                const expected = GAME.state.revSeq[GAME.state.revIdx];
+                if (idx !== expected) {
+                    failLevel(); return;
+                }
+                b.classList.add("lit");
+                feedbackCorrect();
+                GAME.state.revIdx++;
+                if (GAME.state.revIdx >= GAME.state.revSeq.length) {
+                    completeLevel();
+                }
+            });
+        });
+    }, 3600));
+}
+
+/* NÍVEL 15: Pixel cego */
+function renderLevel15() {
+    DOM.levelQuestion.textContent = "Encontre a saída secreta.";
+    const wrap = document.createElement("div"); wrap.className = "blind-pixel-area-15";
+    const pixel = document.createElement("div"); pixel.className = "blind-pixel-15";
+    wrap.appendChild(pixel);
+    DOM.levelContent.appendChild(wrap);
+
+    pixel.addEventListener("pointerup", completeLevel);
+}
+
+/* NÍVEL 16: Arrasta-caixa */
+function renderLevel16() {
+    DOM.levelQuestion.textContent = "Arraste o botão para fora da tela.";
+    const wrap = document.createElement("div"); wrap.style.cssText = "position:absolute; inset:0;";
+    const btn = document.createElement("button"); btn.className = "drag-out-btn-16"; btn.textContent = "ARRASTE-ME";
+    btn.style.left = "calc(50% - 70px)"; btn.style.top = "calc(50% - 30px)";
+    wrap.appendChild(btn); DOM.levelContent.appendChild(wrap);
+
+    btn.addEventListener("pointerdown", e => {
+        btn.setPointerCapture(e.pointerId);
+        const startX = e.clientX; const startY = e.clientY;
+        const rect = btn.getBoundingClientRect();
+        
+        function onMove(em) {
+            btn.style.left = (rect.left + (em.clientX - startX)) + "px";
+            btn.style.top = (rect.top + (em.clientY - startY)) + "px";
+        }
+        function onUp(em) {
+            btn.releasePointerCapture(em.pointerId);
+            btn.removeEventListener("pointermove", onMove); btn.removeEventListener("pointerup", onUp);
+            const cur = btn.getBoundingClientRect();
+            if (cur.left < 10 || cur.right > window.innerWidth - 10 || cur.top < 50 || cur.bottom > window.innerHeight - 10) {
+                completeLevel();
+            } else {
+                btn.style.left = "calc(50% - 70px)"; btn.style.top = "calc(50% - 30px)";
+            }
+        }
+        btn.addEventListener("pointermove", onMove); btn.addEventListener("pointerup", onUp);
+    });
+}
+
+/* NÍVEL 17: Exclusão circular */
+function renderLevel17() {
+    DOM.levelQuestion.textContent = "Toque apenas nos círculos (ignore quadrados).";
+    const wrap = document.createElement("div"); wrap.className = "exclusion-field-17";
+    let circlesLeft = 3;
+
+    const items = [
+        { type: "circle", x: 30, y: 40 },
+        { type: "square", x: 120, y: 70 },
+        { type: "circle", x: 220, y: 30 },
+        { type: "square", x: 80, y: 160 },
+        { type: "circle", x: 260, y: 180 }
+    ];
+
+    items.forEach(it => {
+        const el = document.createElement("div");
+        el.className = "exc-item " + (it.type === "circle" ? "exc-circle" : "exc-square");
+        el.style.left = it.x + "px"; el.style.top = it.y + "px";
+        wrap.appendChild(el);
+
+        el.addEventListener("pointerup", () => {
+            if (it.type === "square") {
+                failLevel();
+            } else if (!el.disabled) {
+                el.disabled = true;
+                el.style.display = "none";
+                circlesLeft--;
+                feedbackCorrect();
+                if (circlesLeft === 0) completeLevel();
+            }
+        });
+    });
+    DOM.levelContent.appendChild(wrap);
+}
+
+/* NÍVEL 18: Botão Fujão */
+function renderLevel18() {
+    DOM.levelQuestion.textContent = "Toque no botão fujão.";
+    const wrap = document.createElement("div"); wrap.style.cssText = "position:absolute; inset:0;";
+    const btn = document.createElement("button"); btn.className = "escaping-btn-18"; btn.textContent = "PEGUE-ME";
+    btn.style.left = "calc(50% - 65px)"; btn.style.top = "calc(50% - 30px)";
+    wrap.appendChild(btn); DOM.levelContent.appendChild(wrap);
+
+    let escapes = 0;
+    btn.addEventListener("pointerenter", flee);
+    btn.addEventListener("pointerdown", (e) => {
+        e.preventDefault();
+        escapes++;
+        if (escapes >= 3) {
+            completeLevel();
+        } else {
+            flee();
+        }
+    });
+
+    function flee() {
+        const randomX = Math.random() * (window.innerWidth - 150);
+        const randomY = Math.random() * (window.innerHeight - 200) + 80;
+        btn.style.left = randomX + "px";
+        btn.style.top = randomY + "px";
+        feedbackLifeLost();
+    }
+}
+
+/* NÍVEL 19: Intruso de letras */
+function renderLevel19() {
+    DOM.levelQuestion.textContent = "Encontre o caractere diferente.";
+    const wrap = document.createElement("div"); wrap.className = "intruder-grid-19";
+    const targetIdx = Math.floor(Math.random() * 25);
+
+    for (let i = 0; i < 25; i++) {
+        const cell = document.createElement("button");
+        cell.className = "intruder-cell";
+        const isIntruder = (i === targetIdx);
+        cell.textContent = isIntruder ? "X" : "O";
+        wrap.appendChild(cell);
+
+        cell.addEventListener("pointerup", () => {
+            if (isIntruder) completeLevel();
+            else failLevel();
+        });
+    }
+    DOM.levelContent.appendChild(wrap);
+}
+
+/* NÍVEL 20: ESPECIAL — Qual era a forma geométrica quebrada do Nível 1? */
+function renderLevel20() {
+    DOM.levelQuestion.textContent = "Qual era a forma geométrica quebrada do Nível 1?";
+    const wrap = document.createElement("div"); wrap.className = "recall-grid-20";
+    
+    // 4 opções de formas geométricas
+    for (let i = 0; i < 4; i++) {
+        const btn = document.createElement("button"); btn.className = "recall-shape-btn";
+        const shape = document.createElement("div"); shape.className = "recall-mini-shape";
+        // Variações de clip-path
+        if (i === 1) {
+            shape.style.clipPath = "polygon(0% 0%, 100% 0%, 100% 50%, 82% 100%, 65% 60%, 50% 95%, 35% 60%, 18% 100%, 0% 50%)"; // Correta do Nível 1
+        } else if (i === 0) {
+            shape.style.clipPath = "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)";
+        } else if (i === 2) {
+            shape.style.clipPath = "polygon(50% 0%, 100% 100%, 0% 100%)";
+        } else {
+            shape.style.clipPath = "polygon(0% 20%, 100% 0%, 100% 80%, 0% 100%)";
+        }
+        btn.appendChild(shape);
+        wrap.appendChild(btn);
+
+        btn.addEventListener("pointerup", () => {
+            if (i === 1) completeLevel();
+            else failLevel();
+        });
+    }
+    DOM.levelContent.appendChild(wrap);
+}
+
+/* NÍVEIS 21 A 100 */
 function renderUnimplementedLevel(number, level) {
     const wrap = document.createElement("div");
     wrap.style.cssText = "text-align: center; width: 100%;";
