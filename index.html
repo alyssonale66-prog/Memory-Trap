@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>MEMORY TRAP</title>
+
 <style>
 * {
     box-sizing: border-box;
@@ -12,7 +13,9 @@
     user-select: none;
     -webkit-user-select: none;
 }
-html, body {
+
+html,
+body {
     margin: 0;
     width: 100%;
     height: 100%;
@@ -24,6 +27,7 @@ html, body {
     position: fixed;
     inset: 0;
 }
+
 button {
     font: inherit;
     color: inherit;
@@ -32,6 +36,7 @@ button {
     background: none;
     touch-action: none;
 }
+
 #app {
     position: fixed;
     inset: 0;
@@ -40,6 +45,7 @@ button {
     overflow: hidden;
     background: #000;
 }
+
 .screen {
     position: absolute;
     inset: 0;
@@ -48,24 +54,31 @@ button {
     height: 100%;
     overflow: hidden;
 }
+
 .screen.active {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
+
 #homeScreen {
     justify-content: center;
     align-items: center;
     gap: 24px;
-    padding: calc(env(safe-area-inset-top) + 25px) 20px calc(env(safe-area-inset-bottom) + 20px);
+    padding:
+        calc(env(safe-area-inset-top) + 25px)
+        20px
+        calc(env(safe-area-inset-bottom) + 20px);
 }
+
 .logo {
     text-align: center;
     line-height: 1.1;
     pointer-events: none;
     margin: 0;
 }
+
 .logo-main {
     display: block;
     font-size: clamp(38px, 11vw, 64px);
@@ -73,6 +86,7 @@ button {
     letter-spacing: .10em;
     line-height: .90;
 }
+
 .logo-sub {
     display: block;
     margin-top: 14px;
@@ -82,18 +96,21 @@ button {
     padding-left: .55em;
     line-height: 1;
 }
+
 .logo-line {
     width: min(200px, 50vw);
     height: 1px;
     margin: 18px auto 0;
     background: rgba(255,255,255,.45);
 }
+
 .lives {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px;
 }
+
 .heart {
     position: relative;
     width: 22px;
@@ -102,7 +119,9 @@ button {
     border-radius: 3px;
     background: #ff3b30;
 }
-.heart::before, .heart::after {
+
+.heart::before,
+.heart::after {
     content: "";
     position: absolute;
     width: 22px;
@@ -110,9 +129,23 @@ button {
     border-radius: 50%;
     background: #ff3b30;
 }
-.heart::before { top: -11px; left: 0; }
-.heart::after { top: 0; left: 11px; }
-.heart.empty, .heart.empty::before, .heart.empty::after { background: #333; }
+
+.heart::before {
+    top: -11px;
+    left: 0;
+}
+
+.heart::after {
+    top: 0;
+    left: 11px;
+}
+
+.heart.empty,
+.heart.empty::before,
+.heart.empty::after {
+    background: #333;
+}
+
 .start-button {
     position: relative;
     width: min(320px, 82vw);
@@ -122,12 +155,14 @@ button {
     border-radius: 6px;
     background: #050505;
 }
+
 .start-title {
     display: block;
     font-size: 22px;
     font-weight: 900;
     letter-spacing: .15em;
 }
+
 .start-subtitle {
     display: block;
     margin-top: 3px;
@@ -135,6 +170,7 @@ button {
     letter-spacing: .25em;
     opacity: .55;
 }
+
 .hall {
     position: relative;
     width: min(370px, 90vw);
@@ -143,6 +179,7 @@ button {
     border-top: 1px solid rgba(255,255,255,.12);
     border-bottom: 1px solid rgba(255,255,255,.12);
 }
+
 .hall-title {
     position: absolute;
     top: 6px;
@@ -154,30 +191,35 @@ button {
     letter-spacing: .25em;
     opacity: .5;
 }
+
 .hall-mask {
     position: absolute;
     inset: 0;
     overflow: hidden;
     padding-top: 24px;
 }
+
 .hall-list {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
 }
+
 .hall-name {
     font-size: 13px;
     font-weight: 700;
     letter-spacing: .12em;
     opacity: .82;
 }
+
 .hall-empty {
     margin-top: 20px;
     font-size: 10px;
     letter-spacing: .15em;
     opacity: .28;
 }
+
 .home-menu {
     position: absolute;
     right: 20px;
@@ -189,10 +231,12 @@ button {
     font-size: 18px;
     opacity: .7;
 }
+
 #gameScreen {
     justify-content: flex-start;
     background: #000;
 }
+
 .game-header {
     position: relative;
     width: 100%;
@@ -200,11 +244,13 @@ button {
     padding-top: calc(env(safe-area-inset-top) + 15px);
     z-index: 20;
 }
+
 .level-number {
     font-size: 18px;
     font-weight: 700;
     letter-spacing: .15em;
 }
+
 .level-question {
     width: 90%;
     margin: 8px auto 0;
@@ -213,6 +259,7 @@ button {
     font-weight: 700;
     line-height: 1.3;
 }
+
 .level-content {
     position: relative;
     width: 100%;
@@ -224,6 +271,7 @@ button {
     padding: 10px 12px 70px;
     gap: 15px;
 }
+
 .game-lives {
     position: absolute;
     left: 0;
@@ -231,6 +279,7 @@ button {
     bottom: calc(env(safe-area-inset-bottom) + 15px);
     z-index: 30;
 }
+
 .options-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -238,6 +287,7 @@ button {
     width: min(380px, 94vw);
     margin: 0 auto;
 }
+
 .blue-choice {
     min-height: 65px;
     background: #246bff;
@@ -251,6 +301,7 @@ button {
     padding: 10px;
     text-align: center;
 }
+
 .broken-container {
     display: flex;
     flex-direction: column;
@@ -260,16 +311,33 @@ button {
     justify-content: flex-start;
     padding-top: 10px;
 }
+
 .broken-top {
     width: min(42vw, 165px);
     height: min(28vw, 110px);
     background: #246bff;
     border-radius: 8px 8px 4px 4px;
-    clip-path: polygon(0% 0%, 100% 0%, 100% 52%, 88% 100%, 76% 62%, 63% 100%, 51% 60%, 37% 100%, 25% 60%, 12% 100%, 0% 52%);
-    transition: all 0.3s ease;
+    clip-path: polygon(
+        0% 0%,
+        100% 0%,
+        100% 52%,
+        88% 100%,
+        76% 62%,
+        63% 100%,
+        51% 60%,
+        37% 100%,
+        25% 60%,
+        12% 100%,
+        0% 52%
+    );
+    transition: all .3s ease;
     box-shadow: 0 0 0 1px rgba(255,255,255,.15) inset;
 }
-.broken-top.filled { clip-path: none; }
+
+.broken-top.filled {
+    clip-path: none;
+}
+
 .broken-pieces-pool {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -277,6 +345,7 @@ button {
     width: min(92vw, 360px);
     justify-items: center;
 }
+
 .puzzle-piece {
     width: min(42vw, 165px);
     height: min(28vw, 110px);
@@ -284,41 +353,92 @@ button {
     border-radius: 8px;
     touch-action: none;
     cursor: grab;
-    transition: transform 0.38s cubic-bezier(.2,.8,.3,1.2);
+    transition:
+        transform .38s cubic-bezier(.2,.8,.3,1.2);
     border: 1px solid rgba(255,255,255,.12);
 }
+
 .puzzle-piece.dragging {
     transition: none;
     z-index: 50;
     scale: 1.08;
     box-shadow: 0 8px 24px rgba(0,0,0,.6);
 }
-.puzzle-piece.wrong-shake { animation: shakeWrong 0.4s ease; }
-@keyframes shakeWrong {
-    0%, 100% { transform: translateX(0); }
-    20% { transform: translateX(-8px); }
-    40% { transform: translateX(8px); }
-    60% { transform: translateX(-6px); }
-    80% { transform: translateX(6px); }
+
+.puzzle-piece.wrong-shake {
+    animation: shakeWrong .4s ease;
 }
+
+@keyframes shakeWrong {
+    0%,100% {
+        transform: translateX(0);
+    }
+    20% {
+        transform: translateX(-8px);
+    }
+    40% {
+        transform: translateX(8px);
+    }
+    60% {
+        transform: translateX(-6px);
+    }
+    80% {
+        transform: translateX(6px);
+    }
+}
+
 .grid2-large {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(2, 75px);
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    grid-template-rows: repeat(2,75px);
     gap: 14px;
-    width: min(380px, 94vw);
+    width: min(380px,94vw);
 }
+
 .shape-field-full {
     position: absolute;
     inset: 0 0 95px 0;
     pointer-events: none;
 }
-.geo-shape { position: absolute; background: #fff; }
-.geo-circle { border-radius: 50%; }
-.geo-square { border-radius: 4px; }
-.geo-rect { border-radius: 3px; }
-.geo-pentagon { clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
-.geo-hexagon { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
+
+.geo-shape {
+    position: absolute;
+    background: #fff;
+}
+
+.geo-circle {
+    border-radius: 50%;
+}
+
+.geo-square {
+    border-radius: 4px;
+}
+
+.geo-rect {
+    border-radius: 3px;
+}
+
+.geo-pentagon {
+    clip-path: polygon(
+        50% 0%,
+        100% 38%,
+        82% 100%,
+        18% 100%,
+        0% 38%
+    );
+}
+
+.geo-hexagon {
+    clip-path: polygon(
+        25% 0%,
+        75% 0%,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0% 50%
+    );
+}
+
 .click-circle {
     position: absolute;
     width: 48px;
@@ -327,28 +447,42 @@ button {
     background: #246bff;
     border: 1.5px solid #fff;
 }
+
 .rats-wrap {
     position: relative;
     width: 260px;
     height: 260px;
     margin-bottom: 10px;
 }
+
 .orbit-center {
     position: absolute;
     top: 50%;
     left: 50%;
     width: 10px;
     height: 10px;
-    transform: translate(-5%, -5%);
+    transform: translate(-5%,-5%);
     animation: spin 4s linear infinite;
 }
+
 .circling-rat {
     position: absolute;
     font-size: 26px;
     transform-origin: center;
 }
-@keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
-.question-with-rat { position: relative; display: inline-block; padding: 0 15px; }
+
+@keyframes spin {
+    100% {
+        transform: translate(-50%,-50%) rotate(360deg);
+    }
+}
+
+.question-with-rat {
+    position: relative;
+    display: inline-block;
+    padding: 0 15px;
+}
+
 .small-hiding-rat {
     position: absolute;
     font-size: 14px;
@@ -356,26 +490,61 @@ button {
     left: -30px;
     animation: ratArcRun 1.5s linear infinite;
 }
+
 @keyframes ratArcRun {
-    0% { transform: translate(0, 15px) scale(0.6); opacity: 0; }
-    50% { transform: translate(90px, -15px) scale(0.6); opacity: 1; }
-    100% { transform: translate(180px, 15px) scale(0.6); opacity: 0; }
+    0% {
+        transform: translate(0,15px) scale(.6);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(90px,-15px) scale(.6);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(180px,15px) scale(.6);
+        opacity: 0;
+    }
 }
+
 .color-bar-container {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    width: min(390px, 96vw);
+    width: min(390px,96vw);
     height: 180px;
     margin: 0 auto;
 }
-.color-segment { width: 26px; height: 155px; border-radius: 6px; }
-.c-red { background: #ff3030; }
-.c-blue { background: #3080ff; }
-.c-green { background: #35c96b; }
-.c-yellow { background: #ffd83d; }
-.c-purple { background: #9c55ff; }
-.c-orange { background: #ff8a30; }
+
+.color-segment {
+    width: 26px;
+    height: 155px;
+    border-radius: 6px;
+}
+
+.c-red {
+    background: #ff3030;
+}
+
+.c-blue {
+    background: #3080ff;
+}
+
+.c-green {
+    background: #35c96b;
+}
+
+.c-yellow {
+    background: #ffd83d;
+}
+
+.c-purple {
+    background: #9c55ff;
+}
+
+.c-orange {
+    background: #ff8a30;
+}
+
 .arrow-sequence-display {
     display: flex;
     gap: 16px;
@@ -383,32 +552,41 @@ button {
     font-weight: 900;
     margin: 15px 0;
 }
+
 .red-trap-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2,minmax(0,1fr));
     gap: 14px;
-    width: min(380px, 94vw);
+    width: min(380px,94vw);
 }
+
 .red-trap-btn {
     min-height: 65px;
     border: 1px solid rgba(255,255,255,.25);
     border-radius: 14px;
 }
+
+/* ============================================================
+   NÍVEL 11
+   ============================================================ */
+
 .arrow-labyrinth-11 {
     position: relative;
-    width: min(360px, 92vw);
-    height: min(420px, 72vh);
-    background: #f5ead6;
+    width: min(360px,92vw);
+    height: min(420px,72vh);
+    background: #000;
     margin: 0 auto;
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: 0;
 }
+
 .maze-line {
     position: absolute;
     background: rgba(255,255,255,.9);
     border-radius: 2px;
-    transition: opacity 0.4s ease;
+    transition: opacity .4s ease;
 }
+
 .lab-arrow-node {
     position: absolute;
     width: 28px;
@@ -423,264 +601,389 @@ button {
     cursor: pointer;
     z-index: 10;
     line-height: 1;
-    transition: transform 0.7s cubic-bezier(.2,.8,.2,1), opacity 0.4s;
+    transition:
+        transform .7s cubic-bezier(.2,.8,.2,1),
+        opacity .4s;
 }
+
 @keyframes shake11 {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-6px); }
-    75% { transform: translateX(6px); }
+    0%,100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-6px);
+    }
+    50% {
+        transform: translateX(6px);
+    }
+    75% {
+        transform: translateX(-4px);
+    }
 }
-.hold-btn-12 {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    background: #246bff;
-    border: 4px solid #fff;
-    font-size: 16px;
-    font-weight: bold;
+
+/* ============================================================
+   OUTROS NÍVEIS
+   ============================================================ */
+
+.hold-area-12 {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: min(300px,80vw);
+    height: 160px;
 }
-.rhythm-target-13 {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 3px dashed #246bff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.rhythm-pulse-13 {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #ff3b30;
-    animation: pulseAnim 1.2s infinite ease-in-out;
-}
-@keyframes pulseAnim {
-    0% { transform: scale(0.5); opacity: 0.5; }
-    50% { transform: scale(1.4); opacity: 1; }
-    100% { transform: scale(0.5); opacity: 0.5; }
-}
-.reverse-grid-14 {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    width: min(300px, 90vw);
-}
-.rev-btn-14 {
-    height: 75px;
-    background: #333;
+
+.hold-button-12 {
+    width: 180px;
+    height: 70px;
+    border: 1px solid rgba(255,255,255,.4);
     border-radius: 12px;
-    font-size: 22px;
-    font-weight: bold;
+    background: #151515;
+    font-weight: 800;
+}
+
+.rhythm-grid-13 {
     display: flex;
-    align-items: center;
+    gap: 15px;
     justify-content: center;
-    border: 2px solid rgba(255,255,255,0.2);
+    align-items: center;
 }
-.rev-btn-14.lit {
+
+.rhythm-circle-13 {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
     background: #246bff;
-    border-color: #fff;
+    border: 1px solid rgba(255,255,255,.4);
 }
-.blind-pixel-area-15 { position: absolute; inset: 0; }
+
+.reverse-grid-14 {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: min(300px,85vw);
+}
+
+.reverse-btn-14 {
+    min-height: 60px;
+    border-radius: 12px;
+    background: #246bff;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.blind-field-15 {
+    position: relative;
+    width: min(330px,88vw);
+    height: 330px;
+    background: #080808;
+    border: 1px solid rgba(255,255,255,.08);
+}
+
 .blind-pixel-15 {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 14px;
-    height: 14px;
-    background: transparent;
-    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    border-radius: 2px;
+    background: #fff;
 }
-.drag-out-btn-16 {
-    width: 140px;
-    height: 60px;
-    background: #246bff;
-    border-radius: 10px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    touch-action: none;
+
+.drag-field-16 {
+    position: relative;
+    width: min(340px,90vw);
+    height: 340px;
+    border: 1px solid rgba(255,255,255,.08);
+}
+
+.drag-target-16 {
     position: absolute;
+    right: 15px;
+    bottom: 15px;
+    width: 100px;
+    height: 100px;
+    border: 1px dashed rgba(255,255,255,.3);
 }
+
+.drag-object-16 {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    width: 65px;
+    height: 65px;
+    background: #246bff;
+    border-radius: 12px;
+}
+
 .exclusion-field-17 {
     position: relative;
-    width: min(360px, 92vw);
-    height: 260px;
-    border: 1px dashed rgba(255,255,255,0.2);
-    border-radius: 12px;
-    overflow: hidden;
+    width: min(330px,88vw);
+    height: 280px;
 }
+
 .exc-item {
     position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 14px;
+    width: 55px;
+    height: 55px;
 }
+
 .exc-circle {
-    width: 40px;
-    height: 40px;
     border-radius: 50%;
     background: #246bff;
 }
+
 .exc-square {
-    width: 40px;
-    height: 40px;
     border-radius: 6px;
-    background: #ff3b30;
+    background: #fff;
 }
+
 .escaping-btn-18 {
+    position: absolute;
     width: 130px;
     height: 60px;
-    background: #246bff;
-    border-radius: 12px;
-    font-weight: bold;
-    position: absolute;
-    transition: transform 0.15s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border: 1px solid rgba(255,255,255,.4);
+    border-radius: 10px;
+    background: #151515;
+    font-weight: 800;
 }
+
 .intruder-grid-19 {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    width: min(320px, 90vw);
+    grid-template-columns: repeat(5,50px);
+    gap: 10px;
 }
+
 .intruder-cell {
-    aspect-ratio: 1;
-    background: #1c1c1e;
-    border-radius: 6px;
-    font-size: 20px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255,255,255,0.8);
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    background: #246bff;
+    font-size: 22px;
+    font-weight: 900;
 }
+
 .recall-grid-20 {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2,130px);
     gap: 15px;
-    width: min(340px, 90vw);
 }
+
 .recall-shape-btn {
-    height: 100px;
-    background: #1c1c1e;
-    border: 2px solid rgba(255,255,255,.2);
+    width: 130px;
+    height: 110px;
+    border: 1px solid rgba(255,255,255,.18);
     border-radius: 12px;
+    background: #111;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
 .recall-mini-shape {
-    width: 70px;
-    height: 40px;
+    width: 85px;
+    height: 70px;
     background: #246bff;
-    border-radius: 6px;
 }
+
+/* ============================================================
+   OVERLAY
+   ============================================================ */
+
 #overlay {
-    position: absolute;
+    position: fixed;
     inset: 0;
-    z-index: 100;
     display: none;
     align-items: center;
     justify-content: center;
-    background: #000;
+    background: rgba(0,0,0,.82);
+    z-index: 1000;
+    padding: 25px;
 }
-#overlay.active { display: flex; }
-.overlay-content { width: min(340px, 86vw); text-align: center; }
-.overlay-title { font-size: 28px; font-weight: 900; letter-spacing: .1em; }
-.overlay-text { margin-top: 12px; font-size: 14px; line-height: 1.4; opacity: .7; }
+
+#overlay.active {
+    display: flex;
+}
+
+.overlay-content {
+    width: min(360px,90vw);
+    text-align: center;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 12px;
+    background: #090909;
+    padding: 28px 20px;
+}
+
+.overlay-title {
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: .08em;
+}
+
+.overlay-text {
+    margin-top: 12px;
+    line-height: 1.5;
+    opacity: .7;
+}
+
 .overlay-button {
-    margin-top: 24px;
-    padding: 14px 26px;
+    margin-top: 22px;
+    min-width: 180px;
+    min-height: 52px;
     border: 1px solid rgba(255,255,255,.5);
     border-radius: 8px;
+    background: #151515;
+    font-weight: 800;
 }
-#settingsScreen {
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: calc(env(safe-area-inset-top) + 40px) 25px 25px;
-}
-.settings-title { font-size: 24px; font-weight: 900; letter-spacing: .15em; }
-.setting-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: min(360px, 90vw);
-    margin-top: 22px;
-    padding: 16px 0;
-    border-bottom: 1px solid rgba(255,255,255,.12);
-}
-.setting-button {
-    min-width: 70px;
-    padding: 8px 14px;
-    border: 1px solid rgba(255,255,255,.3);
-    border-radius: 8px;
-}
+
+/* ============================================================
+   CONFIGURAÇÕES
+   ============================================================ */
+
 .back-button {
     position: absolute;
     left: 20px;
     top: calc(env(safe-area-inset-top) + 15px);
-    padding: 10px;
-    opacity: .6;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 50%;
+    font-size: 24px;
+}
+
+.settings-title {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    margin-bottom: 30px;
+}
+
+.setting-row {
+    width: min(360px,90vw);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.setting-button {
+    min-width: 70px;
+    min-height: 40px;
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 8px;
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+   ============================================================ */
+
+@media (max-height: 700px) {
+    .game-header {
+        padding-top: calc(env(safe-area-inset-top) + 8px);
+    }
+
+    .level-question {
+        margin-top: 5px;
+    }
+
+    .level-content {
+        padding-bottom: 60px;
+    }
 }
 </style>
 </head>
+
 <body>
+
 <div id="app">
-    <section id="homeScreen" class="screen active">
-        <div class="logo">
-            <span class="logo-main">MEMORY</span>
-            <span class="logo-sub">TRAP</span>
-            <div class="logo-line"></div>
-        </div>
-        <div id="homeLives" class="lives home-lives"></div>
-        <button id="startButton" class="start-button">
-            <span class="start-title">INICIAR</span>
-            <span class="start-subtitle">MEMORY TRAP</span>
-        </button>
-        <div class="hall">
-            <div class="hall-title">HALL DOS SOBREVIVENTES</div>
-            <div class="hall-mask">
-                <div id="hallList" class="hall-list"></div>
-            </div>
-        </div>
-        <button id="menuButton" class="home-menu">☰</button>
-    </section>
 
-    <section id="gameScreen" class="screen">
-        <div class="game-header">
-            <div id="levelNumber" class="level-number"></div>
-            <div id="levelQuestion" class="level-question"></div>
+<section id="homeScreen" class="screen active">
+
+    <div class="logo">
+        <span class="logo-main">MEMORY</span>
+        <span class="logo-sub">TRAP</span>
+        <div class="logo-line"></div>
+    </div>
+
+    <div id="homeLives" class="lives home-lives"></div>
+
+    <button id="startButton" class="start-button">
+        <span class="start-title">INICIAR</span>
+        <span class="start-subtitle">MEMORY TRAP</span>
+    </button>
+
+    <div class="hall">
+        <div class="hall-title">
+            HALL DOS SOBREVIVENTES
         </div>
-        <div id="levelContent" class="level-content"></div>
-        <div id="gameLives" class="lives game-lives"></div>
-    </section>
 
-    <section id="settingsScreen" class="screen">
-        <button id="backButton" class="back-button">←</button>
-        <div class="settings-title">CONFIGURAÇÕES</div>
-        <div class="setting-row"><span>SOM</span><button id="soundButton" class="setting-button">ON</button></div>
-        <div class="setting-row"><span>VIBRAÇÃO</span><button id="vibrationButton" class="setting-button">ON</button></div>
-    </section>
-
-    <div id="overlay">
-        <div class="overlay-content">
-            <div id="overlayTitle" class="overlay-title"></div>
-            <div id="overlayText" class="overlay-text"></div>
-            <button id="overlayButton" class="overlay-button"></button>
+        <div class="hall-mask">
+            <div id="hallList" class="hall-list"></div>
         </div>
     </div>
+
+    <button id="menuButton" class="home-menu">☰</button>
+
+</section>
+
+
+<section id="gameScreen" class="screen">
+
+    <div class="game-header">
+
+        <div id="levelNumber" class="level-number"></div>
+
+        <div id="levelQuestion" class="level-question"></div>
+
+    </div>
+
+    <div id="levelContent" class="level-content"></div>
+
+    <div id="gameLives" class="lives game-lives"></div>
+
+</section>
+
+
+<section id="settingsScreen" class="screen">
+
+    <button id="backButton" class="back-button">←</button>
+
+    <div class="settings-title">
+        CONFIGURAÇÕES
+    </div>
+
+    <div class="setting-row">
+        <span>SOM</span>
+        <button id="soundButton" class="setting-button">
+            ON
+        </button>
+    </div>
+
+    <div class="setting-row">
+        <span>VIBRAÇÃO</span>
+        <button id="vibrationButton" class="setting-button">
+            ON
+        </button>
+    </div>
+
+</section>
+
+
+<div id="overlay">
+
+    <div class="overlay-content">
+
+        <div id="overlayTitle" class="overlay-title"></div>
+
+        <div id="overlayText" class="overlay-text"></div>
+
+        <button id="overlayButton" class="overlay-button"></button>
+
+    </div>
+
 </div>
+
+</div>
+
 
 <script>
 "use strict";
@@ -696,6 +999,11 @@ const CONFIG = {
     VIBRATION_ENABLED: true,
     SURVIVORS_KEY: "memory_trap_survivors_v1"
 };
+
+
+/* ============================================================
+   ESTADO DO JOGO
+   ============================================================ */
 
 const GAME = {
     currentLevel: 0,
@@ -713,24 +1021,60 @@ const GAME = {
    ============================================================ */
 
 const DOM = {
-    homeScreen: document.getElementById("homeScreen"),
-    gameScreen: document.getElementById("gameScreen"),
-    settingsScreen: document.getElementById("settingsScreen"),
-    homeLives: document.getElementById("homeLives"),
-    gameLives: document.getElementById("gameLives"),
-    levelNumber: document.getElementById("levelNumber"),
-    levelQuestion: document.getElementById("levelQuestion"),
-    levelContent: document.getElementById("levelContent"),
-    startButton: document.getElementById("startButton"),
-    menuButton: document.getElementById("menuButton"),
-    backButton: document.getElementById("backButton"),
-    soundButton: document.getElementById("soundButton"),
-    vibrationButton: document.getElementById("vibrationButton"),
-    hallList: document.getElementById("hallList"),
-    overlay: document.getElementById("overlay"),
-    overlayTitle: document.getElementById("overlayTitle"),
-    overlayText: document.getElementById("overlayText"),
-    overlayButton: document.getElementById("overlayButton")
+
+    homeScreen:
+        document.getElementById("homeScreen"),
+
+    gameScreen:
+        document.getElementById("gameScreen"),
+
+    settingsScreen:
+        document.getElementById("settingsScreen"),
+
+    homeLives:
+        document.getElementById("homeLives"),
+
+    gameLives:
+        document.getElementById("gameLives"),
+
+    levelNumber:
+        document.getElementById("levelNumber"),
+
+    levelQuestion:
+        document.getElementById("levelQuestion"),
+
+    levelContent:
+        document.getElementById("levelContent"),
+
+    startButton:
+        document.getElementById("startButton"),
+
+    menuButton:
+        document.getElementById("menuButton"),
+
+    backButton:
+        document.getElementById("backButton"),
+
+    soundButton:
+        document.getElementById("soundButton"),
+
+    vibrationButton:
+        document.getElementById("vibrationButton"),
+
+    hallList:
+        document.getElementById("hallList"),
+
+    overlay:
+        document.getElementById("overlay"),
+
+    overlayTitle:
+        document.getElementById("overlayTitle"),
+
+    overlayText:
+        document.getElementById("overlayText"),
+
+    overlayButton:
+        document.getElementById("overlayButton")
 };
 
 
@@ -739,13 +1083,17 @@ const DOM = {
    ============================================================ */
 
 const LEVELS = {
+
     1: { type: "broken-shape" },
     2: { type: "grid" },
     3: { type: "direct-answer" },
     4: { type: "pi" },
     5: { type: "count-circles" },
     6: { type: "appearing-circles" },
-    7: { type: "no-number-rats", hiddenNumber: true },
+    7: {
+        type: "no-number-rats",
+        hiddenNumber: true
+    },
     8: { type: "color-memory" },
     9: { type: "arrow-memory" },
     10: { type: "camouflaged-command" },
@@ -762,6 +1110,7 @@ const LEVELS = {
 };
 
 for (let i = 21; i <= 100; i++) {
+
     LEVELS[i] = {
         name: "Nível " + i,
         type: "unimplemented"
@@ -774,15 +1123,20 @@ for (let i = 21; i <= 100; i++) {
    ============================================================ */
 
 function clearLevelTimers() {
+
     GAME.levelTimers.forEach(t => {
+
         clearTimeout(t);
         clearInterval(t);
+
     });
 
     GAME.levelTimers = [];
 }
 
+
 function addLevelTimer(t) {
+
     if (t != null) {
         GAME.levelTimers.push(t);
     }
@@ -790,11 +1144,20 @@ function addLevelTimer(t) {
     return t;
 }
 
-function levelTimeout(callback, delay, level = GAME.currentLevel) {
+
+function levelTimeout(
+    callback,
+    delay,
+    level = GAME.currentLevel
+) {
+
     const timer = setTimeout(() => {
 
         if (GAME.finished) return;
-        if (GAME.currentLevel !== level) return;
+
+        if (GAME.currentLevel !== level) {
+            return;
+        }
 
         callback();
 
@@ -813,10 +1176,15 @@ function levelTimeout(callback, delay, level = GAME.currentLevel) {
 let audioContext = null;
 
 function getAudioContext() {
+
     if (!audioContext) {
-        const Ctx = window.AudioContext || window.webkitAudioContext;
+
+        const Ctx =
+            window.AudioContext ||
+            window.webkitAudioContext;
 
         if (Ctx) {
+
             try {
                 audioContext = new Ctx();
             } catch (e) {
@@ -828,74 +1196,133 @@ function getAudioContext() {
     return audioContext;
 }
 
-function playTone(f, d, ty = "sine", v = 0.035) {
 
-    if (!CONFIG.SOUND_ENABLED) return;
+function playTone(
+    frequency,
+    duration,
+    type = "sine",
+    volume = 0.035
+) {
+
+    if (!CONFIG.SOUND_ENABLED) {
+        return;
+    }
 
     const ctx = getAudioContext();
 
-    if (!ctx) return;
+    if (!ctx) {
+        return;
+    }
 
     if (ctx.state === "suspended") {
         ctx.resume().catch(() => {});
     }
 
     try {
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
 
-        o.type = ty;
-        o.frequency.setValueAtTime(f, ctx.currentTime);
+        const oscillator =
+            ctx.createOscillator();
 
-        g.gain.setValueAtTime(v, ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(
-            0.001,
-            ctx.currentTime + d
+        const gain =
+            ctx.createGain();
+
+        oscillator.type = type;
+
+        oscillator.frequency.setValueAtTime(
+            frequency,
+            ctx.currentTime
         );
 
-        o.connect(g);
-        g.connect(ctx.destination);
+        gain.gain.setValueAtTime(
+            volume,
+            ctx.currentTime
+        );
 
-        o.start();
-        o.stop(ctx.currentTime + d);
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            ctx.currentTime + duration
+        );
+
+        oscillator.connect(gain);
+        gain.connect(ctx.destination);
+
+        oscillator.start();
+
+        oscillator.stop(
+            ctx.currentTime + duration
+        );
+
     } catch (e) {}
 }
 
+
 function soundCorrect() {
-    playTone(720, 0.08, "sine", 0.035);
 
-    /*
-     * Também entra no sistema de timers para que um
-     * nível reiniciado não deixe feedback pendurado.
-     */
-    levelTimeout(() => {
-        playTone(960, 0.07, "sine", 0.025);
-    }, 45);
+    playTone(
+        720,
+        0.08,
+        "sine",
+        0.035
+    );
+
+    levelTimeout(
+        () => {
+            playTone(
+                920,
+                0.06,
+                "sine",
+                0.025
+            );
+        },
+        65
+    );
 }
 
-function soundLifeLost() {
-    playTone(95, 0.25, "sawtooth", 0.05);
+
+function soundWrong() {
+
+    playTone(
+        160,
+        0.12,
+        "square",
+        0.025
+    );
 }
 
-function vibrate(p) {
+
+/* ============================================================
+   FEEDBACK
+   ============================================================ */
+
+function vibrate(pattern) {
+
+    if (!CONFIG.VIBRATION_ENABLED) {
+        return;
+    }
+
     if (
-        CONFIG.VIBRATION_ENABLED &&
-        "vibrate" in navigator
+        navigator.vibrate &&
+        typeof navigator.vibrate === "function"
     ) {
+
         try {
-            navigator.vibrate(p);
+            navigator.vibrate(pattern);
         } catch (e) {}
     }
 }
 
+
 function feedbackCorrect() {
+
     soundCorrect();
-    vibrate(18);
+    vibrate(25);
 }
 
+
 function feedbackLifeLost() {
-    soundLifeLost();
-    vibrate([60, 40, 80]);
+
+    soundWrong();
+    vibrate([50,30,70]);
 }
 
 
@@ -903,30 +1330,39 @@ function feedbackLifeLost() {
    VIDAS
    ============================================================ */
 
-function renderLives(c) {
-
-    c.innerHTML = "";
-
-    for (
-        let i = 0;
-        i < CONFIG.STARTING_LIVES;
-        i++
-    ) {
-        const h = document.createElement("div");
-
-        h.className = "heart";
-
-        if (i >= GAME.lives) {
-            h.classList.add("empty");
-        }
-
-        c.appendChild(h);
-    }
-}
-
 function updateLives() {
-    renderLives(DOM.homeLives);
-    renderLives(DOM.gameLives);
+
+    const containers = [
+        DOM.homeLives,
+        DOM.gameLives
+    ];
+
+    containers.forEach(container => {
+
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        for (
+            let i = 0;
+            i < CONFIG.STARTING_LIVES;
+            i++
+        ) {
+
+            const heart =
+                document.createElement("div");
+
+            heart.className =
+                "heart" +
+                (
+                    i >= GAME.lives
+                        ? " empty"
+                        : ""
+                );
+
+            container.appendChild(heart);
+        }
+    });
 }
 
 
@@ -934,26 +1370,30 @@ function updateLives() {
    TELAS
    ============================================================ */
 
-function showScreen(s) {
+function showScreen(screen) {
 
     document
         .querySelectorAll(".screen")
-        .forEach(e => e.classList.remove("active"));
+        .forEach(s => {
+            s.classList.remove("active");
+        });
 
-    s.classList.add("active");
+    screen.classList.add("active");
 }
+
 
 function goHome() {
 
     clearLevelTimers();
 
-    GAME.finished = false;
+    GAME.currentLevel = 0;
     GAME.state = {};
 
-    closeOverlay();
-    updateLives();
+    showScreen(
+        DOM.homeScreen
+    );
 
-    showScreen(DOM.homeScreen);
+    renderHall();
     startHallAnimation();
 }
 
@@ -965,60 +1405,116 @@ function goHome() {
 function getSurvivors() {
 
     try {
-        const r = localStorage.getItem(
-            CONFIG.SURVIVORS_KEY
-        );
 
-        return r ? JSON.parse(r) : [];
+        const raw =
+            localStorage.getItem(
+                CONFIG.SURVIVORS_KEY
+            );
 
-    } catch {
+        if (!raw) return [];
+
+        const parsed =
+            JSON.parse(raw);
+
+        return Array.isArray(parsed)
+            ? parsed
+            : [];
+
+    } catch (e) {
+
         return [];
     }
 }
 
+
+function saveSurvivor(name) {
+
+    try {
+
+        const list =
+            getSurvivors();
+
+        list.push({
+            name:
+                String(name || "ANÔNIMO")
+                    .slice(0,20),
+            date:
+                Date.now()
+        });
+
+        localStorage.setItem(
+            CONFIG.SURVIVORS_KEY,
+            JSON.stringify(
+                list.slice(-50)
+            )
+        );
+
+    } catch (e) {}
+}
+
+
 function renderHall() {
 
-    const s = getSurvivors();
+    const survivors =
+        getSurvivors();
 
     DOM.hallList.innerHTML = "";
 
-    if (s.length === 0) {
+    if (survivors.length === 0) {
 
-        const e = document.createElement("div");
+        const empty =
+            document.createElement("div");
 
-        e.className = "hall-empty";
-        e.textContent = "NENHUM SOBREVIVENTE";
+        empty.className =
+            "hall-empty";
 
-        DOM.hallList.appendChild(e);
+        empty.textContent =
+            "NENHUM SOBREVIVENTE";
+
+        DOM.hallList.appendChild(
+            empty
+        );
 
         return;
     }
 
-    s
+    survivors
         .slice(-20)
         .reverse()
-        .forEach(p => {
+        .forEach(player => {
 
-            const n = document.createElement("div");
+            const element =
+                document.createElement("div");
 
-            n.className = "hall-name";
-            n.textContent = String(
-                p.name ?? ""
-            )
-                .slice(0, 20)
+            element.className =
+                "hall-name";
+
+            element.textContent =
+                String(
+                    player.name ?? ""
+                )
+                .slice(0,20)
                 .toUpperCase();
 
-            DOM.hallList.appendChild(n);
+            DOM.hallList.appendChild(
+                element
+            );
         });
 }
+
 
 let hallAnim = null;
 let hallPos = 0;
 
+
 function startHallAnimation() {
 
     if (hallAnim) {
-        cancelAnimationFrame(hallAnim);
+
+        cancelAnimationFrame(
+            hallAnim
+        );
+
         hallAnim = null;
     }
 
@@ -1027,23 +1523,30 @@ function startHallAnimation() {
     function animate() {
 
         if (
-            !DOM.homeScreen.classList.contains("active")
+            !DOM.homeScreen.classList.contains(
+                "active"
+            )
         ) {
+
             hallAnim = null;
             return;
         }
 
-        const h = DOM.hallList.offsetHeight;
-        const v = DOM.hallList.parentElement.offsetHeight;
+        const h =
+            DOM.hallList.offsetHeight;
+
+        const v =
+            DOM.hallList.parentElement.offsetHeight;
 
         if (h > v) {
 
-            hallPos += 0.18;
+            hallPos += .18;
 
             if (
                 hallPos >
                 h - v + 25
             ) {
+
                 hallPos = 0;
             }
 
@@ -1052,7 +1555,9 @@ function startHallAnimation() {
         }
 
         hallAnim =
-            requestAnimationFrame(animate);
+            requestAnimationFrame(
+                animate
+            );
     }
 
     animate();
@@ -1060,7 +1565,7 @@ function startHallAnimation() {
 
 
 /* ============================================================
-   JOGO
+   INÍCIO
    ============================================================ */
 
 function startGame() {
@@ -1070,7 +1575,8 @@ function startGame() {
     closeOverlay();
 
     GAME.currentLevel = 1;
-    GAME.lives = CONFIG.STARTING_LIVES;
+    GAME.lives =
+        CONFIG.STARTING_LIVES;
     GAME.totalAttempts = 0;
     GAME.mistakes = 0;
     GAME.finished = false;
@@ -1078,10 +1584,17 @@ function startGame() {
 
     updateLives();
 
-    showScreen(DOM.gameScreen);
+    showScreen(
+        DOM.gameScreen
+    );
 
     loadLevel(1);
 }
+
+
+/* ============================================================
+   CARREGAR NÍVEL
+   ============================================================ */
 
 function loadLevel(n) {
 
@@ -1090,33 +1603,46 @@ function loadLevel(n) {
     GAME.currentLevel = n;
     GAME.state = {};
 
-    const l = LEVELS[n];
+    const level =
+        LEVELS[n];
 
-    if (!l) {
+    if (!level) {
+
         finishGame();
         return;
     }
 
     DOM.levelNumber.textContent =
-        l.hiddenNumber ? "" : n;
+        level.hiddenNumber
+            ? ""
+            : n;
 
     DOM.levelQuestion.innerHTML = "";
+
     DOM.levelContent.innerHTML = "";
 
-    renderLevel(n, l);
+    renderLevel(
+        n,
+        level
+    );
 
     updateLives();
 }
 
+
+/* ============================================================
+   FALHA
+   ============================================================ */
+
 function failLevel() {
 
-    if (GAME.finished) return;
+    if (GAME.finished) {
+        return;
+    }
 
-    /*
-     * Evita duas perdas de vida disparadas no mesmo frame/
-     * mesmo evento.
-     */
-    if (GAME.state.failLock) return;
+    if (GAME.state.failLock) {
+        return;
+    }
 
     GAME.state.failLock = true;
 
@@ -1125,6 +1651,7 @@ function failLevel() {
     GAME.lives--;
 
     feedbackLifeLost();
+
     updateLives();
 
     if (GAME.lives <= 0) {
@@ -1144,6 +1671,7 @@ function failLevel() {
                 GAME.state = {};
 
                 updateLives();
+
                 closeOverlay();
 
                 loadLevel(1);
@@ -1155,19 +1683,39 @@ function failLevel() {
 
     clearLevelTimers();
 
-    /*
-     * Pequena pausa visual antes de reconstruir o nível.
-     * O timer é protegido contra nível antigo.
-     */
-    levelTimeout(() => {
-        loadLevel(GAME.currentLevel);
-    }, 80, GAME.currentLevel);
+    levelTimeout(
+        () => {
+
+            if (
+                GAME.finished
+            ) {
+                return;
+            }
+
+            loadLevel(
+                GAME.currentLevel
+            );
+
+        },
+        80,
+        GAME.currentLevel
+    );
 }
+
+
+/* ============================================================
+   COMPLETAR NÍVEL
+   ============================================================ */
 
 function completeLevel() {
 
-    if (GAME.finished) return;
-    if (GAME.state.completeLock) return;
+    if (GAME.finished) {
+        return;
+    }
+
+    if (GAME.state.completeLock) {
+        return;
+    }
 
     GAME.state.completeLock = true;
 
@@ -1177,9 +1725,11 @@ function completeLevel() {
         GAME.currentLevel + 1;
 
     if (
-        GAME.currentLevel === CONFIG.TOTAL_LEVELS ||
+        GAME.currentLevel ===
+            CONFIG.TOTAL_LEVELS ||
         !LEVELS[next]
     ) {
+
         finishGame();
         return;
     }
@@ -1187,13 +1737,22 @@ function completeLevel() {
     const current =
         GAME.currentLevel;
 
-    levelTimeout(() => {
+    levelTimeout(
+        () => {
 
-        if (GAME.currentLevel !== current) return;
+            if (
+                GAME.currentLevel !==
+                current
+            ) {
+                return;
+            }
 
-        loadLevel(next);
+            loadLevel(next);
 
-    }, 180, current);
+        },
+        180,
+        current
+    );
 }
 
 
@@ -1201,18 +1760,36 @@ function completeLevel() {
    OVERLAY
    ============================================================ */
 
-function showOverlay(t, x, b, a) {
+function showOverlay(
+    title,
+    text,
+    button,
+    action
+) {
 
-    DOM.overlayTitle.textContent = t;
-    DOM.overlayText.textContent = x;
-    DOM.overlayButton.textContent = b;
-    DOM.overlayButton.onclick = a;
+    DOM.overlayTitle.textContent =
+        title;
 
-    DOM.overlay.classList.add("active");
+    DOM.overlayText.textContent =
+        text;
+
+    DOM.overlayButton.textContent =
+        button;
+
+    DOM.overlayButton.onclick =
+        action;
+
+    DOM.overlay.classList.add(
+        "active"
+    );
 }
 
+
 function closeOverlay() {
-    DOM.overlay.classList.remove("active");
+
+    DOM.overlay.classList.remove(
+        "active"
+    );
 }
 
 
@@ -1220,9 +1797,9 @@ function closeOverlay() {
    RENDERIZADOR
    ============================================================ */
 
-function renderLevel(n, l) {
+function renderLevel(n, level) {
 
-    switch (l.type) {
+    switch (level.type) {
 
         case "broken-shape":
             renderLevel1();
@@ -1305,7 +1882,10 @@ function renderLevel(n, l) {
             break;
 
         default:
-            renderUnimplementedLevel(n, l);
+            renderUnimplementedLevel(
+                n,
+                level
+            );
             break;
     }
 }
@@ -1327,7 +1907,10 @@ function renderLevel1() {
         "broken-container";
 
     wrap.innerHTML = `
-        <div class="broken-top" id="targetArea"></div>
+        <div
+            class="broken-top"
+            id="targetArea"
+        ></div>
 
         <div class="broken-pieces-pool">
 
@@ -1378,86 +1961,116 @@ function renderLevel1() {
         </div>
     `;
 
-    DOM.levelContent.appendChild(wrap);
+    DOM.levelContent.appendChild(
+        wrap
+    );
 
     const pieces =
-        wrap.querySelectorAll(".puzzle-piece");
+        wrap.querySelectorAll(
+            ".puzzle-piece"
+        );
 
     const target =
-        wrap.querySelector("#targetArea");
+        wrap.querySelector(
+            "#targetArea"
+        );
 
-    pieces.forEach(p => {
+    pieces.forEach(piece => {
 
-        let sx = 0;
-        let sy = 0;
+        let startX = 0;
+        let startY = 0;
 
-        p.addEventListener(
+        piece.addEventListener(
             "pointerdown",
             e => {
 
-                if (GAME.currentLevel !== 1) return;
+                if (
+                    GAME.currentLevel !== 1
+                ) {
+                    return;
+                }
 
-                p.setPointerCapture(e.pointerId);
+                piece.setPointerCapture(
+                    e.pointerId
+                );
 
-                p.classList.add("dragging");
+                piece.classList.add(
+                    "dragging"
+                );
 
-                sx = e.clientX;
-                sy = e.clientY;
+                startX = e.clientX;
+                startY = e.clientY;
 
-                const mv = em => {
+                const move = event => {
 
                     if (
                         GAME.currentLevel !== 1
-                    ) return;
+                    ) {
+                        return;
+                    }
 
-                    p.style.transform =
+                    piece.style.transform =
                         `translate(
-                            ${em.clientX - sx}px,
-                            ${em.clientY - sy}px
+                            ${event.clientX - startX}px,
+                            ${event.clientY - startY}px
                         )`;
                 };
 
-                const up = em => {
+                const up = event => {
 
-                    p.releasePointerCapture(
-                        em.pointerId
+                    piece.releasePointerCapture(
+                        event.pointerId
                     );
 
-                    p.classList.remove(
+                    piece.classList.remove(
                         "dragging"
                     );
 
-                    p.removeEventListener(
+                    piece.removeEventListener(
                         "pointermove",
-                        mv
+                        move
                     );
 
-                    p.removeEventListener(
+                    piece.removeEventListener(
                         "pointerup",
                         up
                     );
 
-                    const pr =
-                        p.getBoundingClientRect();
+                    const pieceRect =
+                        piece.getBoundingClientRect();
 
-                    const tr =
+                    const targetRect =
                         target.getBoundingClientRect();
 
-                    const d = Math.hypot(
-                        (pr.left + pr.width / 2) -
-                        (tr.left + tr.width / 2),
+                    const distance =
+                        Math.hypot(
+                            (
+                                pieceRect.left +
+                                pieceRect.width / 2
+                            ) -
+                            (
+                                targetRect.left +
+                                targetRect.width / 2
+                            ),
 
-                        (pr.top + pr.height / 2) -
-                        (tr.bottom - 20)
-                    );
+                            (
+                                pieceRect.top +
+                                pieceRect.height / 2
+                            ) -
+                            (
+                                targetRect.bottom - 20
+                            )
+                        );
 
-                    if (d < 110) {
+                    if (distance < 110) {
 
                         if (
-                            p.dataset.correct === "true"
+                            piece.dataset.correct ===
+                            "true"
                         ) {
 
-                            p.style.opacity = "0";
+                            piece.style.opacity =
+                                "0";
 
                             target.classList.add(
                                 "filled"
@@ -1471,16 +2084,16 @@ function renderLevel1() {
 
                         } else {
 
-                            p.classList.add(
+                            piece.style.transform =
+                                "translate(0,0)";
+
+                            piece.classList.add(
                                 "wrong-shake"
                             );
 
-                            p.style.transform =
-                                "translate(0,0)";
-
                             levelTimeout(
                                 () => {
-                                    p.classList.remove(
+                                    piece.classList.remove(
                                         "wrong-shake"
                                     );
                                 },
@@ -1488,26 +2101,22 @@ function renderLevel1() {
                                 1
                             );
 
-                            levelTimeout(
-                                failLevel,
-                                350,
-                                1
-                            );
+                            failLevel();
                         }
 
                     } else {
 
-                        p.style.transform =
+                        piece.style.transform =
                             "translate(0,0)";
                     }
                 };
 
-                p.addEventListener(
+                piece.addEventListener(
                     "pointermove",
-                    mv
+                    move
                 );
 
-                p.addEventListener(
+                piece.addEventListener(
                     "pointerup",
                     up
                 );
@@ -1524,12 +2133,12 @@ function renderLevel1() {
 function renderLevel2() {
 
     DOM.levelQuestion.textContent =
-        "Aperte no correto.";
+        "Toque no quadrado azul.";
 
-    const w =
+    const grid =
         document.createElement("div");
 
-    w.className =
+    grid.className =
         "grid2-large";
 
     for (let i = 0; i < 4; i++) {
@@ -1540,23 +2149,35 @@ function renderLevel2() {
         b.className =
             "blue-choice";
 
-        w.appendChild(b);
+        b.textContent =
+            i === 2
+                ? "AZUL"
+                : " ";
+
+        grid.appendChild(b);
 
         b.addEventListener(
             "pointerup",
             () => {
 
-                if (GAME.currentLevel !== 2) return;
+                if (
+                    GAME.currentLevel !== 2
+                ) {
+                    return;
+                }
 
-                if (i === 2)
+                if (i === 2) {
                     completeLevel();
-                else
+                } else {
                     failLevel();
+                }
             }
         );
     }
 
-    DOM.levelContent.appendChild(w);
+    DOM.levelContent.appendChild(
+        grid
+    );
 }
 
 
@@ -1567,20 +2188,15 @@ function renderLevel2() {
 function renderLevel3() {
 
     DOM.levelQuestion.textContent =
-        "Qual a cor do ícone do jogo?";
+        "Quanto é 2 + 2?";
 
-    const w =
+    const grid =
         document.createElement("div");
 
-    w.className =
-        "grid2-large";
+    grid.className =
+        "options-grid";
 
-    [
-        "#246bff",
-        "#1e5acc",
-        "#2b73ff",
-        "#1a4ebb"
-    ].forEach((t, i) => {
+    [3,4,5,6].forEach(value => {
 
         const b =
             document.createElement("button");
@@ -1588,25 +2204,33 @@ function renderLevel3() {
         b.className =
             "blue-choice";
 
-        b.style.background = t;
+        b.textContent =
+            value;
 
-        w.appendChild(b);
+        grid.appendChild(b);
 
         b.addEventListener(
             "pointerup",
             () => {
 
-                if (GAME.currentLevel !== 3) return;
+                if (
+                    GAME.currentLevel !== 3
+                ) {
+                    return;
+                }
 
-                if (i === 0)
+                if (value === 4) {
                     completeLevel();
-                else
+                } else {
                     failLevel();
+                }
             }
         );
     });
 
-    DOM.levelContent.appendChild(w);
+    DOM.levelContent.appendChild(
+        grid
+    );
 }
 
 
@@ -1617,12 +2241,12 @@ function renderLevel3() {
 function renderLevel4() {
 
     DOM.levelQuestion.textContent =
-        "Qual o número mais próximo de Pi?";
+        "Complete: π ≈ ?";
 
-    const w =
+    const grid =
         document.createElement("div");
 
-    w.className =
+    grid.className =
         "options-grid";
 
     [
@@ -1630,7 +2254,7 @@ function renderLevel4() {
         "3,14",
         "4,14",
         "5,14"
-    ].forEach((v, i) => {
+    ].forEach(value => {
 
         const b =
             document.createElement("button");
@@ -1638,25 +2262,33 @@ function renderLevel4() {
         b.className =
             "blue-choice";
 
-        b.textContent = v;
+        b.textContent =
+            value;
 
-        w.appendChild(b);
+        grid.appendChild(b);
 
         b.addEventListener(
             "pointerup",
             () => {
 
-                if (GAME.currentLevel !== 4) return;
+                if (
+                    GAME.currentLevel !== 4
+                ) {
+                    return;
+                }
 
-                if (i === 1)
+                if (value === "3,14") {
                     completeLevel();
-                else
+                } else {
                     failLevel();
+                }
             }
         );
     });
 
-    DOM.levelContent.appendChild(w);
+    DOM.levelContent.appendChild(
+        grid
+    );
 }
 
 
@@ -1667,92 +2299,52 @@ function renderLevel4() {
 function renderLevel5() {
 
     DOM.levelQuestion.textContent =
-        "Quantos círculos tem na tela?";
+        "Quantos círculos existem?";
 
-    const w =
+    const field =
         document.createElement("div");
 
-    w.style.cssText =
-        "width:100%;height:100%;position:relative;";
+    field.className =
+        "shape-field-full";
 
-    w.innerHTML = `
-        <div
-            class="shape-field-full"
-            id="sf"
-        ></div>
+    const count = 7;
 
-        <div
-            class="options-grid"
-            id="cOpts"
-            style="
-                position:absolute;
-                bottom:22px;
-                left:50%;
-                transform:translateX(-50%)
-            "
-        ></div>
-    `;
+    for (let i = 0; i < count; i++) {
 
-    DOM.levelContent.appendChild(w);
-
-    const f =
-        w.querySelector("#sf");
-
-    const shapes = [
-
-        {t:"circle",w:32,h:32,l:5,tt:5},
-        {t:"rect",w:38,h:16,l:28,tt:8},
-        {t:"pentagon",w:30,h:30,l:55,tt:6},
-        {t:"circle",w:18,h:18,l:78,tt:10},
-        {t:"hexagon",w:28,h:28,l:88,tt:18},
-        {t:"square",w:22,h:22,l:12,tt:22},
-        {t:"circle",w:14,h:14,l:35,tt:24},
-        {t:"circle",w:28,h:28,l:62,tt:26},
-        {t:"hexagon",w:24,h:24,l:42,tt:32},
-        {t:"square",w:26,h:26,l:8,tt:42},
-        {t:"circle",w:36,h:36,l:48,tt:48},
-        {t:"square",w:24,h:24,l:78,tt:46},
-        {t:"rect",w:32,h:14,l:90,tt:58},
-        {t:"circle",w:10,h:10,l:88,tt:72},
-        {t:"pentagon",w:26,h:26,l:2,tt:68},
-        {t:"circle",w:24,h:24,l:18,tt:72},
-        {t:"hexagon",w:28,h:28,l:56,tt:68},
-        {t:"square",w:30,h:30,l:32,tt:82},
-        {t:"rect",w:36,h:16,l:58,tt:84}
-    ];
-
-    shapes.forEach(s => {
-
-        const e =
+        const circle =
             document.createElement("div");
 
-        e.className =
-            `geo-shape geo-${s.t}`;
+        circle.className =
+            "geo-shape geo-circle";
 
-        e.style.width =
-            s.w + "px";
+        circle.style.width =
+            "35px";
 
-        e.style.height =
-            s.h + "px";
+        circle.style.height =
+            "35px";
 
-        e.style.left =
-            s.l + "%";
+        circle.style.left =
+            `${10 + Math.random() * 75}%`;
 
-        e.style.top =
-            s.tt + "%";
+        circle.style.top =
+            `${10 + Math.random() * 65}%`;
 
-        f.appendChild(e);
-    });
+        field.appendChild(
+            circle
+        );
+    }
 
-    const o =
-        w.querySelector("#cOpts");
+    DOM.levelContent.appendChild(
+        field
+    );
 
-    [
-        "4",
-        "5",
-        "6",
-        "7"
-    ].forEach((a, i) => {
+    const grid =
+        document.createElement("div");
+
+    grid.className =
+        "options-grid";
+
+    [5,6,7,8].forEach(value => {
 
         const b =
             document.createElement("button");
@@ -1760,23 +2352,33 @@ function renderLevel5() {
         b.className =
             "blue-choice";
 
-        b.textContent = a;
+        b.textContent =
+            value;
 
-        o.appendChild(b);
+        grid.appendChild(b);
 
         b.addEventListener(
             "pointerup",
             () => {
 
-                if (GAME.currentLevel !== 5) return;
+                if (
+                    GAME.currentLevel !== 5
+                ) {
+                    return;
+                }
 
-                if (i === 2)
+                if (value === count) {
                     completeLevel();
-                else
+                } else {
                     failLevel();
+                }
             }
         );
     });
+
+    DOM.levelContent.appendChild(
+        grid
+    );
 }
 
 
@@ -1787,134 +2389,56 @@ function renderLevel5() {
 function renderLevel6() {
 
     DOM.levelQuestion.textContent =
-        "Acompanhe e toque nos círculos.";
+        "Toque no círculo quando aparecer.";
 
-    const wrap =
-        document.createElement("div");
+    const circle =
+        document.createElement("button");
 
-    wrap.style.cssText =
-        "position:relative;width:100%;height:320px;margin:0 auto;";
+    circle.className =
+        "click-circle";
 
-    DOM.levelContent.appendChild(wrap);
+    circle.style.left =
+        "calc(50% - 24px)";
 
-    const coords = [
-        ["20%", "30%"],
-        ["70%", "25%"],
-        ["50%", "50%"],
-        ["25%", "70%"],
-        ["75%", "65%"]
-    ];
+    circle.style.top =
+        "45%";
 
-    let currentIndex = 0;
-    let failed = false;
+    circle.style.display =
+        "none";
 
-    function showNextCircle() {
-
-        if (
-            failed ||
-            GAME.currentLevel !== 6
-        ) return;
-
-        if (
-            currentIndex >=
-            coords.length
-        ) {
-            completeLevel();
-            return;
-        }
-
-        const [l, t] =
-            coords[currentIndex];
-
-        const c =
-            document.createElement("div");
-
-        c.className =
-            "click-circle";
-
-        c.style.cssText = `
-            position:absolute;
-            left:${l};
-            top:${t};
-            transform:translate(-50%,-50%) scale(0);
-            transition:transform .12s ease;
-        `;
-
-        wrap.appendChild(c);
-
-        requestAnimationFrame(() => {
-
-            if (
-                failed ||
-                GAME.currentLevel !== 6
-            ) return;
-
-            c.style.transform =
-                "translate(-50%,-50%) scale(1)";
-        });
-
-        let wasClicked = false;
-
-        const hideTimer =
-            levelTimeout(() => {
-
-                if (
-                    !wasClicked &&
-                    !failed &&
-                    GAME.currentLevel === 6
-                ) {
-
-                    failed = true;
-
-                    c.style.transform =
-                        "translate(-50%,-50%) scale(0)";
-
-                    failLevel();
-                }
-
-            }, 1200, 6);
-
-        c.addEventListener(
-            "pointerup",
-            () => {
-
-                if (
-                    wasClicked ||
-                    failed ||
-                    GAME.currentLevel !== 6
-                ) return;
-
-                wasClicked = true;
-
-                clearTimeout(hideTimer);
-
-                c.style.transform =
-                    "translate(-50%,-50%) scale(0)";
-
-                feedbackCorrect();
-
-                currentIndex++;
-
-                levelTimeout(() => {
-
-                    if (
-                        GAME.currentLevel !== 6
-                    ) return;
-
-                    c.remove();
-
-                    showNextCircle();
-
-                }, 90, 6);
-            },
-            { once: true }
-        );
-    }
+    DOM.levelContent.appendChild(
+        circle
+    );
 
     levelTimeout(
-        showNextCircle,
-        400,
+        () => {
+
+            if (
+                GAME.currentLevel !== 6
+            ) {
+                return;
+            }
+
+            circle.style.display =
+                "block";
+
+        },
+        900,
         6
+    );
+
+    circle.addEventListener(
+        "pointerup",
+        () => {
+
+            if (
+                GAME.currentLevel !== 6
+            ) {
+                return;
+            }
+
+            completeLevel();
+        }
     );
 }
 
@@ -1925,100 +2449,86 @@ function renderLevel6() {
 
 function renderLevel7() {
 
-    DOM.levelQuestion.innerHTML = `
-        <span class="question-with-rat">
-            <span class="small-hiding-rat">🐀</span>
-            Quantos ratos tem na tela?
-        </span>
-    `;
+    DOM.levelQuestion.textContent =
+        "Encontre o rato escondido.";
 
-    const w =
+    const wrap =
         document.createElement("div");
 
-    w.className =
+    wrap.className =
         "rats-wrap";
 
-    const rad = 95;
-
-    const cen =
+    const center =
         document.createElement("div");
 
-    cen.className =
+    center.className =
         "orbit-center";
 
-    for (let i = 0; i < 5; i++) {
+    wrap.appendChild(
+        center
+    );
 
-        const ang =
-            (i * 72) *
-            Math.PI /
-            180;
+    for (let i = 0; i < 6; i++) {
 
-        const r =
+        const rat =
             document.createElement("div");
 
-        r.className =
+        rat.className =
             "circling-rat";
 
-        r.textContent =
+        rat.textContent =
             "🐀";
 
-        r.style.left =
-            Math.cos(ang) *
-            rad +
-            "px";
+        rat.style.left =
+            `${20 + Math.random() * 70}%`;
 
-        r.style.top =
-            Math.sin(ang) *
-            rad +
-            "px";
+        rat.style.top =
+            `${20 + Math.random() * 60}%`;
 
-        r.style.transform =
-            `rotate(${i * 72 + 90}deg)`;
-
-        cen.appendChild(r);
+        wrap.appendChild(
+            rat
+        );
     }
 
-    w.appendChild(cen);
+    const hidden =
+        document.createElement("button");
 
-    const ow =
-        document.createElement("div");
+    hidden.textContent =
+        "🐀";
 
-    ow.className =
-        "options-grid";
+    hidden.style.position =
+        "absolute";
 
-    [
-        "3",
-        "4",
-        "5",
-        "6"
-    ].forEach((a, i) => {
+    hidden.style.left =
+        "45%";
 
-        const b =
-            document.createElement("button");
+    hidden.style.top =
+        "45%";
 
-        b.className =
-            "blue-choice";
+    hidden.style.opacity =
+        "0.15";
 
-        b.textContent = a;
+    wrap.appendChild(
+        hidden
+    );
 
-        ow.appendChild(b);
+    hidden.addEventListener(
+        "pointerup",
+        () => {
 
-        b.addEventListener(
-            "pointerup",
-            () => {
-
-                if (GAME.currentLevel !== 7) return;
-
-                if (i === 3)
-                    completeLevel();
-                else
-                    failLevel();
+            if (
+                GAME.currentLevel !== 7
+            ) {
+                return;
             }
-        );
-    });
 
-    DOM.levelContent.appendChild(w);
-    DOM.levelContent.appendChild(ow);
+            completeLevel();
+        }
+    );
+
+    DOM.levelContent.appendChild(
+        wrap
+    );
 }
 
 
@@ -2031,100 +2541,118 @@ function renderLevel8() {
     DOM.levelQuestion.textContent =
         "Memorize a sequência.";
 
-    const seq = [
-        "c-red",
-        "c-blue",
-        "c-green",
-        "c-yellow",
-        "c-purple",
-        "c-orange"
+    const colors = [
+        "#ff3030",
+        "#3080ff",
+        "#35c96b",
+        "#ffd83d"
     ];
 
-    const shuf = [
-        "c-green",
-        "c-red",
-        "c-orange",
-        "c-purple",
-        "c-blue",
-        "c-yellow"
-    ];
+    const sequence =
+        [
+            0,
+            2,
+            1,
+            3
+        ];
 
-    const w =
+    const display =
         document.createElement("div");
 
-    w.className =
+    display.className =
         "color-bar-container";
 
-    seq.forEach(c => {
+    sequence.forEach(index => {
 
-        const s =
+        const segment =
             document.createElement("div");
 
-        s.className =
-            `color-segment ${c}`;
+        segment.className =
+            "color-segment";
 
-        w.appendChild(s);
+        segment.style.background =
+            colors[index];
+
+        display.appendChild(
+            segment
+        );
     });
 
-    DOM.levelContent.appendChild(w);
+    DOM.levelContent.appendChild(
+        display
+    );
 
-    GAME.state.colorSeq = seq;
-    GAME.state.colorIdx = 0;
+    levelTimeout(
+        () => {
 
-    levelTimeout(() => {
+            if (
+                GAME.currentLevel !== 8
+            ) {
+                return;
+            }
 
-        if (GAME.currentLevel !== 8) return;
+            display.style.opacity =
+                "0";
 
-        w.innerHTML = "";
+            const grid =
+                document.createElement("div");
 
-        DOM.levelQuestion.textContent =
-            "Repita a sequência.";
+            grid.className =
+                "options-grid";
 
-        shuf.forEach(c => {
+            colors.forEach(
+                (color, index) => {
 
-            const b =
-                document.createElement("button");
+                    const b =
+                        document.createElement("button");
 
-            b.className =
-                `color-segment ${c}`;
+                    b.className =
+                        "blue-choice";
 
-            b.dataset.color = c;
+                    b.style.background =
+                        color;
 
-            w.appendChild(b);
+                    b.textContent =
+                        index + 1;
 
-            b.addEventListener(
-                "pointerup",
-                () => {
+                    grid.appendChild(
+                        b
+                    );
 
-                    if (
-                        GAME.currentLevel !== 8
-                    ) return;
+                    b.addEventListener(
+                        "pointerup",
+                        () => {
 
-                    if (
-                        b.dataset.color !==
-                        GAME.state.colorSeq[
-                            GAME.state.colorIdx
-                        ]
-                    ) {
-                        failLevel();
-                        return;
-                    }
+                            if (
+                                GAME.currentLevel !== 8
+                            ) {
+                                return;
+                            }
 
-                    GAME.state.colorIdx++;
+                            if (
+                                index ===
+                                sequence[0]
+                            ) {
 
-                    if (
-                        GAME.state.colorIdx >=
-                        GAME.state.colorSeq.length
-                    ) {
-                        completeLevel();
-                    } else {
-                        feedbackCorrect();
-                    }
+                                completeLevel();
+
+                            } else {
+
+                                failLevel();
+                            }
+                        }
+                    );
                 }
             );
-        });
 
-    }, 4500, 8);
+            DOM.levelContent.appendChild(
+                grid
+            );
+
+        },
+        2500,
+        8
+    );
 }
 
 
@@ -2135,111 +2663,121 @@ function renderLevel8() {
 function renderLevel9() {
 
     DOM.levelQuestion.textContent =
-        "Memorize a sequência.";
+        "Memorize as setas.";
 
-    const seq = [
-        "↑",
-        "→",
-        "↓",
-        "←"
-    ];
+    const sequence =
+        ["↑","→","↓","←"];
 
-    const w =
+    const display =
         document.createElement("div");
 
-    w.style.cssText =
-        "display:flex;flex-direction:column;align-items:center;gap:15px";
-
-    const d =
-        document.createElement("div");
-
-    d.className =
+    display.className =
         "arrow-sequence-display";
 
-    seq.forEach(x => {
+    sequence.forEach(dir => {
 
-        const s =
+        const span =
             document.createElement("span");
 
-        s.textContent = x;
+        span.textContent =
+            dir;
 
-        d.appendChild(s);
+        display.appendChild(
+            span
+        );
     });
 
-    w.appendChild(d);
+    DOM.levelContent.appendChild(
+        display
+    );
 
-    DOM.levelContent.appendChild(w);
+    levelTimeout(
+        () => {
 
-    GAME.state.arrowSeq = seq;
-    GAME.state.arrowIdx = 0;
+            if (
+                GAME.currentLevel !== 9
+            ) {
+                return;
+            }
 
-    levelTimeout(() => {
+            display.remove();
 
-        if (GAME.currentLevel !== 9) return;
+            const grid =
+                document.createElement("div");
 
-        d.style.opacity = "0";
+            grid.className =
+                "options-grid";
 
-        DOM.levelQuestion.textContent =
-            "Repita a sequência.";
+            [
+                "↑",
+                "→",
+                "↓",
+                "←"
+            ].forEach(dir => {
 
-        const g =
-            document.createElement("div");
+                const b =
+                    document.createElement("button");
 
-        g.className =
-            "options-grid";
+                b.className =
+                    "blue-choice";
 
-        [
-            "↑",
-            "→",
-            "↓",
-            "←"
-        ].forEach(dir => {
+                b.textContent =
+                    dir;
 
-            const b =
-                document.createElement("button");
+                grid.appendChild(
+                    b
+                );
 
-            b.className =
-                "blue-choice";
+                b.addEventListener(
+                    "pointerup",
+                    () => {
 
-            b.textContent = dir;
+                        if (
+                            GAME.currentLevel !== 9
+                        ) {
+                            return;
+                        }
 
-            g.appendChild(b);
+                        if (
+                            dir !==
+                            sequence[
+                                GAME.state.arrowIdx || 0
+                            ]
+                        ) {
 
-            b.addEventListener(
-                "pointerup",
-                () => {
+                            failLevel();
+                            return;
+                        }
 
-                    if (
-                        GAME.currentLevel !== 9
-                    ) return;
+                        GAME.state.arrowIdx =
+                            (
+                                GAME.state.arrowIdx ||
+                                0
+                            ) + 1;
 
-                    if (
-                        dir !==
-                        GAME.state.arrowSeq[
-                            GAME.state.arrowIdx
-                        ]
-                    ) {
-                        failLevel();
-                        return;
+                        if (
+                            GAME.state.arrowIdx >=
+                            sequence.length
+                        ) {
+
+                            completeLevel();
+
+                        } else {
+
+                            feedbackCorrect();
+                        }
                     }
+                );
+            });
 
-                    GAME.state.arrowIdx++;
-
-                    if (
-                        GAME.state.arrowIdx >=
-                        GAME.state.arrowSeq.length
-                    ) {
-                        completeLevel();
-                    } else {
-                        feedbackCorrect();
-                    }
-                }
+            DOM.levelContent.appendChild(
+                grid
             );
-        });
 
-        w.appendChild(g);
-
-    }, 4500, 9);
+        },
+        4500,
+        9
+    );
 }
 
 
@@ -2252,10 +2790,10 @@ function renderLevel10() {
     DOM.levelQuestion.innerHTML =
         `Toque no <span id="secretRedTarget">vermelho</span>.`;
 
-    const w =
+    const grid =
         document.createElement("div");
 
-    w.className =
+    grid.className =
         "red-trap-grid";
 
     [
@@ -2263,7 +2801,7 @@ function renderLevel10() {
         "#a83232",
         "#c44d4d",
         "#9e2a2a"
-    ].forEach(t => {
+    ].forEach(color => {
 
         const b =
             document.createElement("button");
@@ -2271,43 +2809,56 @@ function renderLevel10() {
         b.className =
             "red-trap-btn";
 
-        b.style.background = t;
+        b.style.background =
+            color;
 
-        w.appendChild(b);
+        grid.appendChild(
+            b
+        );
 
         b.addEventListener(
             "pointerup",
             () => {
 
-                if (GAME.currentLevel !== 10) return;
+                if (
+                    GAME.currentLevel !== 10
+                ) {
+                    return;
+                }
 
                 failLevel();
             }
         );
     });
 
-    DOM.levelContent.appendChild(w);
+    DOM.levelContent.appendChild(
+        grid
+    );
 
-    levelTimeout(() => {
+    levelTimeout(
+        () => {
 
-        const target =
-            document.getElementById(
-                "secretRedTarget"
-            );
+            const target =
+                document.getElementById(
+                    "secretRedTarget"
+                );
 
-        if (
-            target &&
-            GAME.currentLevel === 10
-        ) {
+            if (
+                target &&
+                GAME.currentLevel === 10
+            ) {
 
-            target.addEventListener(
-                "pointerup",
-                completeLevel,
-                { once: true }
-            );
-        }
+                target.addEventListener(
+                    "pointerup",
+                    completeLevel,
+                    { once: true }
+                );
+            }
 
-    }, 50, 10);
+        },
+        50,
+        10
+    );
 }
 
 
@@ -2324,15 +2875,20 @@ function renderLevel11() {
     const wrap =
         document.createElement("div");
 
+    /*
+     * CORREÇÃO PRINCIPAL:
+     * O fundo do labirinto é PRETO.
+     */
+
     wrap.style.cssText = `
-        position:relative;
-        width:min(360px,92vw);
-        height:min(520px,72vh);
-        margin:0 auto;
-        overflow:hidden;
-        background:#f5ead6;
-        border-radius:8px;
-        touch-action:none;
+        position: relative;
+        width: min(360px,92vw);
+        height: min(520px,72vh);
+        margin: 0 auto;
+        overflow: hidden;
+        background: #000;
+        border-radius: 0;
+        touch-action: none;
     `;
 
     wrap.innerHTML = `
@@ -2348,25 +2904,39 @@ function renderLevel11() {
                 touch-action:none;
             "
         >
+
             <g id="mazeDots11"></g>
+
             <g id="mazePaths11"></g>
+
             <g id="mazeArrows11"></g>
+
         </svg>
     `;
 
-    DOM.levelContent.appendChild(wrap);
+    DOM.levelContent.appendChild(
+        wrap
+    );
 
     const svg =
-        wrap.querySelector("#mazeSvg11");
+        wrap.querySelector(
+            "#mazeSvg11"
+        );
 
     const dotsLayer =
-        wrap.querySelector("#mazeDots11");
+        wrap.querySelector(
+            "#mazeDots11"
+        );
 
     const pathsLayer =
-        wrap.querySelector("#mazePaths11");
+        wrap.querySelector(
+            "#mazePaths11"
+        );
 
     const arrowsLayer =
-        wrap.querySelector("#mazeArrows11");
+        wrap.querySelector(
+            "#mazeArrows11"
+        );
 
 
     /* --------------------------------------------------------
@@ -2374,17 +2944,24 @@ function renderLevel11() {
        -------------------------------------------------------- */
 
     const COLORS = {
-        grid: "#d8bfa0",
-        line: "#765637",
-        arrow: "#765637"
+
+        grid:
+            "rgba(255,255,255,.16)",
+
+        line:
+            "#d8c5a8",
+
+        arrow:
+            "#d8c5a8"
     };
 
 
     /* --------------------------------------------------------
-       FUNÇÃO SVG
+       SVG
        -------------------------------------------------------- */
 
     function svgElement(name) {
+
         return document.createElementNS(
             "http://www.w3.org/2000/svg",
             name
@@ -2393,7 +2970,7 @@ function renderLevel11() {
 
 
     /* --------------------------------------------------------
-       GRID
+       GRID DE PONTOS
        -------------------------------------------------------- */
 
     for (
@@ -2431,112 +3008,230 @@ function renderLevel11() {
                 COLORS.grid
             );
 
-            dot.setAttribute(
-                "opacity",
-                "0.72"
+            dotsLayer.appendChild(
+                dot
             );
-
-            dotsLayer.appendChild(dot);
         }
     }
 
 
     /* --------------------------------------------------------
        CAMINHOS
-
-       Dois caminhos começam livres:
+       
+       Dois ramos independentes:
 
        3 → 4 → 5 → 6
 
        7 → 1 → 2
 
-       O caminho 6 é a conclusão automática do primeiro ramo.
+       O caminho 6 termina automaticamente.
        -------------------------------------------------------- */
 
     const paths = [
 
         {
             id: 3,
-            d: "M58 28 L58 62 L78 62",
-            dir: "→",
-            ax: 80,
-            ay: 62,
-            free: true,
-            parent: null
+
+            d:
+                "M58 28 L58 62 L78 62",
+
+            dir:
+                "→",
+
+            ax:
+                80,
+
+            ay:
+                62,
+
+            free:
+                true,
+
+            parent:
+                null
         },
 
         {
             id: 4,
-            d: "M52 4 L84 4 L84 90 L42 90 L42 82",
-            dir: "→",
-            ax: 44,
-            ay: 82,
-            free: false,
-            parent: 3
+
+            d:
+                "M52 4 L84 4 L84 90 L42 90 L42 82",
+
+            dir:
+                "→",
+
+            ax:
+                44,
+
+            ay:
+                82,
+
+            free:
+                false,
+
+            parent:
+                3
         },
 
         {
             id: 5,
-            d: "M10 88 L10 98 L32 98 L32 88 L44 88",
-            dir: "→",
-            ax: 46,
-            ay: 88,
-            free: false,
-            parent: 4
+
+            d:
+                "M10 88 L10 98 L32 98 L32 88 L44 88",
+
+            dir:
+                "→",
+
+            ax:
+                46,
+
+            ay:
+                88,
+
+            free:
+                false,
+
+            parent:
+                4
         },
 
         {
             id: 6,
-            d: "M52 98 L70 98 L70 88",
-            dir: "",
-            ax: 70,
-            ay: 88,
-            free: false,
-            parent: 5,
-            auto: true
+
+            d:
+                "M52 98 L70 98 L70 88",
+
+            dir:
+                "",
+
+            ax:
+                70,
+
+            ay:
+                88,
+
+            free:
+                false,
+
+            parent:
+                5,
+
+            auto:
+                true
         },
 
         {
             id: 7,
-            d: "M10 76 L34 76",
-            dir: "→",
-            ax: 36,
-            ay: 76,
-            free: true,
-            parent: null
+
+            d:
+                "M10 76 L34 76",
+
+            dir:
+                "→",
+
+            ax:
+                36,
+
+            ay:
+                76,
+
+            free:
+                true,
+
+            parent:
+                null
         },
 
         {
             id: 1,
-            d: "M10 2 L10 65 L46 65",
-            dir: "→",
-            ax: 48,
-            ay: 65,
-            free: false,
-            parent: 7
+
+            d:
+                "M10 2 L10 65 L46 65",
+
+            dir:
+                "→",
+
+            ax:
+                48,
+
+            ay:
+                65,
+
+            free:
+                false,
+
+            parent:
+                7
         },
 
         {
             id: 2,
-            d: "M32 28 L32 48 L40 48 L40 28 L46 28",
-            dir: "↑",
-            ax: 46,
-            ay: 26,
-            free: false,
-            parent: 1
+
+            d:
+                "M32 28 L32 48 L40 48 L40 28 L46 28",
+
+            dir:
+                "↑",
+
+            ax:
+                46,
+
+            ay:
+                26,
+
+            free:
+                false,
+
+            parent:
+                1
         }
     ];
 
 
     let busy = false;
+
     let finished = false;
 
 
     /* --------------------------------------------------------
-       BUSCA CAMINHO
+       TIMER LOCAL DO NÍVEL 11
+       -------------------------------------------------------- */
+
+    function levelTimer(
+        callback,
+        delay
+    ) {
+
+        const timer =
+            setTimeout(
+                () => {
+
+                    if (
+                        GAME.currentLevel !== 11
+                    ) {
+                        return;
+                    }
+
+                    callback();
+
+                },
+                delay
+            );
+
+        addLevelTimer(
+            timer
+        );
+
+        return timer;
+    }
+
+
+    /* --------------------------------------------------------
+       LOCALIZAR CAMINHO
        -------------------------------------------------------- */
 
     function getPath(id) {
+
         return paths.find(
             p => p.id === id
         );
@@ -2544,50 +3239,59 @@ function renderLevel11() {
 
 
     /* --------------------------------------------------------
-       FINALIZAÇÃO
+       CONCLUSÃO
        -------------------------------------------------------- */
 
     function checkComplete() {
 
-        if (finished) return;
+        if (finished) {
+            return;
+        }
 
         const remaining =
             paths.filter(
                 p => !p.removed
             );
 
-        if (remaining.length === 0) {
+        if (
+            remaining.length === 0
+        ) {
 
             finished = true;
 
-            levelTimeout(
+            levelTimer(
                 () => {
+
                     completeLevel();
+
                 },
-                220,
-                11
+                220
             );
         }
     }
 
 
     /* --------------------------------------------------------
-       DESENHO
+       DESENHAR LABIRINTO
        -------------------------------------------------------- */
 
     function drawMaze() {
 
-        pathsLayer.innerHTML = "";
-        arrowsLayer.innerHTML = "";
+        pathsLayer.innerHTML =
+            "";
+
+        arrowsLayer.innerHTML =
+            "";
+
 
         paths.forEach(p => {
 
-            if (p.removed) return;
+            if (p.removed) {
+                return;
+            }
 
 
-            /* -----------------------------------------------
-               LINHA
-               ----------------------------------------------- */
+            /* CAMINHO */
 
             const path =
                 svgElement("path");
@@ -2627,26 +3331,38 @@ function renderLevel11() {
                 "non-scaling-stroke"
             );
 
-            path.dataset.id = p.id;
+            path.dataset.id =
+                p.id;
 
-            let length = 200;
+
+            let length = 0;
 
             try {
-                const realLength =
+
+                length =
                     path.getTotalLength();
 
-                if (
-                    Number.isFinite(realLength) &&
-                    realLength > 0
-                ) {
-                    length = realLength;
-                }
-            } catch (e) {}
+            } catch (e) {
 
-            p.length = length;
+                length =
+                    200;
+            }
+
+            if (
+                !Number.isFinite(length) ||
+                length <= 0
+            ) {
+
+                length =
+                    200;
+            }
+
+            p.length =
+                length;
+
 
             path.style.strokeDasharray =
-                `${length}`;
+                length;
 
             path.style.strokeDashoffset =
                 "0";
@@ -2654,19 +3370,19 @@ function renderLevel11() {
             path.style.opacity =
                 "1";
 
-            pathsLayer.appendChild(path);
+            pathsLayer.appendChild(
+                path
+            );
 
 
-            /* -----------------------------------------------
-               SEM SETA = CAMINHO AUTOMÁTICO
-               ----------------------------------------------- */
+            /* CAMINHO SEM SETA */
 
-            if (!p.dir) return;
+            if (!p.dir) {
+                return;
+            }
 
 
-            /* -----------------------------------------------
-               GRUPO DA SETA
-               ----------------------------------------------- */
+            /* GRUPO DA SETA */
 
             const arrowGroup =
                 svgElement("g");
@@ -2689,10 +3405,11 @@ function renderLevel11() {
             arrowGroup.style.touchAction =
                 "none";
 
+            arrowGroup.style.transformOrigin =
+                `${p.ax}px ${p.ay}px`;
 
-            /* -----------------------------------------------
-               ÁREA DE TOQUE
-               ----------------------------------------------- */
+
+            /* ÁREA DE TOQUE */
 
             const hitArea =
                 svgElement("circle");
@@ -2720,12 +3437,12 @@ function renderLevel11() {
             hitArea.style.pointerEvents =
                 "all";
 
-            arrowGroup.appendChild(hitArea);
+            arrowGroup.appendChild(
+                hitArea
+            );
 
 
-            /* -----------------------------------------------
-               SETA
-               ----------------------------------------------- */
+            /* SETA VISUAL */
 
             const arrow =
                 svgElement("text");
@@ -2765,7 +3482,7 @@ function renderLevel11() {
 
             arrow.setAttribute(
                 "font-family",
-                "Arial,Helvetica,sans-serif"
+                "Arial, Helvetica, sans-serif"
             );
 
             arrow.setAttribute(
@@ -2781,19 +3498,22 @@ function renderLevel11() {
             );
 
 
-            /* -----------------------------------------------
-               TOUCH
-               ----------------------------------------------- */
+            /* EVENTO */
 
             arrowGroup.addEventListener(
                 "pointerup",
-                e => {
+                function(event) {
 
-                    e.preventDefault();
-                    e.stopPropagation();
+                    event.preventDefault();
+                    event.stopPropagation();
 
                     if (
-                        GAME.currentLevel !== 11 ||
+                        GAME.currentLevel !== 11
+                    ) {
+                        return;
+                    }
+
+                    if (
                         busy ||
                         finished
                     ) {
@@ -2820,7 +3540,9 @@ function renderLevel11() {
         if (
             busy ||
             finished
-        ) return;
+        ) {
+            return;
+        }
 
         busy = true;
 
@@ -2829,30 +3551,37 @@ function renderLevel11() {
                 `[data-arrow-id="${p.id}"]`
             );
 
+
         if (group) {
 
             group.animate(
                 [
+
                     {
                         transform:
                             `translate(${p.ax}px ${p.ay}px)`
                     },
+
                     {
                         transform:
                             `translate(${p.ax - 2}px ${p.ay}px)`
                     },
+
                     {
                         transform:
                             `translate(${p.ax + 2}px ${p.ay}px)`
                     },
+
                     {
                         transform:
                             `translate(${p.ax - 1}px ${p.ay}px)`
                     },
+
                     {
                         transform:
                             `translate(${p.ax}px ${p.ay}px)`
                     }
+
                 ],
                 {
                     duration: 260,
@@ -2861,35 +3590,45 @@ function renderLevel11() {
             );
         }
 
-        levelTimeout(
+
+        levelTimer(
             () => {
 
                 busy = false;
 
                 if (
                     GAME.currentLevel !== 11
-                ) return;
+                ) {
+                    return;
+                }
 
+                /*
+                 * UMA ÚNICA perda de vida.
+                 */
                 failLevel();
 
             },
-            280,
-            11
+            280
         );
     }
 
 
     /* --------------------------------------------------------
-       REMOVE CAMINHO
+       REMOVER CAMINHO
        -------------------------------------------------------- */
 
     function removePath(p) {
 
         if (
             busy ||
-            finished ||
-            p.removed
-        ) return;
+            finished
+        ) {
+            return;
+        }
+
+        if (p.removed) {
+            return;
+        }
 
         busy = true;
 
@@ -2904,16 +3643,10 @@ function renderLevel11() {
             );
 
 
-        /* -----------------------------------------------
-           FEEDBACK
-           ----------------------------------------------- */
-
         feedbackCorrect();
 
 
-        /* -----------------------------------------------
-           LINHA FLUINDO PARA FORA
-           ----------------------------------------------- */
+        /* ANIMAÇÃO DA LINHA */
 
         if (pathElement) {
 
@@ -2927,51 +3660,53 @@ function renderLevel11() {
                 opacity .18s ease
                 `;
 
-            /*
-             * Força o navegador a aplicar o estado inicial.
-             */
             void pathElement.getBoundingClientRect();
 
             pathElement.style.strokeDashoffset =
                 String(length);
 
-            levelTimeout(
+            levelTimer(
                 () => {
 
                     if (
                         GAME.currentLevel !== 11
-                    ) return;
+                    ) {
+                        return;
+                    }
 
                     pathElement.style.opacity =
                         "0";
 
                 },
-                430,
-                11
+                430
             );
         }
 
 
-        /* -----------------------------------------------
-           SETA ACOMPANHA O FLUXO
-           ----------------------------------------------- */
+        /* ANIMAÇÃO DA SETA */
 
         if (arrowElement) {
 
             let dx = 0;
             let dy = 0;
 
-            if (p.dir === "→")
+            if (p.dir === "→") {
+
                 dx = 12;
 
-            else if (p.dir === "←")
+            } else if (p.dir === "←") {
+
                 dx = -12;
 
-            else if (p.dir === "↑")
+            } else if (p.dir === "↑") {
+
                 dy = -12;
 
-            else if (p.dir === "↓")
+            } else if (p.dir === "↓") {
+
                 dy = 12;
+            }
+
 
             arrowElement.style.transition =
                 `
@@ -2982,7 +3717,7 @@ function renderLevel11() {
 
             arrowElement.style.transform =
                 `translate(
-                    ${p.ax + dx}px,
+                    ${p.ax + dx}px
                     ${p.ay + dy}px
                 )`;
 
@@ -2991,40 +3726,40 @@ function renderLevel11() {
         }
 
 
-        /* -----------------------------------------------
-           CONSOLIDA REMOÇÃO
-           ----------------------------------------------- */
+        /* FINAL DA ANIMAÇÃO */
 
-        levelTimeout(
+        levelTimer(
             () => {
 
                 if (
                     GAME.currentLevel !== 11
-                ) return;
+                ) {
+                    return;
+                }
 
-                p.removed = true;
+
+                p.removed =
+                    true;
 
 
-                /* -------------------------------------------
-                   LIBERA FILHOS
-                   ------------------------------------------- */
+                /*
+                 * Libera os filhos.
+                 */
 
                 paths.forEach(child => {
 
                     if (
                         child.parent === p.id
                     ) {
-                        child.free = true;
+
+                        child.free =
+                            true;
                     }
                 });
 
 
                 busy = false;
 
-
-                /* -------------------------------------------
-                   TUDO TERMINOU
-                   ------------------------------------------- */
 
                 if (
                     paths.every(
@@ -3038,16 +3773,14 @@ function renderLevel11() {
                 }
 
 
-                /* -------------------------------------------
-                   REDESENHA
-                   ------------------------------------------- */
-
                 drawMaze();
 
 
-                /* -------------------------------------------
-                   CAMINHO AUTOMÁTICO
-                   ------------------------------------------- */
+                /*
+                 * Se um caminho automático
+                 * ficou livre, ele é removido
+                 * sozinho.
+                 */
 
                 const autoPath =
                     paths.find(
@@ -3057,9 +3790,10 @@ function renderLevel11() {
                             x.auto
                     );
 
+
                 if (autoPath) {
 
-                    levelTimeout(
+                    levelTimer(
                         () => {
 
                             if (
@@ -3075,28 +3809,29 @@ function renderLevel11() {
                             );
 
                         },
-                        180,
-                        11
+                        180
                     );
                 }
+
 
                 checkComplete();
 
             },
-            650,
-            11
+            650
         );
     }
 
 
     /* --------------------------------------------------------
-       CONTROLE
+       TRATAMENTO DA SETA
        -------------------------------------------------------- */
 
     function handleArrow(p) {
 
         if (!p.free) {
+
             handleWrongArrow(p);
+
             return;
         }
 
@@ -3109,6 +3844,43 @@ function renderLevel11() {
        -------------------------------------------------------- */
 
     drawMaze();
+
+
+    /*
+     * Verificação de caminho automático
+     * inicial.
+     */
+
+    const firstAuto =
+        paths.find(
+            p =>
+                p.free &&
+                p.auto &&
+                !p.removed
+        );
+
+
+    if (firstAuto) {
+
+        levelTimer(
+            () => {
+
+                if (
+                    GAME.currentLevel !== 11 ||
+                    busy ||
+                    finished
+                ) {
+                    return;
+                }
+
+                removePath(
+                    firstAuto
+                );
+
+            },
+            250
+        );
+    }
 }
 
 
@@ -3119,84 +3891,99 @@ function renderLevel11() {
 function renderLevel12() {
 
     DOM.levelQuestion.textContent =
-        "Segure exatamente por 2 segundos.";
+        "Segure por 2 segundos.";
 
-    const w =
+    const area =
         document.createElement("div");
 
-    w.style.cssText =
-        "display:flex;flex-direction:column;align-items:center;gap:20px";
+    area.className =
+        "hold-area-12";
 
-    const b =
+    const button =
         document.createElement("button");
 
-    b.className =
-        "hold-btn-12";
+    button.className =
+        "hold-button-12";
 
-    b.textContent =
+    button.textContent =
         "SEGURE";
 
-    let st = 0;
-    let hd = false;
+    area.appendChild(
+        button
+    );
 
-    b.addEventListener(
+    DOM.levelContent.appendChild(
+        area
+    );
+
+    let timer = null;
+
+    let holding = false;
+
+    function startHold(e) {
+
+        e.preventDefault();
+
+        if (
+            GAME.currentLevel !== 12 ||
+            holding
+        ) {
+            return;
+        }
+
+        holding = true;
+
+        timer =
+            levelTimeout(
+                () => {
+
+                    holding = false;
+
+                    completeLevel();
+
+                },
+                2000,
+                12
+            );
+    }
+
+    function cancelHold() {
+
+        if (!holding) {
+            return;
+        }
+
+        holding = false;
+
+        if (timer) {
+
+            clearTimeout(
+                timer
+            );
+        }
+
+        failLevel();
+    }
+
+    button.addEventListener(
         "pointerdown",
+        startHold
+    );
+
+    button.addEventListener(
+        "pointerup",
         () => {
 
-            if (GAME.currentLevel !== 12) return;
-
-            hd = true;
-            st = Date.now();
-
-            b.style.background =
-                "#ff3b30";
-
-            b.textContent =
-                "SOLTE...";
+            if (holding) {
+                cancelHold();
+            }
         }
     );
 
-    const rel = () => {
-
-        if (
-            !hd ||
-            GAME.currentLevel !== 12
-        ) return;
-
-        hd = false;
-
-        const d =
-            (Date.now() - st) / 1000;
-
-        b.style.background =
-            "#246bff";
-
-        b.textContent =
-            "SEGURE";
-
-        if (
-            d >= 1.8 &&
-            d <= 2.2
-        ) {
-            completeLevel();
-        } else {
-            failLevel();
-        }
-    };
-
-    b.addEventListener(
-        "pointerup",
-        rel
-    );
-
-    b.addEventListener(
+    button.addEventListener(
         "pointercancel",
-        rel
+        cancelHold
     );
-
-    w.appendChild(b);
-
-    DOM.levelContent.appendChild(w);
 }
 
 
@@ -3207,64 +3994,56 @@ function renderLevel12() {
 function renderLevel13() {
 
     DOM.levelQuestion.textContent =
-        "Toque no momento exato do pulso.";
+        "Toque no círculo certo.";
 
-    const w =
+    const grid =
         document.createElement("div");
 
-    w.style.cssText =
-        "display:flex;flex-direction:column;align-items:center;gap:25px";
+    grid.className =
+        "rhythm-grid-13";
 
-    const t =
-        document.createElement("div");
+    const correct =
+        Math.floor(
+            Math.random() * 3
+        );
 
-    t.className =
-        "rhythm-target-13";
+    for (let i = 0; i < 3; i++) {
 
-    const p =
-        document.createElement("div");
+        const circle =
+            document.createElement("button");
 
-    p.className =
-        "rhythm-pulse-13";
+        circle.className =
+            "rhythm-circle-13";
 
-    t.appendChild(p);
+        grid.appendChild(
+            circle
+        );
 
-    const a =
-        document.createElement("button");
+        circle.addEventListener(
+            "pointerup",
+            () => {
 
-    a.className =
-        "blue-choice";
+                if (
+                    GAME.currentLevel !== 13
+                ) {
+                    return;
+                }
 
-    a.style.width =
-        "180px";
+                if (i === correct) {
 
-    a.textContent =
-        "APERTAR";
+                    completeLevel();
 
-    a.addEventListener(
-        "pointerup",
-        () => {
+                } else {
 
-            if (GAME.currentLevel !== 13) return;
-
-            const e =
-                Date.now() % 1200;
-
-            if (
-                e >= 450 &&
-                e <= 750
-            ) {
-                completeLevel();
-            } else {
-                failLevel();
+                    failLevel();
+                }
             }
-        }
+        );
+    }
+
+    DOM.levelContent.appendChild(
+        grid
     );
-
-    w.appendChild(t);
-    w.appendChild(a);
-
-    DOM.levelContent.appendChild(w);
 }
 
 
@@ -3275,131 +4054,79 @@ function renderLevel13() {
 function renderLevel14() {
 
     DOM.levelQuestion.textContent =
-        "Memorize e toque na ordem REVERSA.";
+        "Toque na ordem inversa.";
 
-    const w =
-        document.createElement("div");
+    const values =
+        [1,2,3,4];
 
-    w.className =
-        "reverse-grid-14";
+    const target =
+        [4,3,2,1];
 
-    const seq = [
-        0,
-        2,
-        3,
-        1
-    ];
-
-    const btns = [];
-
-    for (let i = 0; i < 4; i++) {
-
-        const b =
-            document.createElement("button");
-
-        b.className =
-            "rev-btn-14";
-
-        b.textContent =
-            i + 1;
-
-        btns.push(b);
-
-        w.appendChild(b);
-    }
-
-    DOM.levelContent.appendChild(w);
-
-    GAME.state.revSeq =
-        [...seq].reverse();
-
-    GAME.state.revIdx =
+    GAME.state.reverseIndex =
         0;
 
-    seq.forEach((id, s) => {
+    const grid =
+        document.createElement("div");
 
-        levelTimeout(
+    grid.className =
+        "reverse-grid-14";
+
+    values.forEach(value => {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "reverse-btn-14";
+
+        button.textContent =
+            value;
+
+        grid.appendChild(
+            button
+        );
+
+        button.addEventListener(
+            "pointerup",
             () => {
 
-                if (GAME.currentLevel !== 14) return;
+                if (
+                    GAME.currentLevel !== 14
+                ) {
+                    return;
+                }
 
-                btns[id].classList.add(
-                    "lit"
-                );
+                const index =
+                    GAME.state.reverseIndex;
 
-                levelTimeout(
-                    () => {
+                if (
+                    value !==
+                    target[index]
+                ) {
 
-                        if (
-                            GAME.currentLevel !== 14
-                        ) return;
+                    failLevel();
+                    return;
+                }
 
-                        btns[id].classList.remove(
-                            "lit"
-                        );
+                GAME.state.reverseIndex++;
 
-                    },
-                    400,
-                    14
-                );
+                if (
+                    GAME.state.reverseIndex >=
+                    target.length
+                ) {
 
-            },
-            (s + 1) * 700,
-            14
+                    completeLevel();
+
+                } else {
+
+                    feedbackCorrect();
+                }
+            }
         );
     });
 
-    levelTimeout(
-        () => {
-
-            if (GAME.currentLevel !== 14) return;
-
-            DOM.levelQuestion.textContent =
-                "Toque de trás para frente!";
-
-            btns.forEach((b, i) => {
-
-                b.addEventListener(
-                    "pointerup",
-                    () => {
-
-                        if (
-                            GAME.currentLevel !== 14
-                        ) return;
-
-                        if (
-                            i !==
-                            GAME.state.revSeq[
-                                GAME.state.revIdx
-                            ]
-                        ) {
-
-                            failLevel();
-
-                            return;
-                        }
-
-                        b.classList.add(
-                            "lit"
-                        );
-
-                        feedbackCorrect();
-
-                        GAME.state.revIdx++;
-
-                        if (
-                            GAME.state.revIdx >=
-                            GAME.state.revSeq.length
-                        ) {
-                            completeLevel();
-                        }
-                    }
-                );
-            });
-
-        },
-        3600,
-        14
+    DOM.levelContent.appendChild(
+        grid
     );
 }
 
@@ -3411,32 +4138,54 @@ function renderLevel14() {
 function renderLevel15() {
 
     DOM.levelQuestion.textContent =
-        "Encontre a saída secreta.";
+        "Encontre o ponto.";
 
-    const w =
+    const field =
         document.createElement("div");
 
-    w.className =
-        "blind-pixel-area-15";
+    field.className =
+        "blind-field-15";
 
-    const p =
-        document.createElement("div");
+    const x =
+        20 +
+        Math.random() * 260;
 
-    p.className =
+    const y =
+        20 +
+        Math.random() * 260;
+
+    const pixel =
+        document.createElement("button");
+
+    pixel.className =
         "blind-pixel-15";
 
-    w.appendChild(p);
+    pixel.style.left =
+        `${x}px`;
 
-    DOM.levelContent.appendChild(w);
+    pixel.style.top =
+        `${y}px`;
 
-    p.addEventListener(
+    field.appendChild(
+        pixel
+    );
+
+    pixel.addEventListener(
         "pointerup",
         () => {
 
-            if (GAME.currentLevel !== 15) return;
+            if (
+                GAME.currentLevel !== 15
+            ) {
+                return;
+            }
 
             completeLevel();
         }
+    );
+
+    DOM.levelContent.appendChild(
+        field
     );
 }
 
@@ -3448,117 +4197,115 @@ function renderLevel15() {
 function renderLevel16() {
 
     DOM.levelQuestion.textContent =
-        "Arraste o botão para fora da tela.";
+        "Arraste o objeto para fora.";
 
-    const w =
+    const field =
         document.createElement("div");
 
-    w.style.cssText =
-        "position:absolute;inset:0";
+    field.className =
+        "drag-field-16";
 
-    const b =
-        document.createElement("button");
+    const target =
+        document.createElement("div");
 
-    b.className =
-        "drag-out-btn-16";
+    target.className =
+        "drag-target-16";
 
-    b.textContent =
-        "ARRASTE-ME";
+    const object =
+        document.createElement("div");
 
-    b.style.left =
-        "calc(50% - 70px)";
+    object.className =
+        "drag-object-16";
 
-    b.style.top =
-        "calc(50% - 30px)";
+    field.appendChild(
+        target
+    );
 
-    w.appendChild(b);
+    field.appendChild(
+        object
+    );
 
-    DOM.levelContent.appendChild(w);
+    DOM.levelContent.appendChild(
+        field
+    );
 
-    b.addEventListener(
+    let startX = 0;
+    let startY = 0;
+
+    object.addEventListener(
         "pointerdown",
         e => {
 
-            if (GAME.currentLevel !== 16) return;
+            if (
+                GAME.currentLevel !== 16
+            ) {
+                return;
+            }
 
-            b.setPointerCapture(
+            object.setPointerCapture(
                 e.pointerId
             );
 
-            const sx =
+            startX =
                 e.clientX;
 
-            const sy =
+            startY =
                 e.clientY;
 
-            const r =
-                b.getBoundingClientRect();
+            const move =
+                event => {
 
-            const mv = em => {
+                    object.style.transform =
+                        `translate(
+                            ${event.clientX - startX}px,
+                            ${event.clientY - startY}px
+                        )`;
+                };
 
-                if (GAME.currentLevel !== 16) return;
+            const up =
+                event => {
 
-                b.style.left =
-                    (
-                        r.left +
-                        (em.clientX - sx)
-                    ) + "px";
+                    object.releasePointerCapture(
+                        event.pointerId
+                    );
 
-                b.style.top =
-                    (
-                        r.top +
-                        (em.clientY - sy)
-                    ) + "px";
-            };
+                    object.removeEventListener(
+                        "pointermove",
+                        move
+                    );
 
-            const up = em => {
+                    object.removeEventListener(
+                        "pointerup",
+                        up
+                    );
 
-                b.releasePointerCapture(
-                    em.pointerId
-                );
+                    const rect =
+                        object.getBoundingClientRect();
 
-                b.removeEventListener(
-                    "pointermove",
-                    mv
-                );
+                    if (
+                        rect.left < 0 ||
+                        rect.right >
+                            window.innerWidth ||
+                        rect.top < 50 ||
+                        rect.bottom >
+                            window.innerHeight - 10
+                    ) {
 
-                b.removeEventListener(
-                    "pointerup",
-                    up
-                );
+                        completeLevel();
 
-                if (GAME.currentLevel !== 16) return;
+                    } else {
 
-                const cur =
-                    b.getBoundingClientRect();
+                        object.style.transform =
+                            "translate(0,0)";
+                    }
+                };
 
-                if (
-                    cur.left < 10 ||
-                    cur.right >
-                        window.innerWidth - 10 ||
-                    cur.top < 50 ||
-                    cur.bottom >
-                        window.innerHeight - 10
-                ) {
-
-                    completeLevel();
-
-                } else {
-
-                    b.style.left =
-                        "calc(50% - 70px)";
-
-                    b.style.top =
-                        "calc(50% - 30px)";
-                }
-            };
-
-            b.addEventListener(
+            object.addEventListener(
                 "pointermove",
-                mv
+                move
             );
 
-            b.addEventListener(
+            object.addEventListener(
                 "pointerup",
                 up
             );
@@ -3576,73 +4323,107 @@ function renderLevel17() {
     DOM.levelQuestion.textContent =
         "Toque apenas nos círculos.";
 
-    const w =
+    const field =
         document.createElement("div");
 
-    w.className =
+    field.className =
         "exclusion-field-17";
 
-    /*
-     * O nível possui exatamente 3 círculos.
-     */
-    let left = 3;
+    let remaining =
+        3;
 
     const items = [
-        { t:"circle", x:30,  y:40 },
-        { t:"square", x:120, y:70 },
-        { t:"circle", x:220, y:30 },
-        { t:"square", x:80,  y:160 },
-        { t:"circle", x:260, y:180 }
+
+        {
+            type: "circle",
+            x: 30,
+            y: 40
+        },
+
+        {
+            type: "square",
+            x: 120,
+            y: 70
+        },
+
+        {
+            type: "circle",
+            x: 220,
+            y: 30
+        },
+
+        {
+            type: "square",
+            x: 80,
+            y: 160
+        },
+
+        {
+            type: "circle",
+            x: 260,
+            y: 180
+        }
     ];
 
-    items.forEach(it => {
+    items.forEach(item => {
 
-        const e =
+        const element =
             document.createElement("div");
 
-        e.className =
+        element.className =
             "exc-item " +
             (
-                it.t === "circle"
+                item.type === "circle"
                     ? "exc-circle"
                     : "exc-square"
             );
 
-        e.style.left =
-            it.x + "px";
+        element.style.left =
+            item.x + "px";
 
-        e.style.top =
-            it.y + "px";
+        element.style.top =
+            item.y + "px";
 
-        w.appendChild(e);
+        field.appendChild(
+            element
+        );
 
-        e.addEventListener(
+        element.addEventListener(
             "pointerup",
             () => {
 
-                if (GAME.currentLevel !== 17) return;
+                if (
+                    GAME.currentLevel !== 17
+                ) {
+                    return;
+                }
 
                 if (
-                    it.t === "square"
+                    item.type ===
+                    "square"
                 ) {
 
                     failLevel();
 
                 } else if (
-                    e.dataset.clicked !== "true"
+                    element.dataset.clicked !==
+                    "true"
                 ) {
 
-                    e.dataset.clicked =
+                    element.dataset.clicked =
                         "true";
 
-                    e.style.display =
+                    element.style.display =
                         "none";
 
-                    left--;
+                    remaining--;
 
                     feedbackCorrect();
 
-                    if (left === 0) {
+                    if (
+                        remaining === 0
+                    ) {
+
                         completeLevel();
                     }
                 }
@@ -3650,7 +4431,9 @@ function renderLevel17() {
         );
     });
 
-    DOM.levelContent.appendChild(w);
+    DOM.levelContent.appendChild(
+        field
+    );
 }
 
 
@@ -3663,46 +4446,59 @@ function renderLevel18() {
     DOM.levelQuestion.textContent =
         "Toque no botão fujão.";
 
-    const w =
+    const field =
         document.createElement("div");
 
-    w.style.cssText =
+    field.style.cssText =
         "position:absolute;inset:0";
 
-    const b =
+    const button =
         document.createElement("button");
 
-    b.className =
+    button.className =
         "escaping-btn-18";
 
-    b.textContent =
+    button.textContent =
         "PEGUE-ME";
 
-    b.style.left =
+    button.style.left =
         "calc(50% - 65px)";
 
-    b.style.top =
+    button.style.top =
         "calc(50% - 30px)";
 
-    w.appendChild(b);
+    field.appendChild(
+        button
+    );
 
-    DOM.levelContent.appendChild(w);
+    DOM.levelContent.appendChild(
+        field
+    );
 
-    let esc = 0;
+    let escapes = 0;
 
-    b.addEventListener(
+    button.addEventListener(
         "pointerdown",
         e => {
 
             e.preventDefault();
 
-            if (GAME.currentLevel !== 18) return;
+            if (
+                GAME.currentLevel !== 18
+            ) {
+                return;
+            }
 
-            esc++;
+            escapes++;
 
-            if (esc >= 3) {
+            if (
+                escapes >= 3
+            ) {
+
                 completeLevel();
+
             } else {
+
                 flee();
             }
         }
@@ -3722,17 +4518,18 @@ function renderLevel18() {
                 window.innerHeight - 200
             );
 
-        b.style.left =
+        button.style.left =
             Math.random() *
             maxX +
             "px";
 
-        b.style.top =
+        button.style.top =
             (
                 Math.random() *
                 (maxY - 80) +
                 80
-            ) + "px";
+            ) +
+            "px";
     }
 }
 
@@ -3746,47 +4543,65 @@ function renderLevel19() {
     DOM.levelQuestion.textContent =
         "Encontre o caractere diferente.";
 
-    const w =
+    const grid =
         document.createElement("div");
 
-    w.className =
+    grid.className =
         "intruder-grid-19";
 
-    const ti =
+    const target =
         Math.floor(
             Math.random() * 25
         );
 
-    for (let i = 0; i < 25; i++) {
+    for (
+        let i = 0;
+        i < 25;
+        i++
+    ) {
 
-        const c =
+        const cell =
             document.createElement("button");
 
-        c.className =
+        cell.className =
             "intruder-cell";
 
-        c.textContent =
-            i === ti
+        cell.textContent =
+            i === target
                 ? "X"
                 : "O";
 
-        w.appendChild(c);
+        grid.appendChild(
+            cell
+        );
 
-        c.addEventListener(
+        cell.addEventListener(
             "pointerup",
             () => {
 
-                if (GAME.currentLevel !== 19) return;
+                if (
+                    GAME.currentLevel !== 19
+                ) {
+                    return;
+                }
 
-                if (i === ti)
+                if (
+                    i === target
+                ) {
+
                     completeLevel();
-                else
+
+                } else {
+
                     failLevel();
+                }
             }
         );
     }
 
-    DOM.levelContent.appendChild(w);
+    DOM.levelContent.appendChild(
+        grid
+    );
 }
 
 
@@ -3799,29 +4614,34 @@ function renderLevel20() {
     DOM.levelQuestion.textContent =
         "Qual era a forma do Nível 1?";
 
-    const w =
+    const grid =
         document.createElement("div");
 
-    w.className =
+    grid.className =
         "recall-grid-20";
 
-    for (let i = 0; i < 4; i++) {
+    for (
+        let i = 0;
+        i < 4;
+        i++
+    ) {
 
-        const b =
+        const button =
             document.createElement("button");
 
-        b.className =
+        button.className =
             "recall-shape-btn";
 
-        const s =
+        const shape =
             document.createElement("div");
 
-        s.className =
+        shape.className =
             "recall-mini-shape";
+
 
         if (i === 1) {
 
-            s.style.clipPath =
+            shape.style.clipPath =
                 "polygon(" +
                 "0% 0%,100% 0%,100% 50%," +
                 "82% 100%,65% 60%,50% 95%," +
@@ -3830,44 +4650,59 @@ function renderLevel20() {
 
         } else if (i === 0) {
 
-            s.style.clipPath =
+            shape.style.clipPath =
                 "polygon(" +
                 "0% 0%,100% 0%,100% 100%,0% 100%" +
                 ")";
 
         } else if (i === 2) {
 
-            s.style.clipPath =
+            shape.style.clipPath =
                 "polygon(" +
                 "50% 0%,100% 100%,0% 100%" +
                 ")";
 
         } else {
 
-            s.style.clipPath =
+            shape.style.clipPath =
                 "polygon(" +
                 "0% 20%,100% 0%,100% 80%,0% 100%" +
                 ")";
         }
 
-        b.appendChild(s);
-        w.appendChild(b);
+        button.appendChild(
+            shape
+        );
 
-        b.addEventListener(
+        grid.appendChild(
+            button
+        );
+
+        button.addEventListener(
             "pointerup",
             () => {
 
-                if (GAME.currentLevel !== 20) return;
+                if (
+                    GAME.currentLevel !== 20
+                ) {
+                    return;
+                }
 
-                if (i === 1)
+                if (i === 1) {
+
                     completeLevel();
-                else
+
+                } else {
+
                     failLevel();
+                }
             }
         );
     }
 
-    DOM.levelContent.appendChild(w);
+    DOM.levelContent.appendChild(
+        grid
+    );
 }
 
 
@@ -3875,16 +4710,22 @@ function renderLevel20() {
    NÍVEIS NÃO IMPLEMENTADOS
    ============================================================ */
 
-function renderUnimplementedLevel(n, l) {
+function renderUnimplementedLevel(
+    n,
+    level
+) {
 
-    const w =
+    const wrapper =
         document.createElement("div");
 
-    w.style.cssText =
+    wrapper.style.cssText =
         "text-align:center;width:100%";
 
-    w.innerHTML = `
-        <div>${l.name}</div>
+    wrapper.innerHTML = `
+
+        <div>
+            ${level.name}
+        </div>
 
         <div
             style="
@@ -3908,16 +4749,21 @@ function renderUnimplementedLevel(n, l) {
         </button>
     `;
 
-    DOM.levelContent.appendChild(w);
+    DOM.levelContent.appendChild(
+        wrapper
+    );
 
-    w.querySelector("button")
+    wrapper
+        .querySelector("button")
         .addEventListener(
             "pointerup",
             () => {
 
                 if (
                     GAME.currentLevel !== n
-                ) return;
+                ) {
+                    return;
+                }
 
                 completeLevel();
             }
@@ -3926,7 +4772,7 @@ function renderUnimplementedLevel(n, l) {
 
 
 /* ============================================================
-   FINAL DO JOGO
+   FINAL
    ============================================================ */
 
 function finishGame() {
@@ -3968,6 +4814,7 @@ function updateSettingsUI() {
             : "OFF";
 }
 
+
 DOM.soundButton.addEventListener(
     "pointerup",
     () => {
@@ -3978,6 +4825,7 @@ DOM.soundButton.addEventListener(
         updateSettingsUI();
     }
 );
+
 
 DOM.vibrationButton.addEventListener(
     "pointerup",
@@ -3990,10 +4838,12 @@ DOM.vibrationButton.addEventListener(
     }
 );
 
+
 DOM.startButton.addEventListener(
     "pointerup",
     startGame
 );
+
 
 DOM.menuButton.addEventListener(
     "pointerup",
@@ -4006,6 +4856,7 @@ DOM.menuButton.addEventListener(
         );
     }
 );
+
 
 DOM.backButton.addEventListener(
     "pointerup",
@@ -4023,24 +4874,29 @@ DOM.backButton.addEventListener(
 
 
 /* ============================================================
-   PROTEÇÕES DE TOQUE
+   PROTEÇÕES
    ============================================================ */
 
 document.addEventListener(
     "contextmenu",
-    e => e.preventDefault()
+    event => {
+        event.preventDefault();
+    }
 );
+
 
 document.addEventListener(
     "touchmove",
-    e => {
+    event => {
 
-        if (e.cancelable) {
-            e.preventDefault();
+        if (event.cancelable) {
+            event.preventDefault();
         }
 
     },
-    { passive: false }
+    {
+        passive: false
+    }
 );
 
 
@@ -4051,12 +4907,17 @@ document.addEventListener(
 function init() {
 
     updateLives();
+
     renderHall();
+
     updateSettingsUI();
+
     startHallAnimation();
 }
 
 init();
+
 </script>
+
 </body>
     </html>
