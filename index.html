@@ -419,13 +419,42 @@ button {
     border: 1px solid rgba(255,255,255,.25);
     border-radius: 14px;
 }
-
+.arrow-labyrinth-11 {
+    position: relative;
+    width: min(360px, 92vw);
+    height: min(420px, 72vh);
+    background: #f5ead6;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 8px;
+}
+.maze-line {
+    position: absolute;
+    background: rgba(255,255,255,.9);
+    border-radius: 2px;
+    transition: opacity 0.4s ease;
+}
+.lab-arrow-node {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    line-height: 1;
+    transition: transform 0.7s cubic-bezier(.2,.8,.2,1), opacity 0.4s;
+}
 @keyframes shake11 {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-6px); }
     75% { transform: translateX(6px); }
 }
-
 .hold-btn-12 {
     width: 140px;
     height: 140px;
@@ -882,7 +911,7 @@ function failLevel() {
     updateLives();
     if (GAME.lives <= 0) {
         clearLevelTimers();
-        showOverlay("SEM VIDAS", "Você perdeu as 5 vidas.", "RECOMEÇAR", () => {
+        showOverlay("SEM VIDAS", "Você perdeu as 5 vidas. O jogo será reiniciado.", "RECOMEÇAR", () => {
             GAME.lives = CONFIG.STARTING_LIVES;
             updateLives();
             closeOverlay();
@@ -890,10 +919,9 @@ function failLevel() {
         });
         return;
     }
-    showOverlay("ERRO", "Você continua no mesmo nível.", "TENTAR NOVAMENTE", () => {
-        closeOverlay();
-        loadLevel(GAME.currentLevel);
-    });
+    // Reinicia o nível instantaneamente sem mostrar a mensagem de erro/overlay incômoda
+    clearLevelTimers();
+    loadLevel(GAME.currentLevel);
 }
 
 function completeLevel() {
@@ -1085,45 +1113,71 @@ function renderLevel5() {
     });
 }
 
+/* NÍVEL 6 CORRIGIDO E ROBUSTO */
 function renderLevel6() {
     DOM.levelQuestion.textContent = "Acompanhe e toque nos círculos.";
-    const w = document.createElement("div");
-    w.style.cssText = "position:relative;width:100%;height:320px;margin:0 auto";
-    DOM.levelContent.appendChild(w);
-    const coords = [["20%", "30%"], ["70%", "25%"], ["50%", "50%"], ["25%", "70%"], ["75%", "65%"]];
-    let idx = 0, fail = false;
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "position:relative; width:100%; height: 320px; margin: 0 auto;";
+    DOM.levelContent.appendChild(wrap);
 
-    function next() {
-        if (fail) return;
-        if (idx >= coords.length) {
+    const coords = [
+        ["20%", "30%"], ["70%", "25%"],
+        ["50%", "50%"], ["25%", "70%"],
+        ["75%", "65%"]
+    ];
+
+    let currentIndex = 0;
+    let failed = false;
+
+    function showNextCircle() {
+        if (failed || GAME.currentLevel !== 6) return;
+        if (currentIndex >= coords.length) {
             completeLevel();
             return;
         }
-        const [l, t] = coords[idx];
+
+        const [l, t] = coords[currentIndex];
         const c = document.createElement("div");
         c.className = "click-circle";
-        c.style.cssText = `position:absolute;left:${l};top:${t};transform:translate(-50%,-50%) scale(0);transition:transform 0.12s ease`;
-        w.appendChild(c);
-        requestAnimationFrame(() => c.style.transform = "translate(-50%,-50%) scale(1)");
-        let clicked = false;
-        const tm = setTimeout(() => {
-            if (!clicked && !fail) {
-                fail = true;
+        c.style.cssText = `position:absolute; left:${l}; top:${t}; transform: translate(-50%, -50%) scale(0); transition: transform 0.12s ease;`;
+        wrap.appendChild(c);
+
+        requestAnimationFrame(() => {
+            if (failed || GAME.currentLevel !== 6) return;
+            c.style.transform = "translate(-50%, -50%) scale(1)";
+        });
+
+        let wasClicked = false;
+
+        const hideTimer = setTimeout(() => {
+            if (!wasClicked && !failed && GAME.currentLevel === 6) {
+                failed = true;
+                c.style.transform = "translate(-50%, -50%) scale(0)";
                 failLevel();
             }
-        }, 850);
-        addLevelTimer(tm);
+        }, 1200); // 1.2s para dar tempo hábil de clique
+        addLevelTimer(hideTimer);
+
         c.addEventListener("pointerup", () => {
-            if (clicked || fail) return;
-            clicked = true;
-            clearTimeout(tm);
-            c.remove();
+            if (wasClicked || failed || GAME.currentLevel !== 6) return;
+            wasClicked = true;
+            clearTimeout(hideTimer);
+            c.style.transform = "translate(-50%, -50%) scale(0)";
             feedbackCorrect();
-            idx++;
-            next();
+            currentIndex++;
+            setTimeout(() => {
+                if (GAME.currentLevel !== 6) return;
+                c.remove();
+                showNextCircle();
+            }, 90);
         }, { once: true });
     }
-    next();
+
+    // Pequeno atraso inicial de segurança para evitar erro imediato ao carregar o nível
+    const startDelay = setTimeout(() => {
+        showNextCircle();
+    }, 400);
+    addLevelTimer(startDelay);
 }
 
 function renderLevel7() {
