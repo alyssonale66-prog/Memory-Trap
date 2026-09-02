@@ -48,40 +48,71 @@ button {
     align-items: center; justify-content: center;
 }
 
-/* TELA INICIAL */
+/* TELA INICIAL - ESPAÇAMENTO MÍNIMO ENTRE INICIAR E HALL */
 #homeScreen {
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    padding: calc(env(safe-area-inset-top) + 20px) 20px calc(env(safe-area-inset-bottom) + 20px);
+    gap: 24px;
+    padding: calc(env(safe-area-inset-top) + 25px) 20px calc(env(safe-area-inset-bottom) + 20px);
 }
 
-.logo { text-align: center; line-height: .82; pointer-events: none; margin-top: 5px; }
+.logo { 
+    text-align: center; 
+    line-height: .82; 
+    pointer-events: none; 
+    margin: 0;
+}
 .logo-main { display: block; font-size: clamp(38px, 11vw, 64px); font-weight: 900; letter-spacing: .10em; }
 .logo-sub { display: block; margin-top: 6px; font-size: clamp(14px, 3.8vw, 22px); font-weight: 700; letter-spacing: .45em; padding-left: .45em; }
 .logo-line { width: min(200px, 50vw); height: 1px; margin: 10px auto 0; background: rgba(255,255,255,.45); }
 
-/* VIDAS (VERMELHO VIBRANTE #ff3b30 COM ESPAÇAMENTO CLARO ENTRE ELAS EM TODAS AS TELAS) */
-.lives { display: flex; justify-content: center; align-items: center; gap: 16px; }
-.home-lives { margin: auto 0; }
-.heart { position: relative; width: 22px; height: 22px; transform: rotate(-45deg); border-radius: 3px; background: #ff3b30; margin: 0 6px; }
+.lives { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 20px; /* espaçamento leve entre os corações */
+}
+
+.home-lives { 
+    margin: 0; /* tirei o auto que tava separando tudo */
+}
+
+.heart { 
+    position: relative; 
+    width: 22px; 
+    height: 22px; 
+    transform: rotate(-45deg); 
+    border-radius: 3px; 
+    background: #ff3b30; 
+    margin: 0; /* tirei o margin 0 6px que duplicava o gap */
+}
 .heart::before, .heart::after { content: ""; position: absolute; width: 22px; height: 22px; border-radius: 50%; background: #ff3b30; }
 .heart::before { top: -11px; left: 0; }
 .heart::after { top: 0; left: 11px; }
 .heart.empty, .heart.empty::before, .heart.empty::after { background: #333333; }
 
 .start-button {
-    position: relative; width: min(320px, 82vw); min-height: 68px; padding: 12px 20px;
-    border: 1px solid rgba(255,255,255,.75); border-radius: 6px; background: #050505;
-    margin-bottom: 10px;
+    position: relative; 
+    width: min(320px, 82vw); 
+    min-height: 68px; 
+    padding: 12px 20px;
+    border: 1px solid rgba(255,255,255,.75); 
+    border-radius: 6px; 
+    background: #050505;
+    margin: 0; /* sem margin-bottom */
 }
 .start-button:active { transform: scale(.97); }
 .start-title { display: block; font-size: 22px; font-weight: 900; letter-spacing: .15em; }
 .start-subtitle { display: block; margin-top: 3px; font-size: 10px; letter-spacing: .25em; opacity: .55; }
 
 .hall {
-    position: relative; width: min(370px, 90vw); height: 110px; overflow: hidden;
-    border-top: 1px solid rgba(255,255,255,.12); border-bottom: 1px solid rgba(255,255,255,.12);
-    margin-bottom: 10px;
+    position: relative; 
+    width: min(370px, 90vw); 
+    height: 110px; 
+    overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,.12); 
+    border-bottom: 1px solid rgba(255,255,255,.12);
+    margin: 0; /* sem margin, fica colado no botão com só o gap de 24px */
 }
 .hall-title { position: absolute; top: 6px; left: 0; right: 0; z-index: 3; text-align: center; font-size: 10px; letter-spacing: .25em; opacity: .5; }
 .hall-mask { position: absolute; inset: 0; overflow: hidden; padding-top: 24px; }
@@ -106,19 +137,61 @@ button {
 }
 .blue-choice:active { transform: scale(.96); background: #1a53cc; }
 
-/* NÍVEL 1 */
-.broken-container { display: flex; flex-direction: column; align-items: center; gap: 30px; width: 100%; margin-top: -15px; }
-.broken-top { width: 240px; height: 110px; background: #246bff; border-radius: 8px; clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 82% 100%, 65% 60%, 50% 95%, 35% 60%, 18% 100%, 0% 50%); }
-.broken-pieces-pool { display: flex; gap: 12px; justify-content: center; width: 100%; }
-.puzzle-piece {
-    width: 60px; height: 60px; background: #246bff; border-radius: 6px;
-    touch-action: none; cursor: grab; transition: transform 0.2s ease;
+/* NÍVEL 1 - NOVO */
+.broken-container { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 36px; 
+    width: 100%; 
+    margin-top: -10px;
 }
-.puzzle-piece.p1 { clip-path: polygon(0% 100%, 100% 100%, 100% 50%, 80% 10%, 65% 45%, 50% 15%, 35% 45%, 20% 10%, 0% 50%); }
-.puzzle-piece.p2 { clip-path: polygon(0% 100%, 100% 100%, 100% 50%, 82% 0%, 65% 40%, 50% 5%, 35% 40%, 18% 0%, 0% 50%); }
-.puzzle-piece.p3 { clip-path: polygon(0% 100%, 100% 100%, 100% 50%, 84% 5%, 65% 35%, 50% 10%, 35% 35%, 16% 5%, 0% 50%); }
-.puzzle-piece.p4 { clip-path: polygon(0% 100%, 100% 100%, 100% 50%, 78% 15%, 65% 50%, 50% 20%, 35% 50%, 22% 15%, 0% 50%); }
-.puzzle-piece.dragging { transition: none; z-index: 50; }
+.broken-top { 
+    width: min(340px, 86vw); 
+    height: 170px; 
+    background: #246bff; 
+    border-radius: 10px 10px 4px 4px;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 52%, 88% 100%, 78% 62%, 63% 98%, 52% 60%, 38% 100%, 26% 64%, 12% 100%, 0% 52%);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.15) inset;
+}
+.broken-top.filled {
+    clip-path: none;
+    background: #246bff;
+}
+.broken-pieces-pool { 
+    display: flex; 
+    gap: 14px; 
+    justify-content: center; 
+    width: 100%;
+    flex-wrap: wrap;
+}
+.puzzle-piece {
+    width: 78px; 
+    height: 78px; 
+    background: #246bff; 
+    border-radius: 6px;
+    touch-action: none; 
+    cursor: grab;
+    transition: transform 0.38s cubic-bezier(.2,.8,.3,1.2);
+    border: 1px solid rgba(255,255,255,.12);
+}
+.puzzle-piece.dragging { 
+    transition: none; 
+    z-index: 50; 
+    scale: 1.1;
+    box-shadow: 0 8px 24px rgba(0,0,0,.6);
+}
+.puzzle-piece.wrong-shake {
+    animation: shakeWrong 0.4s ease;
+}
+@keyframes shakeWrong {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+}
 
 /* NÍVEL 2 */
 .grid2-large { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, 75px); gap: 14px; width: min(380px, 94vw); }
@@ -164,19 +237,27 @@ button {
 .red-trap-btn { min-height: 65px; border: 1px solid rgba(255,255,255,.25); border-radius: 14px; }
 #secretRedTarget { cursor: pointer; }
 
-/* NÍVEL 11: Labirinto Complexo de Setas Brancas em Fundo Preto */
+/* NÍVEL 11: Labirinto FIEL à imagem 1 - Fundo preto / Setas brancas */
 .arrow-labyrinth-11 {
-    position: relative; width: min(340px, 92vw); height: 320px;
-    background: #000; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px;
+    position: relative; width: min(360px, 94vw); height: min(360px, 94vw);
+    background: #000; border: 2px solid #fff; border-radius: 4px;
     overflow: hidden; margin: 0 auto;
 }
-.lab-arrow-node {
-    position: absolute; width: 44px; height: 44px;
-    background: #111; border: 1px solid rgba(255,255,255,0.4); border-radius: 8px;
-    color: #fff; font-size: 22px; display: flex; align-items: center; justify-content: center;
-    cursor: pointer; transition: transform 0.35s ease, opacity 0.35s ease;
+.maze-wall {
+    position: absolute; background: #fff; border-radius: 1px;
 }
-.lab-arrow-node:active { transform: scale(0.92); }
+.lab-arrow-node {
+    position: absolute; width: 36px; height: 36px;
+    background: transparent; border: none;
+    color: #fff; font-size: 26px; font-weight: 900;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 10; line-height: 1;
+    transition: transform 0.6s cubic-bezier(.2,.8,.2,1), opacity 0.6s ease;
+}
+.lab-arrow-node.wrong-shake {
+    animation: shake11 0.3s ease;
+}
+@keyframes shake11 { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
 
 /* ESTILOS DOS NÍVEIS 12 a 20 */
 .hold-btn-12 { width: 140px; height: 140px; border-radius: 50%; background: #246bff; border: 4px solid #fff; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
@@ -414,17 +495,18 @@ function renderLevel(number, level) {
     }
 }
 
-/* NÍVEL 1 */
+/* NÍVEL 1 - NOVO */
 function renderLevel1() {
     DOM.levelQuestion.textContent = "Complete a figura.";
-    const wrap = document.createElement("div"); wrap.className = "broken-container";
+    const wrap = document.createElement("div"); 
+    wrap.className = "broken-container";
     wrap.innerHTML = `
         <div class="broken-top" id="targetArea"></div>
-        <div class="broken-pieces-pool">
-            <div class="puzzle-piece p1" data-correct="false"></div>
-            <div class="puzzle-piece p2" data-correct="true"></div>
-            <div class="puzzle-piece p3" data-correct="false"></div>
-            <div class="puzzle-piece p4" data-correct="false"></div>
+        <div class="broken-pieces-pool" id="piecesPool">
+            <div class="puzzle-piece" data-correct="false" data-id="0" style="clip-path: polygon(0% 100%, 100% 100%, 100% 28%, 86% 2%, 77% 32%, 61% 4%, 50% 32%, 36% 3%, 25% 32%, 11% 2%, 0% 28%);"></div>
+            <div class="puzzle-piece" data-correct="true" data-id="1" style="clip-path: polygon(0% 100%, 100% 100%, 100% 48%, 88% 0%, 78% 38%, 63% 2%, 52% 40%, 38% 0%, 26% 36%, 12% 0%, 0% 48%);"></div>
+            <div class="puzzle-piece" data-correct="false" data-id="2" style="clip-path: polygon(0% 100%, 100% 100%, 100% 32%, 88% 8%, 78% 34%, 63% 10%, 52% 36%, 38% 8%, 26% 32%, 12% 8%, 0% 32%);"></div>
+            <div class="puzzle-piece" data-correct="false" data-id="3" style="clip-path: polygon(0% 100%, 100% 100%, 100% 30%, 88% 4%, 79% 30%, 64% 6%, 53% 32%, 39% 4%, 27% 30%, 13% 4%, 0% 30%);"></div>
         </div>
     `;
     DOM.levelContent.appendChild(wrap);
@@ -433,26 +515,59 @@ function renderLevel1() {
     const targetArea = wrap.querySelector("#targetArea");
 
     pieces.forEach(piece => {
+        let startX = 0, startY = 0;
+
         piece.addEventListener("pointerdown", e => {
             piece.setPointerCapture(e.pointerId);
             piece.classList.add("dragging");
-            const startX = e.clientX; const startY = e.clientY;
+            piece.classList.remove("wrong-shake");
+            startX = e.clientX;
+            startY = e.clientY;
+
+            const onMove = (em) => {
+                const dx = em.clientX - startX;
+                const dy = em.clientY - startY;
+                piece.style.transform = `translate(${dx}px, ${dy}px)`;
+            };
             
-            function onMove(em) { piece.style.transform = `translate(${em.clientX - startX}px, ${em.clientY - startY}px)`; }
-            
-            function onUp(em) {
-                piece.releasePointerCapture(em.pointerId); piece.classList.remove("dragging");
-                piece.removeEventListener("pointermove", onMove); piece.removeEventListener("pointerup", onUp);
-                
-                const pRect = piece.getBoundingClientRect(); const tRect = targetArea.getBoundingClientRect();
-                const isOver = (pRect.left >= tRect.left - 30 && pRect.right <= tRect.right + 30 && pRect.top >= tRect.top - 30 && pRect.bottom <= tRect.bottom + 30);
-                
-                if (isOver) {
-                    if (piece.dataset.correct === "true") { piece.style.visibility = "hidden"; completeLevel(); } 
-                    else { failLevel(); setTimeout(() => piece.style.transform = "none", 100); }
-                } else { piece.style.transform = "none"; }
-            }
-            piece.addEventListener("pointermove", onMove); piece.addEventListener("pointerup", onUp);
+            const onUp = (em) => {
+                piece.releasePointerCapture(em.pointerId);
+                piece.classList.remove("dragging");
+                piece.removeEventListener("pointermove", onMove);
+                piece.removeEventListener("pointerup", onUp);
+
+                const pRect = piece.getBoundingClientRect();
+                const tRect = targetArea.getBoundingClientRect();
+                const pCenterX = pRect.left + pRect.width / 2;
+                const pCenterY = pRect.top + pRect.height / 2;
+                const tCenterX = tRect.left + tRect.width / 2;
+                const tCenterY = tRect.bottom - 20;
+
+                const dist = Math.hypot(pCenterX - tCenterX, pCenterY - tCenterY);
+                const isNear = dist < 110;
+
+                if (isNear) {
+                    if (piece.dataset.correct === "true") {
+                        piece.style.transition = "transform 0.35s cubic-bezier(.2,.8,.2,1), opacity 0.25s ease";
+                        piece.style.transform = `translate(${tCenterX - pCenterX + (pRect.left - startX) + pRect.width/2}px, ${tCenterY - pCenterY + (pRect.top - startY) + pRect.height/2}px) scale(1.15)`;
+                        piece.style.opacity = "0";
+                        targetArea.classList.add("filled");
+                        feedbackCorrect();
+                        setTimeout(() => completeLevel(), 380);
+                    } else {
+                        feedbackLifeLost();
+                        piece.classList.add("wrong-shake");
+                        piece.style.transform = "translate(0px, 0px)";
+                        setTimeout(() => piece.classList.remove("wrong-shake"), 400);
+                        setTimeout(() => failLevel(), 350);
+                    }
+                } else {
+                    piece.style.transform = "translate(0px, 0px)";
+                }
+            };
+
+            piece.addEventListener("pointermove", onMove);
+            piece.addEventListener("pointerup", onUp);
         });
     });
 }
@@ -529,44 +644,65 @@ function renderLevel5() {
     });
 }
 
-/* NÍVEL 6 */
+/* NÍVEL 6 - RÁPIDO */
 function renderLevel6() {
     DOM.levelQuestion.textContent = "Acompanhe e toque nos círculos.";
-    const wrap = document.createElement("div"); wrap.style.cssText = "position:absolute; inset:0;";
-    const coords = [["20%", "30%"], ["70%", "25%"], ["50%", "50%"], ["25%", "70%"], ["75%", "65%"]];
-    let clickedCount = 0;
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "position:relative; width:100%; height: 320px; margin: 0 auto;";
+    DOM.levelContent.appendChild(wrap);
+
+    const coords = [
+        ["20%", "30%"], ["70%", "25%"],
+        ["50%", "50%"], ["25%", "70%"],
+        ["75%", "65%"]
+    ];
+
+    let currentIndex = 0;
     let failed = false;
 
-    coords.forEach(([l, t], i) => {
-        const c = document.createElement("div"); c.className = "click-circle";
-        c.style.cssText = `position:absolute; left:${l}; top:${t}; display:none;`;
+    function showNextCircle() {
+        if (failed) return;
+        if (currentIndex >= coords.length) {
+            completeLevel();
+            return;
+        }
+
+        const [l, t] = coords[currentIndex];
+        const c = document.createElement("div");
+        c.className = "click-circle";
+        c.style.cssText = `position:absolute; left:${l}; top:${t}; transform: translate(-50%, -50%) scale(0); transition: transform 0.12s ease;`;
         wrap.appendChild(c);
 
-        addLevelTimer(setTimeout(() => {
-            if (failed) return;
-            c.style.display = "block";
-            const hideTimer = setTimeout(() => {
-                if (c.style.display === "block" && !failed) {
-                    failed = true;
-                    failLevel();
-                }
-            }, 3000);
-            addLevelTimer(hideTimer);
+        requestAnimationFrame(() => {
+            c.style.transform = "translate(-50%, -50%) scale(1)";
+        });
 
-            c.addEventListener("pointerup", () => {
-                if (c.style.display === "block") {
-                    c.style.display = "none";
-                    clickedCount++;
-                    feedbackCorrect();
-                    if (clickedCount === coords.length && !failed) {
-                        completeLevel();
-                    }
-                }
-            }, { once: true });
-        }, i * 3200));
-    });
+        let wasClicked = false;
 
-    DOM.levelContent.appendChild(wrap);
+        const hideTimer = setTimeout(() => {
+            if (!wasClicked && !failed) {
+                failed = true;
+                c.style.transform = "translate(-50%, -50%) scale(0)";
+                failLevel();
+            }
+        }, 1100);
+        addLevelTimer(hideTimer);
+
+        c.addEventListener("pointerup", () => {
+            if (wasClicked || failed) return;
+            wasClicked = true;
+            clearTimeout(hideTimer);
+            c.style.transform = "translate(-50%, -50%) scale(0)";
+            feedbackCorrect();
+            currentIndex++;
+            setTimeout(() => {
+                c.remove();
+                showNextCircle();
+            }, 90);
+        }, { once: true });
+    }
+
+    showNextCircle();
 }
 
 /* NÍVEL 7 */
@@ -666,67 +802,88 @@ function renderLevel10() {
     }, 50);
 }
 
-/* NÍVEL 11: Labirinto Complexo de Setas Brancas em Fundo Preto (Fiel à Referência) */
+/* NÍVEL 11: Labirinto Complexo FIEL - Limpe o labirinto de setas */
 function renderLevel11() {
     DOM.levelQuestion.textContent = "Limpe o labirinto de setas.";
-    const wrap = document.createElement("div"); wrap.className = "arrow-labyrinth-11";
-    
-    // Conjunto de nós de setas distribuídos no labirinto complexo (posições X, Y em px, direção e se está bloqueado por outra seta na mesma linha de saída)
-    const nodes = [
-        { id: 1, text: "←", x: 20, y: 20, dir: "left", blocked: true },
-        { id: 2, text: "↑", x: 140, y: 20, dir: "up", blocked: false },
-        { id: 3, text: "→", x: 260, y: 20, dir: "right", blocked: true },
-        { id: 4, text: "↓", x: 80, y: 110, dir: "down", blocked: false },
-        { id: 5, text: "→", x: 190, y: 110, dir: "right", blocked: false },
-        { id: 6, text: "↑", x: 60, y: 210, dir: "up", blocked: true },
-        { id: 7, text: "←", x: 160, y: 210, dir: "left", blocked: false },
-        { id: 8, text: "↓", x: 260, y: 210, dir: "down", blocked: false }
+    const wrap = document.createElement("div");
+    wrap.className = "arrow-labyrinth-11";
+
+    const walls = [
+        [0,0, 38,2], [48,0, 52,2], 
+        [0,0, 2,100], 
+        [0,98, 100,2], 
+        [98,0, 2,28], [98,38, 2,62], 
+
+        [20,8, 2,28], [10,18, 22,2], [10,28, 12,2],
+        [35,8, 2,18], [35,18, 25,2], [58,18, 20,2],
+        [28,28, 2,22], [28,48, 32,2], [58,18, 2,32],
+        [10,38, 22,2], [10,48, 12,2], [20,48, 2,30],
+        [40,28, 2,22], [40,38, 22,2], [70,28, 2,32],
+        [10,58, 12,2], [10,68, 32,2], [10,78, 2,12],
+        [50,58, 30,2], [50,58, 2,20], [80,48, 2,20],
+        [60,68, 20,2], [60,78, 2,20], [30,78, 32,2],
     ];
 
-    let remainingFree = nodes.filter(n => !n.blocked).length;
-    // Se o jogador limpar as livres, desbloqueia as outras em cascata
-    let activeNodes = [...nodes];
+    walls.forEach(w => {
+        const el = document.createElement("div");
+        el.className = "maze-wall";
+        el.style.left = w[0] + "%"; el.style.top = w[1] + "%";
+        el.style.width = w[2] + "%"; el.style.height = w[3] + "%";
+        wrap.appendChild(el);
+    });
 
-    activeNodes.forEach(node => {
+    const nodes = [
+        { x: 5, y: 5, dir: "→", free: false },
+        { x: 25, y: 5, dir: "→", free: false },
+        { x: 41, y: 3, dir: "↑", free: true }, 
+        { x: 62, y: 4, dir: "→", free: false },
+        { x: 82, y: 2, dir: "↑", free: false },
+        { x: 5, y: 22, dir: "→", free: false },
+        { x: 15, y: 32, dir: "↓", free: false },
+        { x: 32, y: 32, dir: "↑", free: false },
+        { x: 45, y: 22, dir: "←", free: false },
+        { x: 62, y: 22, dir: "↓", free: false },
+        { x: 84, y: 22, dir: "←", free: false },
+        { x: 5, y: 52, dir: "→", free: false },
+        { x: 32, y: 52, dir: "→", free: false },
+        { x: 62, y: 52, dir: "↓", free: false },
+        { x: 84, y: 52, dir: "↓", free: false },
+        { x: 15, y: 82, dir: "↑", free: false },
+        { x: 35, y: 82, dir: "←", free: false },
+        { x: 66, y: 82, dir: "→", free: false },
+    ];
+
+    nodes.forEach(node => {
         const btn = document.createElement("button");
         btn.className = "lab-arrow-node";
-        btn.textContent = node.text;
-        btn.style.left = node.x + "px";
-        btn.style.top = node.y + "px";
+        btn.textContent = node.dir;
+        btn.style.left = node.x + "%";
+        btn.style.top = node.y + "%";
         wrap.appendChild(btn);
 
         btn.addEventListener("pointerup", () => {
             if (btn.disabled) return;
-            
-            if (node.blocked) {
+            if (!node.free) {
+                btn.classList.add("wrong-shake");
+                feedbackLifeLost();
+                setTimeout(()=>btn.classList.remove("wrong-shake"),300);
                 failLevel();
-            } else {
-                btn.disabled = true;
-                feedbackCorrect();
-                let slideX = 0, slideY = 0;
-                if (node.dir === "left") slideX = -350;
-                if (node.dir === "right") slideX = 350;
-                if (node.dir === "up") slideY = -350;
-                if (node.dir === "down") slideY = 350;
-
-                btn.style.transform = `translate(${slideX}px, ${slideY}px)`;
-                btn.style.opacity = "0";
-
-                node.cleared = true;
-                // Desbloqueia nós dependentes
-                activeNodes.forEach(n => {
-                    if (n.blocked) {
-                        // Se era bloqueado por este, agora fica livre
-                        n.blocked = false;
-                        remainingFree++;
-                    }
-                });
-
-                remainingFree--;
-                if (remainingFree <= 0) {
-                    setTimeout(completeLevel, 450);
-                }
+                return;
             }
+            btn.disabled = true;
+            feedbackCorrect();
+
+            btn.style.transform = `translateY(-400px)`;
+            btn.style.opacity = "0";
+
+            wrap.querySelectorAll(".maze-wall").forEach((w,i)=>{
+                setTimeout(()=>{ w.style.transition="opacity.2s"; w.style.opacity="0"; }, i*30);
+            });
+            wrap.querySelectorAll(".lab-arrow-node").forEach(other=>{
+                if(other!==btn){ other.style.transition="opacity.2s"; other.style.opacity="0"; }
+            });
+
+            setTimeout(completeLevel, 700);
         });
     });
 
