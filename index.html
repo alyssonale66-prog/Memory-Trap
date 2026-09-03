@@ -420,7 +420,7 @@ button {
     border-radius: 14px;
 }
 
-/* ESTILOS DO NÍVEL 11 - IMAGEM REAL E FUNDO BEGE */
+/* --- ESTILOS DO NÍVEL 11 - VECTOR CANVAS E FUNDO BEGE --- */
 #level-11-bg {
     background-color: #F5EBE0 !important;
     width: 100%;
@@ -436,28 +436,35 @@ button {
 }
 #maze-real-wrapper {
     position: relative;
-    width: min(92vw, 360px);
-    height: min(123vw, 480px);
+    width: 360px;
+    height: 480px;
     background-color: #F5EBE0;
     overflow: visible;
 }
-#maze-official-img {
+#maze-vector-draw {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    display: block;
+    pointer-events: none;
+}
+#interaction-layer {
+    position: absolute;
+    inset: 0;
     pointer-events: none;
 }
 .arrow-trigger {
     position: absolute;
-    width: 32px;
-    height: 32px;
+    width: 35px;
+    height: 35px;
     cursor: pointer;
     background: rgba(139, 90, 43, 0.0);
-    border: none;
+    border-radius: 50%;
     transform: translate(-50%, -50%);
     transition: left 0.4s cubic-bezier(0.25, 1, 0.5, 1), top 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
     z-index: 10;
+    pointer-events: auto;
 }
 .trigger-shake {
     animation: triggerShakeAnim 0.15s ease-in-out;
@@ -1345,43 +1352,75 @@ function renderLevel10() {
     }, 50);
 }
 
-/* NÍVEL 11 - MODELO COM IMAGEM REAL E FUNDO BEGE INTEGRADO */
+/* --- NÍVEL 11 - VECTOR CANVAS E FUNDO BEGE INTEGRADO --- */
 function renderLevel11() {
-    // Aplica o ID especial para alterar o fundo e a cor do texto da seção
     DOM.levelContent.id = "level-11-bg";
     DOM.levelQuestion.textContent = "Liberte todas as setas.";
 
     const containerWrapper = document.createElement("div");
     containerWrapper.innerHTML = `
         <div id="maze-real-wrapper">
-            <img src="https://squarespace-cdn.com" id="maze-official-img" alt="Maze Level 11">
+            <canvas id="maze-vector-draw" width="360" height="480"></canvas>
             <div id="interaction-layer"></div>
         </div>
     `;
     DOM.levelContent.appendChild(containerWrapper);
 
+    const canvas = containerWrapper.querySelector('#maze-vector-draw');
+    const ctx = canvas.getContext('2d');
     const container = containerWrapper.querySelector('#interaction-layer');
+    container.innerHTML = ''; 
+
+    // Desenho das cobrinhas do labirinto
+    ctx.strokeStyle = "#8B5A2B"; 
+    ctx.lineWidth = 10;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.beginPath();
+    ctx.moveTo(35, 40); ctx.lineTo(325, 40);
+    ctx.moveTo(110, 40); ctx.lineTo(110, 110); ctx.lineTo(210, 110);
+    ctx.moveTo(35, 170); ctx.lineTo(35, 80); ctx.lineTo(95, 80);
+    ctx.moveTo(175, 190); ctx.lineTo(275, 190); ctx.lineTo(275, 330);
+    ctx.moveTo(35, 250); ctx.lineTo(125, 250); ctx.lineTo(125, 310);
+    ctx.moveTo(35, 380); ctx.lineTo(115, 380); ctx.lineTo(115, 440);
+    ctx.stroke();
 
     let rotaSolucao = [
-        { id: 1,  pX: 84, pY: 7,   dir: 'RIGHT', concluido: false },
-        { id: 2,  pX: 33, pY: 12,  dir: 'UP',    concluido: false },
-        { id: 3,  pX: 11, pY: 30,  dir: 'LEFT',  concluido: false },
-        { id: 4,  pX: 42, pY: 41,  dir: 'RIGHT', concluido: false },
-        { id: 5,  pX: 86, pY: 48,  dir: 'DOWN',  concluido: false },
-        { id: 6,  pX: 62, pY: 69,  dir: 'RIGHT', concluido: false },
-        { id: 7,  pX: 12, pY: 82,  dir: 'LEFT',  concluido: false },
-        { id: 8,  pX: 31, pY: 88,  dir: 'DOWN',  concluido: false },
-        { id: 9,  pX: 55, pY: 78,  dir: 'LEFT',  concluido: false },
-        { id: 10, pX: 87, pY: 88,  dir: 'DOWN',  concluido: false }
+        { id: 1,  pX: 90, pY: 8,   dir: 'RIGHT', concluido: false },
+        { id: 2,  pX: 58, pY: 23,  dir: 'DOWN',  concluido: false },
+        { id: 3,  pX: 26, pY: 17,  dir: 'UP',    concluido: false },
+        { id: 4,  pX: 76, pY: 69,  dir: 'RIGHT', concluido: false },
+        { id: 5,  pX: 35, pY: 65,  dir: 'DOWN',  concluido: false },
+        { id: 6,  pX: 32, pY: 92,  dir: 'DOWN',  concluido: false }
     ];
 
-    rotaSolucao.forEach((seta, index) => {
-        const botao = document.createElement('div');
-        botao.className = 'arrow-trigger';
-        botao.style.left = `${seta.pX}%`;
-        botao.style.top = `${seta.pY}%`;
+    rotaSolucao.forEach(seta => {
+        ctx.fillStyle = "#8B5A2B";
+        ctx.beginPath();
+        let rX = (seta.pX / 100) * canvas.width;
+        let rY = (seta.pY / 100) * canvas.height;
 
-        botao.onpointerup = () => {
+        if (seta.dir === 'RIGHT') {
+            ctx.moveTo(rX, rY); ctx.lineTo(rX - 12, rY - 8); ctx.lineTo(rX - 12, rY + 8);
+        } else if (seta.dir === 'UP') {
+            ctx.moveTo(rX, rY); ctx.lineTo(rX - 8, rY + 12); ctx.lineTo(rX + 8, rY + 12);
+        } else if (seta.dir === 'DOWN') {
+            ctx.moveTo(rX, rY); ctx.lineTo(rX - 8, rY - 12); ctx.lineTo(rX + 8, rY - 12);
+        } else if (seta.dir === 'LEFT') {
+            ctx.moveTo(rX, rY); ctx.lineTo(rX + 12, rY - 8); ctx.lineTo(rX + 12, rY + 8);
+        }
+        ctx.fill();
+    });
+
+    rotaSolucao.forEach((seta, index) => {
+        const bClique = document.createElement('div');
+        bClique.className = 'arrow-trigger';
+        bClique.style.left = `${seta.pX}%`;
+        bClique.style.top = `${seta.pY}%`;
+
+        bClique.onpointerup = () => {
             if (seta.concluido || GAME.currentLevel !== 11) return;
 
             let liberada = true;
@@ -1396,16 +1435,15 @@ function renderLevel11() {
                 seta.concluido = true;
                 feedbackCorrect();
                 
-                if (seta.dir === 'RIGHT') botao.style.left = '160%';
-                if (seta.dir === 'LEFT')  botao.style.left = '-60%';
-                if (seta.dir === 'UP')    botao.style.top = '-60%';
-                if (seta.dir === 'DOWN')  botao.style.top = '160%';
-                botao.style.opacity = '0';
+                if (seta.dir === 'RIGHT') bClique.style.left = '160%';
+                if (seta.dir === 'LEFT')  bClique.style.left = '-60%';
+                if (seta.dir === 'UP')    bClique.style.top = '-60%';
+                if (seta.dir === 'DOWN')  bClique.style.top = '160%';
+                bClique.style.opacity = '0';
 
                 setTimeout(() => {
-                    botao.remove();
+                    bClique.remove();
                     if (rotaSolucao.every(s => s.concluido)) {
-                        // Limpa o ID customizado do fundo antes de trocar de nível
                         DOM.levelContent.id = "";
                         completeLevel();
                     }
@@ -1413,18 +1451,18 @@ function renderLevel11() {
 
             } else {
                 feedbackLifeLost();
-                botao.classList.add('trigger-shake');
-                setTimeout(() => botao.classList.remove('trigger-shake'), 150);
+                bClique.classList.add('trigger-shake');
+                setTimeout(() => bClique.classList.remove('trigger-shake'), 150);
                 failLevel();
             }
         };
 
-        container.appendChild(botao);
+        container.appendChild(bClique);
     });
 }
 
 function renderLevel12() {
-    DOM.levelContent.id = ""; // Limpa o ID do fundo bege do nível 11
+    DOM.levelContent.id = "";
     DOM.levelQuestion.textContent = "Segure exatamente por 2 segundos.";
     const w = document.createElement("div");
     w.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:20px";
@@ -1549,7 +1587,7 @@ function renderLevel15() {
     const doorsGrid = document.createElement("div");
     doorsGrid.className = "doors-container-15";
     
-    const correctDoor = 2; // 3ª porta (do meio)
+    const correctDoor = 2;
     
     for (let i = 0; i < 5; i++) {
         const door = document.createElement("button");
