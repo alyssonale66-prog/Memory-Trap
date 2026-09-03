@@ -1,249 +1,394 @@
-function renderLevel11() {
-    DOM.levelQuestion.textContent = "Liberte todas as setas.";
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>MEMORY TRAP - Nível 11</title>
+<style>
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    touch-action: none;
+    position: fixed;
+    inset: 0;
+}
+button {
+    font: inherit;
+    color: inherit;
+    border: 0;
+    outline: 0;
+    background: none;
+    touch-action: none;
+}
+#app {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+.game-header {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    padding-top: calc(env(safe-area-inset-top) + 16px);
+    z-index: 20;
+}
+.level-number {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: .15em;
+    opacity: 0.7;
+}
+.level-question {
+    width: 90%;
+    margin: 6px auto 0;
+    text-align: center;
+    font-size: clamp(16px, 4vw, 20px);
+    font-weight: 700;
+    line-height: 1.2;
+}
+.level-content {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    gap: 15px;
+}
+#maze-game-container-11 {
+    position: relative;
+    width: 350px;
+    height: 440px;
+    background-color: #000000;
+    overflow: visible;
+    margin: 0 auto;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+}
+#mazeCanvas-11 {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    background-color: #000000;
+    border-radius: 12px;
+}
+#overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.88);
+}
+#overlay.active {
+    display: flex;
+}
+.overlay-content {
+    width: min(340px, 86vw);
+    text-align: center;
+}
+.overlay-title {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: .1em;
+}
+.overlay-text {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.4;
+    opacity: .7;
+}
+.overlay-button {
+    margin-top: 24px;
+    padding: 14px 26px;
+    border: 1px solid rgba(255,255,255,.5);
+    border-radius: 8px;
+    background: #246bff;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div id="app">
+    <div class="game-header">
+        <div id="levelNumber" class="level-number">NÍVEL 11</div>
+        <div id="levelQuestion" class="level-question">Liberte todas as setas.</div>
+    </div>
+    <div id="levelContent" class="level-content"></div>
+</div>
 
+<div id="overlay">
+    <div class="overlay-content">
+        <div id="overlayTitle" class="overlay-title"></div>
+        <div id="overlayText" class="overlay-text"></div>
+        <button id="overlayButton" class="overlay-button"></button>
+    </div>
+</div>
+
+<script>
+const GAME = { soundEnabled: true, vibrationEnabled: true };
+
+const DOM = {
+    levelContent: document.getElementById("levelContent"),
+    overlay: document.getElementById("overlay"),
+    overlayTitle: document.getElementById("overlayTitle"),
+    overlayText: document.getElementById("overlayText"),
+    overlayButton: document.getElementById("overlayButton")
+};
+
+let audioContext = null;
+function getAudioContext() {
+    if (!audioContext) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (Ctx) audioContext = new Ctx();
+    }
+    return audioContext;
+}
+
+function playTone(f, d, ty = "sine", v = 0.035) {
+    if (!GAME.soundEnabled) return;
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = ty;
+    o.frequency.setValueAtTime(f, ctx.currentTime);
+    g.gain.setValueAtTime(v, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + d);
+    o.connect(g);
+    g.connect(ctx.destination);
+    o.start();
+    o.stop(ctx.currentTime + d);
+}
+
+function soundCorrect() {
+    playTone(720, .08, "sine", .035);
+    setTimeout(() => playTone(960, .07, "sine", .025), 45);
+}
+function soundLifeLost() { playTone(95, .25, "sawtooth", .05); }
+
+function vibrate(p) {
+    if (GAME.vibrationEnabled && "vibrate" in navigator) {
+        try { navigator.vibrate(p); } catch (e) {}
+    }
+}
+function feedbackCorrect() { soundCorrect(); vibrate(18); }
+function feedbackLifeLost() { soundLifeLost(); vibrate([60, 40, 80]); }
+
+function showOverlay(t, x, b, a) {
+    DOM.overlayTitle.textContent = t;
+    DOM.overlayText.textContent = x;
+    DOM.overlayButton.textContent = b;
+    DOM.overlayButton.onclick = a;
+    DOM.overlay.classList.add("active");
+}
+function closeOverlay() { DOM.overlay.classList.remove("active"); }
+
+function loadLevel11() {
+    DOM.levelContent.innerHTML = "";
+    
     const containerWrapper = document.createElement("div");
     containerWrapper.innerHTML = `
-        <div id="maze-game-container-11" style="width: min(340px, 90vw); aspect-ratio: 1; margin: 0 auto; position: relative; background: #0a0a0c; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; overflow: hidden;">
-            <canvas id="mazeCanvas-11" style="width: 100%; height: 100%; display: block; touch-action: none; cursor: pointer;"></canvas>
+        <div id="maze-game-container-11">
+            <canvas id="mazeCanvas-11" width="350" height="440"></canvas>
         </div>
     `;
     DOM.levelContent.appendChild(containerWrapper);
 
     const canvas = containerWrapper.querySelector('#mazeCanvas-11');
     const ctx = canvas.getContext('2d');
-    
-    // Configura a resolução interna do canvas para alta nitidez
-    const size = 400; 
-    canvas.width = size;
-    canvas.height = size;
 
-    // Grade do Nível 11 (Tamanho Normal Escalonável)
-    const COLS = 8;
-    const ROWS = 8;
+    const COR_AZUL = '#246bff';
+    const COLS = 6;
+    const ROWS = 5;
     const cellW = canvas.width / COLS;
     const cellH = canvas.height / ROWS;
 
-    let arrows = [];
-    let occupancy = {};
-
-    const DIRS = [
-        { name: 'UP', dc: 0, dr: -1 },
-        { name: 'DOWN', dc: 0, dr: 1 },
-        { name: 'LEFT', dc: -1, dr: 0 },
-        { name: 'RIGHT', dc: 1, dr: 0 }
+    const dirsLayout = [
+        'RIGHT', 'DOWN', 'LEFT', 'RIGHT', 'DOWN', 'LEFT',
+        'DOWN',  'UP',   'RIGHT', 'LEFT', 'UP',   'RIGHT',
+        'LEFT',  'RIGHT', 'DOWN', 'UP',   'RIGHT', 'DOWN',
+        'UP',    'LEFT',  'UP',   'RIGHT', 'DOWN', 'LEFT',
+        'RIGHT', 'DOWN',  'LEFT', 'UP',   'RIGHT', 'UP'
     ];
 
-    // Corredor de Saída: Células a partir da cabeça até a borda
-    function getCorridor(headC, headR, dir, occ) {
-        let corridor = [];
-        let c = headC + dir.dc;
-        let r = headR + dir.dr;
-        while (c >= 0 && c < COLS && r >= 0 && r < ROWS) {
-            corridor.push(`${c},${r}`);
-            c += dir.dc;
-            r += dir.dr;
-        }
-        return corridor;
-    }
+    let pieces = [];
+    let idCounter = 1;
 
-    // Phase 2 - Backwards Builder (Python to JS)
-    function generateLevel() {
-        let placed = 0;
-        let attempts = 0;
-        let targetArrows = 8; 
-
-        while (placed < targetArrows && attempts < 800) {
-            attempts++;
-            let headC = Math.floor(Math.random() * COLS);
-            let headR = Math.floor(Math.random() * ROWS);
-            let dir = DIRS[Math.floor(Math.random() * DIRS.length)];
-
-            // Comprimento 2 a 4, traçado reto (Tangle 0.0)
-            let length = Math.floor(Math.random() * 3) + 2; 
-            let body = [];
-            let valid = true;
-
-            for (let i = 0; i < length; i++) {
-                // Corpo cresce na direção oposta à saída
-                let bc = headC - (dir.dc * i);
-                let br = headR - (dir.dr * i);
-                
-                if (bc < 0 || bc >= COLS || br < 0 || br >= ROWS || occupancy[`${bc},${br}`]) {
-                    valid = false;
-                    break;
-                }
-                body.push({c: bc, r: br});
-            }
-
-            if (!valid) continue;
-
-            // A seta precisa ter o caminho limpo no momento em que é colocada (é a última a sair)
-            let corridor = getCorridor(headC, headR, dir, occupancy);
-            if (!corridor.every(pos => !occupancy[pos])) continue;
-
-            // Setas subsequentes precisam bloquear o corredor de uma seta existente
-            if (arrows.length > 0) {
-                let blocksAny = false;
-                for (let a of arrows) {
-                    let aCorridor = getCorridor(a.head.c, a.head.r, a.dir, occupancy);
-                    for (let cell of body) {
-                        if (aCorridor.includes(`${cell.c},${cell.r}`)) {
-                            blocksAny = true;
-                            break;
-                        }
-                    }
-                    if (blocksAny) break;
-                }
-                if (!blocksAny) continue;
-            }
-
-            // Registra a seta e bloqueia as células
-            let arrowId = `arr_${placed}`;
-            body.reverse(); // Armazena da Cauda -> Cabeça
-            
-            arrows.push({
-                id: arrowId,
-                cells: body,
-                head: {c: headC, r: headR},
-                dir: dir,
+    for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+            let index = r * COLS + c;
+            pieces.push({
+                id: idCounter++,
+                col: c,
+                row: r,
+                dir: dirsLayout[index],
                 exited: false,
-                animOffset: 0,
-                shake: 0
+                animX: 0,
+                animY: 0,
+                shakeTime: 0
             });
-
-            body.forEach(cell => occupancy[`${cell.c},${cell.r}`] = arrowId);
-            placed++;
         }
     }
 
-    generateLevel();
+    let animId = null;
 
-    let animId;
-    function draw() {
-        if (GAME.currentLevel !== 11) return;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function isBlocked(piece) {
+        let c = piece.col;
+        let r = piece.row;
+        let dir = piece.dir;
 
-        // Grid pontilhado base
-        ctx.fillStyle = 'rgba(255,255,255,0.03)';
-        for(let r=0; r<ROWS; r++) {
-            for(let c=0; c<COLS; c++) {
-                ctx.beginPath();
-                ctx.arc(c*cellW + cellW/2, r*cellH + cellH/2, 2, 0, Math.PI*2);
-                ctx.fill();
-            }
+        for (let other of pieces) {
+            if (other.id === piece.id || other.exited) continue;
+            if (dir === 'RIGHT' && other.row === r && other.col > c) return true;
+            if (dir === 'LEFT' && other.row === r && other.col < c) return true;
+            if (dir === 'DOWN' && other.col === c && other.row > r) return true;
+            if (dir === 'UP' && other.col === c && other.row < r) return true;
         }
+        return false;
+    }
+
+    function draw() {
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         let allExited = true;
 
-        arrows.forEach(arr => {
-            if (!arr.exited) allExited = false;
-            if (arr.exited && arr.animOffset > size * 1.5) return;
+        pieces.forEach(p => {
+            if (!p.exited) allExited = false;
+            if (p.exited && (Math.abs(p.animX) > 600 || Math.abs(p.animY) > 600)) return;
 
             ctx.save();
-            let ox = 0, oy = 0;
 
-            if (arr.exited) {
-                arr.animOffset += 24;
-                ox = arr.dir.dc * arr.animOffset;
-                oy = arr.dir.dr * arr.animOffset;
-            } else if (arr.shake > 0) {
-                ox = Math.sin(arr.shake * 0.8) * 5;
-                arr.shake--;
+            let baseX = p.col * cellW + cellW / 2;
+            let baseY = p.row * cellH + cellH / 2;
+
+            if (p.shakeTime > 0) {
+                baseX += Math.sin(p.shakeTime * 0.8) * 6;
+                p.shakeTime--;
             }
 
-            ctx.translate(ox, oy);
+            if (p.exited) {
+                if (p.dir === 'RIGHT') p.animX += 26;
+                if (p.dir === 'LEFT') p.animX -= 26;
+                if (p.dir === 'UP') p.animY -= 26;
+                if (p.dir === 'DOWN') p.animY += 26;
+            }
 
-            // Desenho do Caminho (Corpo)
-            ctx.strokeStyle = '#246bff';
-            ctx.lineWidth = cellW * 0.45;
+            let x = baseX + p.animX;
+            let y = baseY + p.animY;
+
+            ctx.translate(x, y);
+
+            ctx.strokeStyle = COR_AZUL;
+            ctx.lineWidth = 10;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
-            ctx.beginPath();
-            for (let i = 0; i < arr.cells.length; i++) {
-                let cx = arr.cells[i].c * cellW + cellW/2;
-                let cy = arr.cells[i].r * cellH + cellH/2;
-                if (i === 0) ctx.moveTo(cx, cy);
-                else ctx.lineTo(cx, cy);
-            }
-            ctx.stroke();
 
-            // Desenho da Cabeça (Seta Direcional)
-            let headCx = arr.head.c * cellW + cellW/2;
-            let headCy = arr.head.r * cellH + cellH/2;
-            ctx.translate(headCx, headCy);
-            
-            let angle = 0;
-            if (arr.dir.name === 'RIGHT') angle = 0;
-            if (arr.dir.name === 'DOWN') angle = Math.PI/2;
-            if (arr.dir.name === 'LEFT') angle = Math.PI;
-            if (arr.dir.name === 'UP') angle = -Math.PI/2;
-            
-            ctx.rotate(angle);
-            ctx.fillStyle = '#ffffff';
             ctx.beginPath();
-            ctx.moveTo(12, 0);
-            ctx.lineTo(-8, -10);
-            ctx.lineTo(-8, 10);
-            ctx.fill();
+            if (p.dir === 'RIGHT') {
+                ctx.moveTo(-16, 0); ctx.lineTo(16, 0);
+                ctx.stroke();
+                ctx.fillStyle = COR_AZUL;
+                ctx.beginPath();
+                ctx.moveTo(20, 0); ctx.lineTo(8, -8); ctx.lineTo(8, 8);
+                ctx.fill();
+            } else if (p.dir === 'LEFT') {
+                ctx.moveTo(16, 0); ctx.lineTo(-16, 0);
+                ctx.stroke();
+                ctx.fillStyle = COR_AZUL;
+                ctx.beginPath();
+                ctx.moveTo(-20, 0); ctx.lineTo(-8, -8); ctx.lineTo(-8, 8);
+                ctx.fill();
+            } else if (p.dir === 'UP') {
+                ctx.moveTo(0, 16); ctx.lineTo(0, -16);
+                ctx.stroke();
+                ctx.fillStyle = COR_AZUL;
+                ctx.beginPath();
+                ctx.moveTo(0, -20); ctx.lineTo(-8, -8); ctx.lineTo(8, -8);
+                ctx.fill();
+            } else if (p.dir === 'DOWN') {
+                ctx.moveTo(0, -16); ctx.lineTo(0, 16);
+                ctx.stroke();
+                ctx.fillStyle = COR_AZUL;
+                ctx.beginPath();
+                ctx.moveTo(0, 20); ctx.lineTo(-8, 8); ctx.lineTo(8, 8);
+                ctx.fill();
+            }
 
             ctx.restore();
         });
 
         if (allExited) {
             cancelAnimationFrame(animId);
-            setTimeout(() => completeLevel(), 300);
+            setTimeout(() => {
+                showOverlay("VITÓRIA!", "Você concluiu o Nível 11 com sucesso!", "JOGAR NOVAMENTE", () => {
+                    closeOverlay();
+                    loadLevel11();
+                });
+            }, 350);
             return;
         }
+
         animId = requestAnimationFrame(draw);
     }
 
-    canvas.addEventListener('pointerdown', (e) => {
-        if (GAME.currentLevel !== 11) return;
-        
-        // Correção de escala para toques no Canvas
+    canvas.addEventListener('pointerup', function (e) {
         const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        const mx = (e.clientX - rect.left) * scaleX;
-        const my = (e.clientY - rect.top) * scaleY;
-        
-        const c = Math.floor(mx / cellW);
-        const r = Math.floor(my / cellH);
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
 
-        let clickedArr = null;
-        for (let arr of arrows) {
-            if (arr.exited) continue;
-            for (let cell of arr.cells) {
-                if (cell.c === c && cell.r === r) {
-                    clickedArr = arr;
-                    break;
+        for (let i = pieces.length - 1; i >= 0; i--) {
+            let p = pieces[i];
+            if (p.exited) continue;
+
+            let px = p.col * cellW;
+            let py = p.row * cellH;
+
+            if (mouseX >= px && mouseX <= px + cellW && mouseY >= py && mouseY <= py + cellH) {
+                if (!isBlocked(p)) {
+                    p.exited = true;
+                    feedbackCorrect();
+                } else {
+                    p.shakeTime = 16;
+                    feedbackLifeLost();
                 }
-            }
-            if (clickedArr) break;
-        }
-
-        if (clickedArr) {
-            let corridor = getCorridor(clickedArr.head.c, clickedArr.head.r, clickedArr.dir, occupancy);
-            let blocked = false;
-            
-            // Verifica se alguma célula no corredor está ocupada por outra seta
-            for (let pos of corridor) {
-                if (occupancy[pos] && occupancy[pos] !== clickedArr.id) {
-                    blocked = true;
-                    break;
-                }
-            }
-
-            if (!blocked) {
-                clickedArr.exited = true;
-                clickedArr.cells.forEach(cell => delete occupancy[`${cell.c},${cell.r}`]);
-                feedbackCorrect();
-            } else {
-                clickedArr.shake = 18;
-                failLevel();
+                break;
             }
         }
     });
 
     draw();
 }
+
+document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("touchmove", e => { if (e.cancelable) e.preventDefault(); }, { passive: false });
+
+loadLevel11();
+</script>
+</body>
+</html>
