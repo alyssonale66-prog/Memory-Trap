@@ -420,59 +420,20 @@ button {
     border-radius: 14px;
 }
 
-/* --- ESTILOS DO NÍVEL 11 - VECTOR CANVAS E FUNDO BEGE --- */
-#level-11-bg {
-    background-color: #F5EBE0 !important;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-#level-11-bg .level-number, 
-#level-11-bg .level-question {
-    color: #8B5A2B !important;
-}
-#maze-real-wrapper {
+/* --- ESTILOS DO NÍVEL 11 - AMAZE BLUE STYLE --- */
+#maze-game-container-11 {
     position: relative;
     width: 360px;
     height: 480px;
-    background-color: #F5EBE0;
+    background-color: #000000;
     overflow: visible;
+    margin: 0 auto;
 }
-#maze-vector-draw {
-    position: absolute;
-    top: 0;
-    left: 0;
+#mazeCanvas-11 {
     width: 100%;
     height: 100%;
-    pointer-events: none;
-}
-#interaction-layer {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-}
-.arrow-trigger {
-    position: absolute;
-    width: 35px;
-    height: 35px;
     cursor: pointer;
-    background: rgba(139, 90, 43, 0.0);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: left 0.4s cubic-bezier(0.25, 1, 0.5, 1), top 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
-    z-index: 10;
-    pointer-events: auto;
-}
-.trigger-shake {
-    animation: triggerShakeAnim 0.15s ease-in-out;
-}
-@keyframes triggerShakeAnim {
-    0%, 100% { transform: translate(-50%, -50%) translateX(0); }
-    25% { transform: translate(-50%, -50%) translateX(-6px); }
-    50% { transform: translate(-50%, -50%) translateX(6px); }
+    background-color: #000000;
 }
 
 .hold-btn-12 {
@@ -1352,117 +1313,152 @@ function renderLevel10() {
     }, 50);
 }
 
-/* --- NÍVEL 11 - VECTOR CANVAS E FUNDO BEGE INTEGRADO --- */
+/* --- NÍVEL 11 - AMAZE BLUE STYLE (VERSÃO DEFINITIVA) --- */
 function renderLevel11() {
-    DOM.levelContent.id = "level-11-bg";
     DOM.levelQuestion.textContent = "Liberte todas as setas.";
 
     const containerWrapper = document.createElement("div");
     containerWrapper.innerHTML = `
-        <div id="maze-real-wrapper">
-            <canvas id="maze-vector-draw" width="360" height="480"></canvas>
-            <div id="interaction-layer"></div>
+        <div id="maze-game-container-11">
+            <canvas id="mazeCanvas-11" width="360" height="480"></canvas>
         </div>
     `;
     DOM.levelContent.appendChild(containerWrapper);
 
-    const canvas = containerWrapper.querySelector('#maze-vector-draw');
+    const canvas = containerWrapper.querySelector('#mazeCanvas-11');
     const ctx = canvas.getContext('2d');
-    const container = containerWrapper.querySelector('#interaction-layer');
-    container.innerHTML = ''; 
 
-    // Desenho das cobrinhas do labirinto
-    ctx.strokeStyle = "#8B5A2B"; 
-    ctx.lineWidth = 10;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const COR_AZUL = '#246bff';
+    const ESPESSURA = 12;
 
-    ctx.beginPath();
-    ctx.moveTo(35, 40); ctx.lineTo(325, 40);
-    ctx.moveTo(110, 40); ctx.lineTo(110, 110); ctx.lineTo(210, 110);
-    ctx.moveTo(35, 170); ctx.lineTo(35, 80); ctx.lineTo(95, 80);
-    ctx.moveTo(175, 190); ctx.lineTo(275, 190); ctx.lineTo(275, 330);
-    ctx.moveTo(35, 250); ctx.lineTo(125, 250); ctx.lineTo(125, 310);
-    ctx.moveTo(35, 380); ctx.lineTo(115, 380); ctx.lineTo(115, 440);
-    ctx.stroke();
-
-    let rotaSolucao = [
-        { id: 1,  pX: 90, pY: 8,   dir: 'RIGHT', concluido: false },
-        { id: 2,  pX: 58, pY: 23,  dir: 'DOWN',  concluido: false },
-        { id: 3,  pX: 26, pY: 17,  dir: 'UP',    concluido: false },
-        { id: 4,  pX: 76, pY: 69,  dir: 'RIGHT', concluido: false },
-        { id: 5,  pX: 35, pY: 65,  dir: 'DOWN',  concluido: false },
-        { id: 6,  pX: 32, pY: 92,  dir: 'DOWN',  concluido: false }
+    // Definição das cobrinhas/tubulações em azul elétrico
+    let snakes = [
+        { id: 1, points: [{x: 40, y: 50}, {x: 320, y: 50}], dir: 'RIGHT', exited: false, animOffset: 0, shakeTime: 0 },
+        { id: 2, points: [{x: 100, y: 90}, {x: 100, y: 160}, {x: 220, y: 160}], dir: 'RIGHT', exited: false, animOffset: 0, shakeTime: 0 },
+        { id: 3, points: [{x: 40, y: 200}, {x: 150, y: 200}, {x: 150, y: 300}], dir: 'DOWN', exited: false, animOffset: 0, shakeTime: 0 },
+        { id: 4, points: [{x: 180, y: 100}, {x: 280, y: 100}, {x: 280, y: 320}, {x: 120, y: 320}], dir: 'LEFT', exited: false, animOffset: 0, shakeTime: 0 },
+        { id: 5, points: [{x: 60, y: 400}, {x: 300, y: 400}], dir: 'RIGHT', exited: false, animOffset: 0, shakeTime: 0 }
     ];
 
-    rotaSolucao.forEach(seta => {
-        ctx.fillStyle = "#8B5A2B";
-        ctx.beginPath();
-        let rX = (seta.pX / 100) * canvas.width;
-        let rY = (seta.pY / 100) * canvas.height;
+    let animId = null;
 
-        if (seta.dir === 'RIGHT') {
-            ctx.moveTo(rX, rY); ctx.lineTo(rX - 12, rY - 8); ctx.lineTo(rX - 12, rY + 8);
-        } else if (seta.dir === 'UP') {
-            ctx.moveTo(rX, rY); ctx.lineTo(rX - 8, rY + 12); ctx.lineTo(rX + 8, rY + 12);
-        } else if (seta.dir === 'DOWN') {
-            ctx.moveTo(rX, rY); ctx.lineTo(rX - 8, rY - 12); ctx.lineTo(rX + 8, rY - 12);
-        } else if (seta.dir === 'LEFT') {
-            ctx.moveTo(rX, rY); ctx.lineTo(rX + 12, rY - 8); ctx.lineTo(rX + 12, rY + 8);
-        }
-        ctx.fill();
-    });
+    function draw() {
+        if (GAME.currentLevel !== 11) return;
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    rotaSolucao.forEach((seta, index) => {
-        const bClique = document.createElement('div');
-        bClique.className = 'arrow-trigger';
-        bClique.style.left = `${seta.pX}%`;
-        bClique.style.top = `${seta.pY}%`;
+        snakes.forEach(snake => {
+            if (snake.exited && snake.animOffset > 600) return;
 
-        bClique.onpointerup = () => {
-            if (seta.concluido || GAME.currentLevel !== 11) return;
+            ctx.save();
+            
+            if (snake.shakeTime > 0) {
+                let shakeX = Math.sin(snake.shakeTime * 0.6) * 6;
+                ctx.translate(shakeX, 0);
+                snake.shakeTime--;
+            }
 
-            let liberada = true;
-            for (let i = 0; i < index; i++) {
-                if (!rotaSolucao[i].concluido) {
-                    liberada = false;
+            if (snake.exited) {
+                if (snake.dir === 'RIGHT') ctx.translate(snake.animOffset, 0);
+                if (snake.dir === 'LEFT') ctx.translate(-snake.animOffset, 0);
+                if (snake.dir === 'UP') ctx.translate(0, -snake.animOffset);
+                if (snake.dir === 'DOWN') ctx.translate(0, snake.animOffset);
+                snake.animOffset += 28;
+            }
+
+            ctx.strokeStyle = COR_AZUL;
+            ctx.lineWidth = ESPESSURA;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            ctx.beginPath();
+            ctx.moveTo(snake.points[0].x, snake.points[0].y);
+            for (let i = 1; i < snake.points.length; i++) {
+                ctx.lineTo(snake.points[i].x, snake.points[i].y);
+            }
+            ctx.stroke();
+
+            // Desenha a ponta da seta na extremidade final
+            let last = snake.points[snake.points.length - 1];
+            ctx.fillStyle = COR_AZUL;
+            ctx.beginPath();
+            if (snake.dir === 'RIGHT') {
+                ctx.moveTo(last.x + 4, last.y);
+                ctx.lineTo(last.x - 12, last.y - 10);
+                ctx.lineTo(last.x - 12, last.y + 10);
+            } else if (snake.dir === 'LEFT') {
+                ctx.moveTo(last.x - 4, last.y);
+                ctx.lineTo(last.x + 12, last.y - 10);
+                ctx.lineTo(last.x + 12, last.y + 10);
+            } else if (snake.dir === 'UP') {
+                ctx.moveTo(last.x, last.y - 4);
+                ctx.lineTo(last.x - 10, last.y + 12);
+                ctx.lineTo(last.x + 10, last.y + 12);
+            } else if (snake.dir === 'DOWN') {
+                ctx.moveTo(last.x, last.y + 4);
+                ctx.lineTo(last.x - 10, last.y - 12);
+                ctx.lineTo(last.x + 10, last.y - 12);
+            }
+            ctx.fill();
+            ctx.restore();
+        });
+
+        animId = requestAnimationFrame(draw);
+    }
+
+    canvas.addEventListener('pointerup', function (e) {
+        if (GAME.currentLevel !== 11) return;
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        for (let i = snakes.length - 1; i >= 0; i--) {
+            let snake = snakes[i];
+            if (snake.exited) continue;
+
+            let clicked = false;
+            for (let j = 0; j < snake.points.length - 1; j++) {
+                let p1 = snake.points[j];
+                let p2 = snake.points[j+1];
+                if (mouseX >= Math.min(p1.x, p2.x) - 18 && mouseX <= Math.max(p1.x, p2.x) + 18 &&
+                    mouseY >= Math.min(p1.y, p2.y) - 18 && mouseY <= Math.max(p1.y, p2.y) + 18) {
+                    clicked = true;
                     break;
                 }
             }
 
-            if (liberada) {
-                seta.concluido = true;
-                feedbackCorrect();
-                
-                if (seta.dir === 'RIGHT') bClique.style.left = '160%';
-                if (seta.dir === 'LEFT')  bClique.style.left = '-60%';
-                if (seta.dir === 'UP')    bClique.style.top = '-60%';
-                if (seta.dir === 'DOWN')  bClique.style.top = '160%';
-                bClique.style.opacity = '0';
+            if (clicked) {
+                // Lógica de dependência em cadeia (Amaze!):
+                // S1 sai livre -> S2 precisa que S1 saia -> S3 precisa de S2 -> S4 precisa de S3 -> S5 precisa de S4
+                let bloqueado = false;
+                if (snake.id === 2 && !snakes.find(s => s.id === 1).exited) bloqueado = true;
+                if (snake.id === 3 && !snakes.find(s => s.id === 2).exited) bloqueado = true;
+                if (snake.id === 4 && !snakes.find(s => s.id === 3).exited) bloqueado = true;
+                if (snake.id === 5 && !snakes.find(s => s.id === 4).exited) bloqueado = true;
 
-                setTimeout(() => {
-                    bClique.remove();
-                    if (rotaSolucao.every(s => s.concluido)) {
-                        DOM.levelContent.id = "";
-                        completeLevel();
-                    }
-                }, 400);
-
-            } else {
-                feedbackLifeLost();
-                bClique.classList.add('trigger-shake');
-                setTimeout(() => bClique.classList.remove('trigger-shake'), 150);
-                failLevel();
+                if (!bloqueado) {
+                    snake.exited = true;
+                    feedbackCorrect();
+                    setTimeout(() => {
+                        if (snakes.every(s => s.exited)) {
+                            cancelAnimationFrame(animId);
+                            completeLevel();
+                        }
+                    }, 400);
+                } else {
+                    snake.shakeTime = 16;
+                    feedbackLifeLost();
+                    failLevel();
+                }
+                break;
             }
-        };
-
-        container.appendChild(bClique);
+        }
     });
+
+    draw();
 }
 
 function renderLevel12() {
-    DOM.levelContent.id = "";
     DOM.levelQuestion.textContent = "Segure exatamente por 2 segundos.";
     const w = document.createElement("div");
     w.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:20px";
@@ -1515,7 +1511,6 @@ function renderLevel12() {
 }
 
 function renderLevel13() {
-    DOM.levelContent.id = "";
     DOM.levelQuestion.textContent = "Toque no momento exato do pulso.";
     const w = document.createElement("div");
     w.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:25px";
@@ -1539,7 +1534,6 @@ function renderLevel13() {
 }
 
 function renderLevel14() {
-    DOM.levelContent.id = "";
     DOM.levelQuestion.textContent = "Memorize e toque na ordem REVERSA.";
     const w = document.createElement("div");
     w.className = "reverse-grid-14";
@@ -1579,7 +1573,6 @@ function renderLevel14() {
 }
 
 function renderLevel15() {
-    DOM.levelContent.id = "";
     DOM.levelQuestion.textContent = "Encontre a saída secreta.";
     const w = document.createElement("div");
     w.style.cssText = "display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; gap:20px;";
@@ -1614,7 +1607,6 @@ function renderLevel15() {
 }
 
 function renderLevel16() {
-    DOM.levelContent.id = "";
     DOM.levelQuestion.textContent = "Arraste o botão para fora da tela.";
     const w = document.createElement("div");
     w.style.cssText = "position:absolute;inset:0";
@@ -1650,7 +1642,6 @@ function renderLevel16() {
 }
 
 function renderLevel17() {
-    DOM.levelContent.id = "";
     DOM.levelQuestion.textContent = "Toque apenas nos círculos.";
     const w = document.createElement("div");
     w.className = "exclusion-field-17";
@@ -1683,7 +1674,6 @@ function renderLevel17() {
 }
 
 function renderLevel18() {
-    DOM.levelContent.id = "";
     DOM.levelQuestion.textContent = "Toque no botão fujão.";
     const w = document.createElement("div");
     w.style.cssText = "position:absolute;inset:0";
@@ -1708,7 +1698,6 @@ function renderLevel18() {
 }
 
 function renderLevel19() {
-    DOM.levelContent.id = "";
     DOM.levelQuestion.textContent = "Encontre o caractere diferente.";
     const w = document.createElement("div");
     w.className = "intruder-grid-19";
@@ -1727,7 +1716,6 @@ function renderLevel19() {
 }
 
 function renderLevel20() {
-    DOM.levelContent.id = "";
     DOM.levelQuestion.textContent = "Qual era a forma do Nível 1?";
     const w = document.createElement("div");
     w.className = "recall-grid-20";
@@ -1751,7 +1739,6 @@ function renderLevel20() {
 }
 
 function renderUnimplementedLevel(n, l) {
-    DOM.levelContent.id = "";
     const w = document.createElement("div");
     w.style.cssText = "text-align:center;width:100%";
     w.innerHTML = `<div>${l.name}</div><div style="font-size:12px;opacity:.5;margin-top:20px">MECÂNICA RESERVADA</div><button class="blue-choice" style="display:block;width:180px;margin:30px auto 0">TESTAR</button>`;
@@ -1760,7 +1747,6 @@ function renderUnimplementedLevel(n, l) {
 }
 
 function finishGame() {
-    DOM.levelContent.id = "";
     clearLevelTimers();
     showOverlay("PARABÉNS", "Você concluiu o MEMORY TRAP!", "REINICIAR", () => {
         closeOverlay();
