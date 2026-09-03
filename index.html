@@ -205,21 +205,21 @@ button {
     position: relative;
     width: 100%;
     text-align: center;
-    padding-top: calc(env(safe-area-inset-top) + 15px);
+    padding-top: calc(env(safe-area-inset-top) + 12px);
     z-index: 20;
 }
 .level-number {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     letter-spacing: .15em;
 }
 .level-question {
     width: 90%;
-    margin: 8px auto 0;
+    margin: 4px auto 0;
     text-align: center;
-    font-size: clamp(15px, 3.8vw, 19px);
+    font-size: clamp(14px, 3.5vw, 18px);
     font-weight: 700;
-    line-height: 1.3;
+    line-height: 1.2;
 }
 .level-content {
     position: relative;
@@ -229,14 +229,14 @@ button {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px 12px 70px;
-    gap: 15px;
+    padding: 5px 10px 65px;
+    gap: 10px;
 }
 .game-lives {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: calc(env(safe-area-inset-bottom) + 15px);
+    bottom: calc(env(safe-area-inset-bottom) + 12px);
     z-index: 30;
 }
 .options-grid {
@@ -420,11 +420,11 @@ button {
     border-radius: 14px;
 }
 
-/* --- ESTILOS DO NÍVEL 11 - AMAZE BLUE STYLE --- */
+/* --- ESTILOS DO NÍVEL 11 - AMAZE BLUE STYLE (30 SETAS) --- */
 #maze-game-container-11 {
     position: relative;
-    width: 360px;
-    height: 480px;
+    width: 350px;
+    height: 440px;
     background-color: #000000;
     overflow: visible;
     margin: 0 auto;
@@ -1313,14 +1313,14 @@ function renderLevel10() {
     }, 50);
 }
 
-/* --- NÍVEL 11 - AMAZE BLUE STYLE (VERSÃO DEFINITIVA) --- */
+/* --- NÍVEL 11 - AMAZE BLUE STYLE (30 SETAS / GRADE 6X5) --- */
 function renderLevel11() {
     DOM.levelQuestion.textContent = "Liberte todas as setas.";
 
     const containerWrapper = document.createElement("div");
     containerWrapper.innerHTML = `
         <div id="maze-game-container-11">
-            <canvas id="mazeCanvas-11" width="360" height="480"></canvas>
+            <canvas id="mazeCanvas-11" width="350" height="440"></canvas>
         </div>
     `;
     DOM.levelContent.appendChild(containerWrapper);
@@ -1329,79 +1329,136 @@ function renderLevel11() {
     const ctx = canvas.getContext('2d');
 
     const COR_AZUL = '#246bff';
-    const ESPESSURA = 12;
+    const COLS = 6;
+    const ROWS = 5;
+    const cellW = canvas.width / COLS;
+    const cellH = canvas.height / ROWS;
 
-    // Definição das cobrinhas/tubulações em azul elétrico
-    let snakes = [
-        { id: 1, points: [{x: 40, y: 50}, {x: 320, y: 50}], dir: 'RIGHT', exited: false, animOffset: 0, shakeTime: 0 },
-        { id: 2, points: [{x: 100, y: 90}, {x: 100, y: 160}, {x: 220, y: 160}], dir: 'RIGHT', exited: false, animOffset: 0, shakeTime: 0 },
-        { id: 3, points: [{x: 40, y: 200}, {x: 150, y: 200}, {x: 150, y: 300}], dir: 'DOWN', exited: false, animOffset: 0, shakeTime: 0 },
-        { id: 4, points: [{x: 180, y: 100}, {x: 280, y: 100}, {x: 280, y: 320}, {x: 120, y: 320}], dir: 'LEFT', exited: false, animOffset: 0, shakeTime: 0 },
-        { id: 5, points: [{x: 60, y: 400}, {x: 300, y: 400}], dir: 'RIGHT', exited: false, animOffset: 0, shakeTime: 0 }
+    // Layout inicial com 30 direções variadas (6x5)
+    const dirsLayout = [
+        'RIGHT', 'DOWN', 'LEFT', 'RIGHT', 'DOWN', 'LEFT',
+        'DOWN',  'UP',   'RIGHT', 'LEFT', 'UP',   'RIGHT',
+        'LEFT',  'RIGHT', 'DOWN', 'UP',   'RIGHT', 'DOWN',
+        'UP',    'LEFT',  'UP',   'RIGHT', 'DOWN', 'LEFT',
+        'RIGHT', 'DOWN',  'LEFT', 'UP',   'RIGHT', 'UP'
     ];
 
+    let pieces = [];
+    let idCounter = 1;
+
+    for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+            let index = r * COLS + c;
+            pieces.push({
+                id: idCounter++,
+                col: c,
+                row: r,
+                dir: dirsLayout[index],
+                exited: false,
+                animX: 0,
+                animY: 0,
+                shakeTime: 0
+            });
+        }
+    }
+
     let animId = null;
+
+    // Função que verifica se há obstrução no caminho da peça até a borda
+    function isBlocked(piece) {
+        let c = piece.col;
+        let r = piece.row;
+        let dir = piece.dir;
+
+        // Verifica na grade se existe alguma outra peça ativa no caminho exato de saída
+        for (let other of pieces) {
+            if (other.id === piece.id || other.exited) continue;
+            if (dir === 'RIGHT' && other.row === r && other.col > c) return true;
+            if (dir === 'LEFT' && other.row === r && other.col < c) return true;
+            if (dir === 'DOWN' && other.col === c && other.row > r) return true;
+            if (dir === 'UP' && other.col === c && other.row < r) return true;
+        }
+        return false;
+    }
 
     function draw() {
         if (GAME.currentLevel !== 11) return;
         ctx.fillStyle = '#000000';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        snakes.forEach(snake => {
-            if (snake.exited && snake.animOffset > 600) return;
+        let allExited = true;
+
+        pieces.forEach(p => {
+            if (!p.exited) allExited = false;
+            if (p.exited && (Math.abs(p.animX) > 600 || Math.abs(p.animY) > 600)) return;
 
             ctx.save();
-            
-            if (snake.shakeTime > 0) {
-                let shakeX = Math.sin(snake.shakeTime * 0.6) * 6;
-                ctx.translate(shakeX, 0);
-                snake.shakeTime--;
+
+            let baseX = p.col * cellW + cellW / 2;
+            let baseY = p.row * cellH + cellH / 2;
+
+            if (p.shakeTime > 0) {
+                baseX += Math.sin(p.shakeTime * 0.8) * 6;
+                p.shakeTime--;
             }
 
-            if (snake.exited) {
-                if (snake.dir === 'RIGHT') ctx.translate(snake.animOffset, 0);
-                if (snake.dir === 'LEFT') ctx.translate(-snake.animOffset, 0);
-                if (snake.dir === 'UP') ctx.translate(0, -snake.animOffset);
-                if (snake.dir === 'DOWN') ctx.translate(0, snake.animOffset);
-                snake.animOffset += 28;
+            if (p.exited) {
+                if (p.dir === 'RIGHT') p.animX += 26;
+                if (p.dir === 'LEFT') p.animX -= 26;
+                if (p.dir === 'UP') p.animY -= 26;
+                if (p.dir === 'DOWN') p.animY += 26;
             }
 
+            let x = baseX + p.animX;
+            let y = baseY + p.animY;
+
+            ctx.translate(x, y);
+
+            // Desenha o corpo da barra/tubulação e a seta
             ctx.strokeStyle = COR_AZUL;
-            ctx.lineWidth = ESPESSURA;
+            ctx.lineWidth = 10;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
 
             ctx.beginPath();
-            ctx.moveTo(snake.points[0].x, snake.points[0].y);
-            for (let i = 1; i < snake.points.length; i++) {
-                ctx.lineTo(snake.points[i].x, snake.points[i].y);
+            if (p.dir === 'RIGHT') {
+                ctx.moveTo(-16, 0); ctx.lineTo(16, 0);
+                ctx.stroke();
+                ctx.fillStyle = COR_AZUL;
+                ctx.beginPath();
+                ctx.moveTo(20, 0); ctx.lineTo(8, -8); ctx.lineTo(8, 8);
+                ctx.fill();
+            } else if (p.dir === 'LEFT') {
+                ctx.moveTo(16, 0); ctx.lineTo(-16, 0);
+                ctx.stroke();
+                ctx.fillStyle = COR_AZUL;
+                ctx.beginPath();
+                ctx.moveTo(-20, 0); ctx.lineTo(-8, -8); ctx.lineTo(-8, 8);
+                ctx.fill();
+            } else if (p.dir === 'UP') {
+                ctx.moveTo(0, 16); ctx.lineTo(0, -16);
+                ctx.stroke();
+                ctx.fillStyle = COR_AZUL;
+                ctx.beginPath();
+                ctx.moveTo(0, -20); ctx.lineTo(-8, -8); ctx.lineTo(8, -8);
+                ctx.fill();
+            } else if (p.dir === 'DOWN') {
+                ctx.moveTo(0, -16); ctx.lineTo(0, 16);
+                ctx.stroke();
+                ctx.fillStyle = COR_AZUL;
+                ctx.beginPath();
+                ctx.moveTo(0, 20); ctx.lineTo(-8, 8); ctx.lineTo(8, 8);
+                ctx.fill();
             }
-            ctx.stroke();
 
-            // Desenha a ponta da seta na extremidade final
-            let last = snake.points[snake.points.length - 1];
-            ctx.fillStyle = COR_AZUL;
-            ctx.beginPath();
-            if (snake.dir === 'RIGHT') {
-                ctx.moveTo(last.x + 4, last.y);
-                ctx.lineTo(last.x - 12, last.y - 10);
-                ctx.lineTo(last.x - 12, last.y + 10);
-            } else if (snake.dir === 'LEFT') {
-                ctx.moveTo(last.x - 4, last.y);
-                ctx.lineTo(last.x + 12, last.y - 10);
-                ctx.lineTo(last.x + 12, last.y + 10);
-            } else if (snake.dir === 'UP') {
-                ctx.moveTo(last.x, last.y - 4);
-                ctx.lineTo(last.x - 10, last.y + 12);
-                ctx.lineTo(last.x + 10, last.y + 12);
-            } else if (snake.dir === 'DOWN') {
-                ctx.moveTo(last.x, last.y + 4);
-                ctx.lineTo(last.x - 10, last.y - 12);
-                ctx.lineTo(last.x + 10, last.y - 12);
-            }
-            ctx.fill();
             ctx.restore();
         });
+
+        if (allExited) {
+            cancelAnimationFrame(animId);
+            setTimeout(() => completeLevel(), 350);
+            return;
+        }
 
         animId = requestAnimationFrame(draw);
     }
@@ -1412,41 +1469,20 @@ function renderLevel11() {
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
 
-        for (let i = snakes.length - 1; i >= 0; i--) {
-            let snake = snakes[i];
-            if (snake.exited) continue;
+        // Descobre qual peça foi tocada na grade
+        for (let i = pieces.length - 1; i >= 0; i--) {
+            let p = pieces[i];
+            if (p.exited) continue;
 
-            let clicked = false;
-            for (let j = 0; j < snake.points.length - 1; j++) {
-                let p1 = snake.points[j];
-                let p2 = snake.points[j+1];
-                if (mouseX >= Math.min(p1.x, p2.x) - 18 && mouseX <= Math.max(p1.x, p2.x) + 18 &&
-                    mouseY >= Math.min(p1.y, p2.y) - 18 && mouseY <= Math.max(p1.y, p2.y) + 18) {
-                    clicked = true;
-                    break;
-                }
-            }
+            let px = p.col * cellW;
+            let py = p.row * cellH;
 
-            if (clicked) {
-                // Lógica de dependência em cadeia (Amaze!):
-                // S1 sai livre -> S2 precisa que S1 saia -> S3 precisa de S2 -> S4 precisa de S3 -> S5 precisa de S4
-                let bloqueado = false;
-                if (snake.id === 2 && !snakes.find(s => s.id === 1).exited) bloqueado = true;
-                if (snake.id === 3 && !snakes.find(s => s.id === 2).exited) bloqueado = true;
-                if (snake.id === 4 && !snakes.find(s => s.id === 3).exited) bloqueado = true;
-                if (snake.id === 5 && !snakes.find(s => s.id === 4).exited) bloqueado = true;
-
-                if (!bloqueado) {
-                    snake.exited = true;
+            if (mouseX >= px && mouseX <= px + cellW && mouseY >= py && mouseY <= py + cellH) {
+                if (!isBlocked(p)) {
+                    p.exited = true;
                     feedbackCorrect();
-                    setTimeout(() => {
-                        if (snakes.every(s => s.exited)) {
-                            cancelAnimationFrame(animId);
-                            completeLevel();
-                        }
-                    }, 400);
                 } else {
-                    snake.shakeTime = 16;
+                    p.shakeTime = 16;
                     feedbackLifeLost();
                     failLevel();
                 }
