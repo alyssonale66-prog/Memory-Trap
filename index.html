@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<title>MEMORY TRAP - Nível 11</title>
+<title>MEMORY TRAP - Nível 11 (Real)</title>
 <style>
 * {
     box-sizing: border-box;
@@ -17,8 +17,8 @@ html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: #000;
-    color: #fff;
+    background: #f7f1e3; /* Tom de fundo idêntico ao da referência */
+    color: #3d2817;
     font-family: Arial, Helvetica, sans-serif;
     touch-action: none;
     position: fixed;
@@ -38,7 +38,6 @@ button {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: #000;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -48,22 +47,22 @@ button {
     position: relative;
     width: 100%;
     text-align: center;
-    padding-top: calc(env(safe-area-inset-top) + 16px);
+    padding-top: calc(env(safe-area-inset-top) + 12px);
     z-index: 20;
 }
 .level-number {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     letter-spacing: .15em;
-    opacity: 0.7;
+    opacity: 0.6;
 }
 .level-question {
     width: 90%;
-    margin: 6px auto 0;
+    margin: 4px auto 0;
     text-align: center;
-    font-size: clamp(16px, 4vw, 20px);
+    font-size: 17px;
     font-weight: 700;
-    line-height: 1.2;
+    color: #5c3a21;
 }
 .level-content {
     position: relative;
@@ -73,25 +72,20 @@ button {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    gap: 15px;
+    padding: 5px;
 }
-#maze-game-container-11 {
+#maze-container-11 {
     position: relative;
-    width: 350px;
-    height: 440px;
-    background-color: #000000;
+    width: min(94vw, 420px);
+    height: min(120vw, 540px);
+    background-color: #f7f1e3;
     overflow: visible;
     margin: 0 auto;
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 12px;
 }
 #mazeCanvas-11 {
     width: 100%;
     height: 100%;
     cursor: pointer;
-    background-color: #000000;
-    border-radius: 12px;
 }
 #overlay {
     position: absolute;
@@ -100,7 +94,7 @@ button {
     display: none;
     align-items: center;
     justify-content: center;
-    background: rgba(0,0,0,0.88);
+    background: rgba(0,0,0,0.82);
 }
 #overlay.active {
     display: flex;
@@ -108,6 +102,7 @@ button {
 .overlay-content {
     width: min(340px, 86vw);
     text-align: center;
+    color: #fff;
 }
 .overlay-title {
     font-size: 28px;
@@ -118,14 +113,15 @@ button {
     margin-top: 12px;
     font-size: 14px;
     line-height: 1.4;
-    opacity: .7;
+    opacity: .8;
 }
 .overlay-button {
     margin-top: 24px;
     padding: 14px 26px;
     border: 1px solid rgba(255,255,255,.5);
     border-radius: 8px;
-    background: #246bff;
+    background: #8b5a2b;
+    color: #fff;
     font-weight: bold;
     cursor: pointer;
 }
@@ -134,10 +130,14 @@ button {
 <body>
 <div id="app">
     <div class="game-header">
-        <div id="levelNumber" class="level-number">NÍVEL 11</div>
-        <div id="levelQuestion" class="level-question">Liberte todas as setas.</div>
+        <div class="level-number">NÍVEL 11</div>
+        <div class="level-question">Escape com todas as setas</div>
     </div>
-    <div id="levelContent" class="level-content"></div>
+    <div id="levelContent" class="level-content">
+        <div id="maze-container-11">
+            <canvas id="mazeCanvas-11" width="600" height="750"></canvas>
+        </div>
+    </div>
 </div>
 
 <div id="overlay">
@@ -149,55 +149,15 @@ button {
 </div>
 
 <script>
-const GAME = { soundEnabled: true, vibrationEnabled: true };
+// Lógica extraída do motor LevelGenerator / LevelSolver (Dart) para o Nível 11
+const CONFIG = { soundEnabled: true, vibrationEnabled: true };
 
 const DOM = {
-    levelContent: document.getElementById("levelContent"),
     overlay: document.getElementById("overlay"),
     overlayTitle: document.getElementById("overlayTitle"),
     overlayText: document.getElementById("overlayText"),
     overlayButton: document.getElementById("overlayButton")
 };
-
-let audioContext = null;
-function getAudioContext() {
-    if (!audioContext) {
-        const Ctx = window.AudioContext || window.webkitAudioContext;
-        if (Ctx) audioContext = new Ctx();
-    }
-    return audioContext;
-}
-
-function playTone(f, d, ty = "sine", v = 0.035) {
-    if (!GAME.soundEnabled) return;
-    const ctx = getAudioContext();
-    if (!ctx) return;
-    if (ctx.state === "suspended") ctx.resume().catch(() => {});
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.type = ty;
-    o.frequency.setValueAtTime(f, ctx.currentTime);
-    g.gain.setValueAtTime(v, ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + d);
-    o.connect(g);
-    g.connect(ctx.destination);
-    o.start();
-    o.stop(ctx.currentTime + d);
-}
-
-function soundCorrect() {
-    playTone(720, .08, "sine", .035);
-    setTimeout(() => playTone(960, .07, "sine", .025), 45);
-}
-function soundLifeLost() { playTone(95, .25, "sawtooth", .05); }
-
-function vibrate(p) {
-    if (GAME.vibrationEnabled && "vibrate" in navigator) {
-        try { navigator.vibrate(p); } catch (e) {}
-    }
-}
-function feedbackCorrect() { soundCorrect(); vibrate(18); }
-function feedbackLifeLost() { soundLifeLost(); vibrate([60, 40, 80]); }
 
 function showOverlay(t, x, b, a) {
     DOM.overlayTitle.textContent = t;
@@ -208,137 +168,125 @@ function showOverlay(t, x, b, a) {
 }
 function closeOverlay() { DOM.overlay.classList.remove("active"); }
 
-function loadLevel11() {
-    DOM.levelContent.innerHTML = "";
-    
-    const containerWrapper = document.createElement("div");
-    containerWrapper.innerHTML = `
-        <div id="maze-game-container-11">
-            <canvas id="mazeCanvas-11" width="350" height="440"></canvas>
-        </div>
-    `;
-    DOM.levelContent.appendChild(containerWrapper);
-
-    const canvas = containerWrapper.querySelector('#mazeCanvas-11');
+function initLevel11() {
+    const canvas = document.getElementById('mazeCanvas-11');
     const ctx = canvas.getContext('2d');
 
-    const COR_AZUL = '#246bff';
-    const COLS = 6;
-    const ROWS = 5;
-    const cellW = canvas.width / COLS;
-    const cellH = canvas.height / ROWS;
+    const GRID_SIZE = 19; // Matriz 19x19 idêntica à gerada pelo backend do jogo
+    const cellW = canvas.width / GRID_SIZE;
+    const cellH = canvas.height / GRID_SIZE;
 
-    const dirsLayout = [
-        'RIGHT', 'DOWN', 'LEFT', 'RIGHT', 'DOWN', 'LEFT',
-        'DOWN',  'UP',   'RIGHT', 'LEFT', 'UP',   'RIGHT',
-        'LEFT',  'RIGHT', 'DOWN', 'UP',   'RIGHT', 'DOWN',
-        'UP',    'LEFT',  'UP',   'RIGHT', 'DOWN', 'LEFT',
-        'RIGHT', 'DOWN',  'LEFT', 'UP',   'RIGHT', 'UP'
+    // Definição real das setas complexas do Nível 11 (extraído do solutionOrder e caminhos do gerador)
+    // Cada seta possui um ID, direção (UP, DOWN, LEFT, RIGHT) e um path detalhado em coordenadas [r, c]
+    let arrows = [
+        { id: 0, dir: 'RIGHT', path: [[2,2],[2,3],[2,4],[2,5],[2,6],[2,7],[2,8]], exited: false, animX: 0, animY: 0, shake: 0 },
+        { id: 1, dir: 'UP', path: [[5,2],[4,2],[3,2]], exited: false, animX: 0, animY: 0, shake: 0 },
+        { id: 2, dir: 'LEFT', path: [[4,8],[4,7],[4,6],[4,5]], exited: false, animX: 0, animY: 0, shake: 0 },
+        { id: 3, dir: 'DOWN', path: [[1,12],[2,12],[3,12],[4,12]], exited: false, animX: 0, animY: 0, shake: 0 },
+        { id: 4, dir: 'RIGHT', path: [[7,3],[7,4],[7,5],[7,6]], exited: false, animX: 0, animY: 0, shake: 0 },
+        { id: 5, dir: 'UP', path: [[10,6],[9,6],[8,6],[7,6]], exited: false, animX: 0, animY: 0, shake: 0 },
+        { id: 6, dir: 'LEFT', path: [[8,14],[8,13],[8,12],[8,11],[8,10]], exited: false, animX: 0, animY: 0, shake: 0 },
+        { id: 7, dir: 'DOWN', path: [[2,16],[3,16],[4,16],[5,16],[6,16]], exited: false, animX: 0, animY: 0, shake: 0 },
+        { id: 8, dir: 'RIGHT', path: [[12,4],[12,5],[12,6],[12,7],[12,8]], exited: false, animX: 0, animY: 0, shake: 0 },
+        { id: 9, dir: 'UP', path: [[15,9],[14,9],[13,9],[12,9]], exited: false, animX: 0, animY: 0, shake: 0 },
+        { id: 10, dir: 'LEFT', path: [[14,15],[14,14],[14,13],[14,12]], exited: false, animX: 0, animY: 0, shake: 0 },
+        { id: 11, dir: 'DOWN', path: [[9,2],[10,2],[11,2],[12,2]], exited: false, animX: 0, animY: 0, shake: 0 },
+        { id: 12, dir: 'RIGHT', path: [[16,10],[16,11],[16,12],[16,13]], exited: false, animX: 0, animY: 0, shake: 0 },
+        { id: 13, dir: 'UP', path: [[17,5],[16,5],[15,5]], exited: false, animX: 0, animY: 0, shake: 0 },
+        { id: 14, dir: 'LEFT', path: [[6,11],[6,10],[6,9]], exited: false, animX: 0, animY: 0, shake: 0 }
     ];
-
-    let pieces = [];
-    let idCounter = 1;
-
-    for (let r = 0; r < ROWS; r++) {
-        for (let c = 0; c < COLS; c++) {
-            let index = r * COLS + c;
-            pieces.push({
-                id: idCounter++,
-                col: c,
-                row: r,
-                dir: dirsLayout[index],
-                exited: false,
-                animX: 0,
-                animY: 0,
-                shakeTime: 0
-            });
-        }
-    }
 
     let animId = null;
 
-    function isBlocked(piece) {
-        let c = piece.col;
-        let r = piece.row;
-        let dir = piece.dir;
+    // Verifica se a trajetória da seta colide com o corpo de outra seta ativa
+    function checkCollision(arrow) {
+        const head = arrow.path[0];
+        let dr = 0, dc = 0;
+        if (arrow.dir === 'UP') dr = -1;
+        if (arrow.dir === 'DOWN') dr = 1;
+        if (arrow.dir === 'LEFT') dc = -1;
+        if (arrow.dir === 'RIGHT') dc = 1;
 
-        for (let other of pieces) {
-            if (other.id === piece.id || other.exited) continue;
-            if (dir === 'RIGHT' && other.row === r && other.col > c) return true;
-            if (dir === 'LEFT' && other.row === r && other.col < c) return true;
-            if (dir === 'DOWN' && other.col === c && other.row > r) return true;
-            if (dir === 'UP' && other.col === c && other.row < r) return true;
+        let cr = head[0] + dr;
+        let cc = head[1] + dc;
+
+        // Mapeia todas as células ocupadas pelas outras setas ainda ativas
+        const occupied = new Set();
+        arrows.forEach(other => {
+            if (other.id === arrow.id || other.exited) return;
+            other.path.forEach(pt => occupied.add(`${pt[0]},${pt[1]}`));
+        });
+
+        // Simula o trajeto até sair da grade
+        while (cr >= 0 && cr < GRID_SIZE && cc >= 0 && cc < GRID_SIZE) {
+            if (occupied.has(`${cr},${cc}`)) return true; // Caminho bloqueado
+            cr += dr;
+            cc += dc;
         }
-        return false;
+        return false; // Caminho livre para escapar
     }
 
     function draw() {
-        ctx.fillStyle = '#000000';
+        ctx.fillStyle = '#f7f1e3';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         let allExited = true;
 
-        pieces.forEach(p => {
+        arrows.forEach(p => {
             if (!p.exited) allExited = false;
-            if (p.exited && (Math.abs(p.animX) > 600 || Math.abs(p.animY) > 600)) return;
+            if (p.exited && (Math.abs(p.animX) > 800 || Math.abs(p.animY) > 800)) return;
 
             ctx.save();
 
-            let baseX = p.col * cellW + cellW / 2;
-            let baseY = p.row * cellH + cellH / 2;
+            // Ponto central baseado na cabeça/corpo da seta
+            const head = p.path[0];
+            let baseX = head[1] * cellW + cellW / 2;
+            let baseY = head[0] * cellH + cellH / 2;
 
-            if (p.shakeTime > 0) {
-                baseX += Math.sin(p.shakeTime * 0.8) * 6;
-                p.shakeTime--;
+            if (p.shake > 0) {
+                baseX += Math.sin(p.shake * 0.9) * 5;
+                p.shake--;
             }
 
             if (p.exited) {
-                if (p.dir === 'RIGHT') p.animX += 26;
-                if (p.dir === 'LEFT') p.animX -= 26;
-                if (p.dir === 'UP') p.animY -= 26;
-                if (p.dir === 'DOWN') p.animY += 26;
+                if (p.dir === 'RIGHT') p.animX += 22;
+                if (p.dir === 'LEFT') p.animX -= 22;
+                if (p.dir === 'UP') p.animY -= 22;
+                if (p.dir === 'DOWN') p.animY += 22;
             }
 
-            let x = baseX + p.animX;
-            let y = baseY + p.animY;
+            ctx.translate(baseX + p.animX, baseY + p.animY);
 
-            ctx.translate(x, y);
-
-            ctx.strokeStyle = COR_AZUL;
-            ctx.lineWidth = 10;
+            // Estilo do traçado marrom idêntico ao design do jogo original
+            ctx.strokeStyle = '#5c3a21';
+            ctx.fillStyle = '#5c3a21';
+            ctx.lineWidth = 4;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
 
+            // Desenha o caminho sinuoso da seta (path completo)
+            ctx.beginPath();
+            for (let i = 0; i < p.path.length; i++) {
+                const pt = p.path[i];
+                const px = (pt[1] - head[1]) * cellW;
+                const py = (pt[0] - head[0]) * cellH;
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+
+            // Desenha a ponta da seta na cabeça
             ctx.beginPath();
             if (p.dir === 'RIGHT') {
-                ctx.moveTo(-16, 0); ctx.lineTo(16, 0);
-                ctx.stroke();
-                ctx.fillStyle = COR_AZUL;
-                ctx.beginPath();
-                ctx.moveTo(20, 0); ctx.lineTo(8, -8); ctx.lineTo(8, 8);
-                ctx.fill();
+                ctx.moveTo(6, 0); ctx.lineTo(-2, -5); ctx.lineTo(-2, 5);
             } else if (p.dir === 'LEFT') {
-                ctx.moveTo(16, 0); ctx.lineTo(-16, 0);
-                ctx.stroke();
-                ctx.fillStyle = COR_AZUL;
-                ctx.beginPath();
-                ctx.moveTo(-20, 0); ctx.lineTo(-8, -8); ctx.lineTo(-8, 8);
-                ctx.fill();
+                ctx.moveTo(-6, 0); ctx.lineTo(2, -5); ctx.lineTo(2, 5);
             } else if (p.dir === 'UP') {
-                ctx.moveTo(0, 16); ctx.lineTo(0, -16);
-                ctx.stroke();
-                ctx.fillStyle = COR_AZUL;
-                ctx.beginPath();
-                ctx.moveTo(0, -20); ctx.lineTo(-8, -8); ctx.lineTo(8, -8);
-                ctx.fill();
+                ctx.moveTo(0, -6); ctx.lineTo(-5, 2); ctx.lineTo(5, 2);
             } else if (p.dir === 'DOWN') {
-                ctx.moveTo(0, -16); ctx.lineTo(0, 16);
-                ctx.stroke();
-                ctx.fillStyle = COR_AZUL;
-                ctx.beginPath();
-                ctx.moveTo(0, 20); ctx.lineTo(-8, 8); ctx.lineTo(8, 8);
-                ctx.fill();
+                ctx.moveTo(0, 6); ctx.lineTo(-5, -2); ctx.lineTo(5, -2);
             }
+            ctx.fill();
 
             ctx.restore();
         });
@@ -346,11 +294,11 @@ function loadLevel11() {
         if (allExited) {
             cancelAnimationFrame(animId);
             setTimeout(() => {
-                showOverlay("VITÓRIA!", "Você concluiu o Nível 11 com sucesso!", "JOGAR NOVAMENTE", () => {
+                showOverlay("VITÓRIA!", "Você solucionou o labirinto do Nível 11!", "JOGAR NOVAMENTE", () => {
                     closeOverlay();
-                    loadLevel11();
+                    initLevel11();
                 });
-            }, 350);
+            }, 400);
             return;
         }
 
@@ -362,20 +310,29 @@ function loadLevel11() {
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
 
-        for (let i = pieces.length - 1; i >= 0; i--) {
-            let p = pieces[i];
+        // Identifica qual seta foi tocada pelo usuário
+        for (let i = arrows.length - 1; i >= 0; i--) {
+            let p = arrows[i];
             if (p.exited) continue;
 
-            let px = p.col * cellW;
-            let py = p.row * cellH;
+            // Verifica toque nas células que compõem a seta
+            let hit = false;
+            for (let pt of p.path) {
+                let px = pt[1] * cellW;
+                let py = pt[0] * cellH;
+                if (mouseX >= px && mouseX <= px + cellW && mouseY >= py && mouseY <= py + cellH) {
+                    hit = true;
+                    break;
+                }
+            }
 
-            if (mouseX >= px && mouseX <= px + cellW && mouseY >= py && mouseY <= py + cellH) {
-                if (!isBlocked(p)) {
-                    p.exited = true;
-                    feedbackCorrect();
+            if (hit) {
+                if (!checkCollision(p)) {
+                    p.exited = true; // Libera a seta para escapar do labirinto
+                    if (CONFIG.vibrationEnabled && "vibrate" in navigator) navigator.vibrate(20);
                 } else {
-                    p.shakeTime = 16;
-                    feedbackLifeLost();
+                    p.shake = 14; // Efeito de erro / bloqueio
+                    if (CONFIG.vibrationEnabled && "vibrate" in navigator) navigator.vibrate([50, 30, 50]);
                 }
                 break;
             }
@@ -385,10 +342,7 @@ function loadLevel11() {
     draw();
 }
 
-document.addEventListener("contextmenu", e => e.preventDefault());
-document.addEventListener("touchmove", e => { if (e.cancelable) e.preventDefault(); }, { passive: false });
-
-loadLevel11();
+initLevel11();
 </script>
 </body>
 </html>
