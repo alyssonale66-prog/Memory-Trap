@@ -420,61 +420,20 @@ button {
     border-radius: 14px;
 }
 
-/* ESTILOS DO NÍVEL 11 (LABIRINTO DE SETAS) */
-#game-board-11 {
+/* ESTILOS DO NÍVEL 11 - COBRINHA REAL */
+#canvas-game-container-11 {
     position: relative;
     width: 360px;
-    height: 440px;
+    height: 480px;
     background-color: #000000;
-    border: 4px solid #8B5A2B;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(139, 90, 43, 0.3);
     overflow: visible;
     margin: 0 auto;
 }
-.arrow-11 {
-    position: absolute;
-    width: 30px;
-    height: 30px;
+#snakesCanvas-11 {
+    width: 100%;
+    height: 100%;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.1s ease, left 0.4s cubic-bezier(0.25, 1, 0.5, 1), top 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
-    user-select: none;
-}
-.arrow-11::before {
-    content: '';
-    display: block;
-    width: 0;
-    height: 0;
-    border-style: solid;
-}
-.dir-UP::before {
-    border-width: 0 10px 18px 10px;
-    border-color: transparent transparent #8B5A2B transparent;
-}
-.dir-DOWN::before {
-    border-width: 18px 10px 0 10px;
-    border-color: #8B5A2B transparent transparent transparent;
-}
-.dir-LEFT::before {
-    border-width: 10px 18px 10px 0;
-    border-color: transparent #8B5A2B transparent transparent;
-}
-.dir-RIGHT::before {
-    border-width: 10px 0 10px 18px;
-    border-color: transparent transparent transparent #8B5A2B;
-}
-.shake-11 {
-    animation: shakeAnim11 0.15s ease-in-out;
-}
-@keyframes shakeAnim11 {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-6px); }
-    50% { transform: translateX(6px); }
-    75% { transform: translateX(-4px); }
-    100% { transform: translateX(0); }
+    background-color: #000000;
 }
 
 .hold-btn-12 {
@@ -1354,98 +1313,174 @@ function renderLevel10() {
     }, 50);
 }
 
-/* NÍVEL 11 - LABIRINTO DE SETAS INTEGRADO */
+/* NÍVEL 11 - COBRINHA REAL INTEGRADO AO MOTOR DO JOGO */
 function renderLevel11() {
     DOM.levelQuestion.textContent = "Liberte todas as setas.";
-    
-    const container = document.createElement("div");
-    container.innerHTML = `
-        <div id="game-board-11"></div>
+
+    const containerWrapper = document.createElement("div");
+    containerWrapper.innerHTML = `
+        <div id="canvas-game-container-11">
+            <canvas id="snakesCanvas-11" width="360" height="480"></canvas>
+        </div>
     `;
-    DOM.levelContent.appendChild(container);
+    DOM.levelContent.appendChild(containerWrapper);
 
-    const GRID_SIZE = 40; 
-    const ARROW_SIZE = 30;
+    const canvas = containerWrapper.querySelector('#snakesCanvas-11');
+    const ctx = canvas.getContext('2d');
+    
+    const COR_SNAKE = '#8B5A2B'; 
+    const ESPESSURA_LINHA = 14;
 
-    let initialArrowsConfig = [
-        { id: 1,  gridX: 2, gridY: 1,  dir: 'RIGHT' },
-        { id: 2,  gridX: 3, gridY: 1,  dir: 'DOWN' },
-        { id: 3,  gridX: 1, gridY: 3,  dir: 'UP' },
-        { id: 4,  gridX: 4, gridY: 3,  dir: 'RIGHT' },
-        { id: 5,  gridX: 5, gridY: 5,  dir: 'LEFT' },
-        { id: 6,  gridX: 2, gridY: 7,  dir: 'DOWN' },
-        { id: 7,  gridX: 4, gridY: 7,  dir: 'RIGHT' },
-        { id: 8,  gridX: 7, gridY: 8,  dir: 'UP' },
-        { id: 9,  gridX: 1, gridY: 10, dir: 'LEFT' },
-        { id: 10, gridX: 6, gridY: 10, dir: 'RIGHT' }
+    let snakes = [
+        {
+            id: 1,
+            points: [{x: 40, y: 40}, {x: 320, y: 40}],
+            dir: 'RIGHT',
+            exited: false,
+            animOffset: 0,
+            shakeTime: 0
+        },
+        {
+            id: 2,
+            points: [{x: 120, y: 40}, {x: 120, y: 120}, {x: 220, y: 120}],
+            dir: 'DOWN',
+            exited: false,
+            animOffset: 0,
+            shakeTime: 0
+        },
+        {
+            id: 3,
+            points: [{x: 40, y: 180}, {x: 40, y: 80}, {x: 100, y: 80}],
+            dir: 'UP',
+            exited: false,
+            animOffset: 0,
+            shakeTime: 0
+        },
+        {
+            id: 4,
+            points: [{x: 180, y: 200}, {x: 280, y: 200}, {x: 280, y: 340}],
+            dir: 'RIGHT',
+            exited: false,
+            animOffset: 0,
+            shakeTime: 0
+        }
     ];
 
-    let activeArrows = JSON.parse(JSON.stringify(initialArrowsConfig));
-    const board = document.getElementById('game-board-11');
+    let animId = null;
 
-    activeArrows.forEach(arrow => {
-        const div = document.createElement('div');
-        div.className = `arrow-11 dir-${arrow.dir}`;
-        div.id = `arrow-${arrow.id}`;
-        
-        const posX = (arrow.gridX * GRID_SIZE) + (GRID_SIZE - ARROW_SIZE) / 2;
-        const posY = (arrow.gridY * GRID_SIZE) + (GRID_SIZE - ARROW_SIZE) / 2;
-        
-        div.style.left = `${posX}px`;
-        div.style.top = `${posY}px`;
+    function draw() {
+        if (GAME.currentLevel !== 11) return;
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        div.onpointerup = () => triggerMove11(arrow, div);
-        board.appendChild(div);
-    });
+        snakes.forEach(snake => {
+            if (snake.exited && snake.animOffset > 600) return;
 
-    function triggerMove11(arrow, element) {
-        if (arrow.exited) return;
-
-        let isBlocked = false;
-
-        activeArrows.forEach(target => {
-            if (target.id === arrow.id || target.exited) return;
-
-            if (arrow.dir === 'RIGHT') {
-                if (target.gridY === arrow.gridY && target.gridX > arrow.gridX) isBlocked = true;
-            } else if (arrow.dir === 'LEFT') {
-                if (target.gridY === arrow.gridY && target.gridX < arrow.gridX) isBlocked = true;
-            } else if (arrow.dir === 'UP') {
-                if (target.gridX === arrow.gridX && target.gridY < arrow.gridY) isBlocked = true;
-            } else if (arrow.dir === 'DOWN') {
-                if (target.gridX === arrow.gridX && target.gridY > arrow.gridY) isBlocked = true;
+            ctx.save();
+            
+            if (snake.shakeTime > 0) {
+                let shakeX = Math.sin(snake.shakeTime * 0.5) * 5;
+                ctx.translate(shakeX, 0);
+                snake.shakeTime--;
             }
+
+            if (snake.exited) {
+                if (snake.dir === 'RIGHT') ctx.translate(snake.animOffset, 0);
+                if (snake.dir === 'LEFT') ctx.translate(-snake.animOffset, 0);
+                if (snake.dir === 'UP') ctx.translate(0, -snake.animOffset);
+                if (snake.dir === 'DOWN') ctx.translate(0, snake.animOffset);
+                snake.animOffset += 25;
+            }
+
+            ctx.strokeStyle = COR_SNAKE;
+            ctx.lineWidth = ESPESSURA_LINHA;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            ctx.beginPath();
+            ctx.moveTo(snake.points[0].x, snake.points[0].y);
+            for(let i = 1; i < snake.points.length; i++) {
+                ctx.lineTo(snake.points[i].x, snake.points[i].y);
+            }
+            ctx.stroke();
+
+            let lastPoint = snake.points[snake.points.length - 1];
+            ctx.fillStyle = COR_SNAKE;
+            ctx.beginPath();
+            
+            if (snake.dir === 'RIGHT') {
+                ctx.moveTo(lastPoint.x + 4, lastPoint.y);
+                ctx.lineTo(lastPoint.x - 12, lastPoint.y - 12);
+                ctx.lineTo(lastPoint.x - 12, lastPoint.y + 12);
+            } else if (snake.dir === 'LEFT') {
+                ctx.moveTo(lastPoint.x - 4, lastPoint.y);
+                ctx.lineTo(lastPoint.x + 12, lastPoint.y - 12);
+                ctx.lineTo(lastPoint.x + 12, lastPoint.y + 12);
+            } else if (snake.dir === 'UP') {
+                ctx.moveTo(lastPoint.x, lastPoint.y - 4);
+                ctx.lineTo(lastPoint.x - 12, lastPoint.y + 12);
+                ctx.lineTo(lastPoint.x + 12, lastPoint.y + 12);
+            } else if (snake.dir === 'DOWN') {
+                ctx.moveTo(lastPoint.x, lastPoint.y + 4);
+                ctx.lineTo(lastPoint.x - 12, lastPoint.y - 12);
+                ctx.lineTo(lastPoint.x + 12, lastPoint.y - 12);
+            }
+            ctx.fill();
+            ctx.restore();
         });
 
-        if (!isBlocked) {
-            arrow.exited = true;
-            feedbackCorrect();
-            
-            if (arrow.dir === 'RIGHT') element.style.left = '500px';
-            if (arrow.dir === 'LEFT') element.style.left = '-150px';
-            if (arrow.dir === 'UP') element.style.top = '-150px';
-            if (arrow.dir === 'DOWN') element.style.top = '550px';
-            
-            element.style.opacity = '0';
-
-            setTimeout(() => {
-                element.remove();
-                checkLevel11Completion();
-            }, 400);
-        } else {
-            feedbackLifeLost();
-            element.classList.add('shake-11');
-            setTimeout(() => element.classList.remove('shake-11'), 150);
-            failLevel();
-        }
+        animId = requestAnimationFrame(draw);
     }
 
-    function checkLevel11Completion() {
-        const currentWinState = activeArrows.every(a => a.exited);
-        if (currentWinState) {
-            completeLevel();
+    canvas.addEventListener('pointerup', function clickHandler(e) {
+        if (GAME.currentLevel !== 11) return;
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        for (let i = snakes.length - 1; i >= 0; i--) {
+            let snake = snakes[i];
+            if (snake.exited) continue;
+
+            let clicked = false;
+            for(let j = 0; j < snake.points.length - 1; j++) {
+                let p1 = snake.points[j];
+                let p2 = snake.points[j+1];
+                
+                if (mouseX >= Math.min(p1.x, p2.x) - 15 && mouseX <= Math.max(p1.x, p2.x) + 15 &&
+                    mouseY >= Math.min(p1.y, p2.y) - 15 && mouseY <= Math.max(p1.y, p2.y) + 15) {
+                    clicked = true;
+                    break;
+                }
+            }
+
+            if (clicked) {
+                let bloqueado = false;
+                
+                if (snake.id === 2 && !snakes.find(s => s.id === 1).exited) bloqueado = true;
+                if (snake.id === 3 && !snakes.find(s => s.id === 2).exited) bloqueado = true;
+                if (snake.id === 4 && !snakes.find(s => s.id === 3).exited) bloqueado = true;
+
+                if (!bloqueado) {
+                    snake.exited = true;
+                    feedbackCorrect();
+                    setTimeout(() => {
+                        if (snakes.every(s => s.exited)) {
+                            cancelAnimationFrame(animId);
+                            completeLevel();
+                        }
+                    }, 400);
+                } else {
+                    snake.shakeTime = 15;
+                    feedbackLifeLost();
+                    failLevel();
+                }
+                break;
+            }
         }
-    }
+    });
+
+    draw();
 }
 
 function renderLevel12() {
